@@ -16,7 +16,7 @@
         <tr>
 
             <th>Question ID</th>
-            <th>Submission Time: </th>
+            <th>Submission Time</th>
             <th>View Number</th>
             <th>Vote Number</th>
             <th>Title</th>
@@ -26,10 +26,10 @@
 
         </tr>
 
- 	{% for question in user_questions %}
+ 	{% for question in questions %}
 	<tr>
 
-	 <td><a href="/list">{{ question["id"]}}</a></td>
+	 <td><a href="/details">{{ question["id"]}}</a></td>
 	 <td>{{ question["sumbission_time"]}}</td>
   	 <td>{{ question["view_number"]}}</td>
   	 <td>{{ question["vote_number"]}}</td>

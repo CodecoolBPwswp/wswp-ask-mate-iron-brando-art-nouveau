@@ -17,6 +17,11 @@ def route_list():
 def form():
     return render_template('form.html')
 
+@app.route('/details')
+def get_question_details():
+    user_questions = data_manager.get_data_from_file("questions")
+    return render_template("details.html", questions=user_questions)
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
