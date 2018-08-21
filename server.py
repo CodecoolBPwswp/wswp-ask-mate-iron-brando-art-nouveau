@@ -17,6 +17,14 @@ def route_list():
 def form():
     return render_template('form.html')
 
+@app.route('/form', methods=['POST'])
+def form():
+    dict_of_question = request.form.to_dict()
+    dict_of_question["view_number"] = None
+    dict_of_question["image"] = None
+    data_manager.add_new_question(dict_of_question)
+    return redirect('/')
+
 
 @app.route('/details')
 def get_question_details():
