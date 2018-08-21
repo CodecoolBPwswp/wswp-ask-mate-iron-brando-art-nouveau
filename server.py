@@ -13,7 +13,9 @@ def route_list():
     return render_template('lists.html', questions=user_questions)
 
 
-
+@app.route('/form')
+def form():
+    return render_template('form.html')
 
 if __name__ == "__main__":
     app.run(

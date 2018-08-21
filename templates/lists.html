@@ -29,12 +29,12 @@
  	{% for question in user_questions %}
 	<tr>
 
-	 <td><a href="/list">{{ questions["id"]}}</a></td>
-	 <td>{{ questions["sumbission_time"]}}</td>
-  	 <td>{{ questions["view_number"]}}</td>
-  	 <td>{{ questions["vote_number"]}}</td>
-  	 <td>{{ questions["title"]}}</td>
-   	 <td>{{ questions["message"]}}</td>
+	 <td><a href="/list">{{ question["id"]}}</a></td>
+	 <td>{{ question["sumbission_time"]}}</td>
+  	 <td>{{ question["view_number"]}}</td>
+  	 <td>{{ question["vote_number"]}}</td>
+  	 <td>{{ question["title"]}}</td>
+   	 <td>{{ question["message"]}}</td>
 	</tr>
 	{% endfor %}
 
