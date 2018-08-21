@@ -4,6 +4,14 @@ app = Flask(__name__)
 
 
 # routing functions here
+@app.route('/', methods=['POST',"GET"])
+@app.route('/list')
+def route_list():
+    user_questions = data_manager.TBC()
+
+    return render_template('list.html', user_questions=user_questions)
+
+
 
 
 if __name__ == "__main__":

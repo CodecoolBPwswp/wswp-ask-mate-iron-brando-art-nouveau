@@ -1,0 +1,45 @@
+<!DOCTYPE HTML> 
+
+<html>
+
+<head> 
+	<title>AskMate by Iron Brando </title>
+
+
+</head>
+
+<body>
+	<h1>Ask Mate, latest questions: </h1>
+
+	<table>
+
+        <tr>
+
+            <th>Question ID</th>
+            <th>Submission Time: </th>
+            <th>View Number</th>
+            <th>Vote Number</th>
+            <th>Title</th>
+            <th>Message</th>
+
+
+
+        </tr>
+
+ 	{% for question in user_questions %}
+	<tr>
+
+	 <td><a href="/list">{{ list["id"]}}</a></td>
+	 <td>{{ question["sumbission_time"]}}</td>
+  	 <td>{{ question["View_number"]}}</td>
+  	 <td>{{ question["Vote_number"]}}</td>
+  	 <td>{{ question["Title"]}}</td>
+   	 <td>{{ question["Message"]}}</td>
+	</tr>
+	{% endfor %}
+
+	</table>
+
+</body>
+
+</html>
