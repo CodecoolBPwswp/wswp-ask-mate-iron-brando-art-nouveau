@@ -10,7 +10,7 @@ app = Flask(__name__)
 def route_list():
     user_questions = data_manager.get_data_from_file("questions")
 
-    return render_template('lists.html', user_questions=user_questions)
+    return render_template('lists.html', questions=user_questions)
 
 
 
