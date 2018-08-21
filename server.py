@@ -13,7 +13,7 @@ def route_list():
     return render_template('lists.html', user_questions=user_questions)
 
 
-@app.route('/')
+@app.route('/form')
 def form():
     return render_template('form.html')
 
