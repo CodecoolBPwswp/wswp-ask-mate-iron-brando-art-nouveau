@@ -1,7 +1,23 @@
-<form>
-    Type in your question here: <br>
-    <input type="text" name="title" size="61"> <br><br>
-    In details: <br>
-    <input type="text" name="question" style="font-size:12pt;height:220px;width:400px;"><br><br>
-    <input type="submit" value="Submit">
-</form>
+<!DOCTYPE html>
+<html>
+    <header>
+        <title>
+            Asking a question
+        </title>
+    </header>
+    <body>
+        <h1>Asking a question</h1> <br><br>
+        <form>
+            Type in your question here: <br>
+            <input type="text" name="title" size="61"> <br><br>
+            In details: <br>
+            <input type="text" name="question" style="font-size:12pt;height:220px;width:400px;"><br><br>
+            <input type="submit" value="Submit">
+        </form> <br>
+        <form method=post enctype=multipart/form-data>
+            <p><input type=file name=file>
+               <input type=submit value=Upload>
+          </form>
+        <a href="/">Cancel</a>
+    </body>
+</html>

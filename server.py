@@ -17,6 +17,10 @@ def route_list():
 def form():
     return render_template('form.html')
 
+@app.route('/cancel')
+def cancel():
+    return('/')
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
