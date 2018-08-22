@@ -17,10 +17,7 @@ def add_new_question(dict_of_new_question):
     # expected fields: view_number, title, message, image
     dict_of_new_question = add_id_to_entry(dict_of_new_question)
     dict_of_new_question = add_submission_time(dict_of_new_question)
-    for field_name in HEADER_QUESTIONS:
-        if field_name not in dict_of_new_question:
-            error_message = "Missing field from new question: {}".format(field_name)
-            raise KeyError(error_message)
+    check_if_all_fields(dict_of_new_question, HEADER_QUESTIONS)
     connection.append_line_to_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, dict_of_new_question)
 
 
@@ -43,3 +40,19 @@ def get_line_by_id(dict_of_lines, _id, field_to_check="id"):
 def get_all_answers():
     list_of_answers = connection.read_csv_to_list_of_dicts(FILE_PATH_TO_ANSWERS)
     return list_of_answers
+
+
+def add_new_answer(dict_of_new_answer):
+    # expected fields: vote_number, question_id, message, image
+    dict_of_new_answer = add_id_to_entry(dict_of_new_answer)
+    dict_of_new_answer = add_submission_time(dict_of_new_answer)
+    check_if_all_fields(dict_of_new_answer, HEADER_ANSWERS)
+    connection.append_line_to_csv(FILE_PATH_TO_ANSWERS, HEADER_ANSWERS, dict_of_new_answer)
+
+
+def check_if_all_fields(dict_to_check, header):
+    for field_name in header:
+        if field_name not in dict_to_check:
+            error_message = "Missing field from new line: {}".format(field_name)
+            raise KeyError(error_message)
+
