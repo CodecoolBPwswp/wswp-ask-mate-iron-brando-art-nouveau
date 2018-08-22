@@ -14,5 +14,8 @@ def append_line_to_csv(file_path, data_header, line_to_append):
         writer.writerow(line_to_append)
 
 
-def update_line_in_csv(file_path, updated_line):
-    pass
+def update_csv(file_path, data_header, updated_data):
+    with open(file_path, "w") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=data_header)
+        writer.writeheader()
+        writer.writerows(updated_data)
