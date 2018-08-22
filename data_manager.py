@@ -19,7 +19,7 @@ def add_new_question(dict_of_new_question):
     dict_of_new_question = add_submission_time(dict_of_new_question)
     for field_name in HEADER_QUESTIONS:
         if field_name not in dict_of_new_question:
-            error_message = "Missing field from new question: {field_name}"
+            error_message = "Missing field from new question: {}".format(field_name)
             raise KeyError(error_message)
     connection.append_line_to_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, dict_of_new_question)
 
