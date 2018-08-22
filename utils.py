@@ -13,16 +13,16 @@ def add_submission_time(dict_of_new_entry):
     return dict_of_new_entry
 
 
-def get_line_by_id(dict_of_lines, _id, field_to_check="id"):
-    filtered_line = [line for line in dict_of_lines if line[field_to_check] == _id][0]
-    return filtered_line
-
-
 def check_if_all_fields(dict_to_check, header):
     for field_name in header:
         if field_name not in dict_to_check:
             error_message = "Missing field from new line: {}".format(field_name)
             raise KeyError(error_message)
+
+
+def get_line_by_id(dict_of_lines, _id, field_to_check="id"):
+    filtered_line = [line for line in dict_of_lines if line[field_to_check] == _id][0]
+    return filtered_line
 
 
 def update_line_in_list_of_dicts(list_of_dicts, updated_dict):
@@ -38,5 +38,15 @@ def update_line_in_list_of_dicts(list_of_dicts, updated_dict):
     return list_of_dicts
 
 
-def increase_view(line):
-    pass
+def increase_field_by_1(data, _id, field_name):
+    line_to_update = get_line_by_id(data, _id)
+    line_to_update[field_name] += 1
+    updated_data = update_line_in_list_of_dicts(data, line_to_update)
+    return updated_data
+
+
+def set_integer_fields(data, list_of_field_names):
+    for field in list_of_field_names:
+        for line in data:
+            line[field] = int(line[field])
+    return data

@@ -22,7 +22,7 @@ def form():
 @app.route('/form', methods=['POST'])
 def save_question():
     dict_of_question = request.form.to_dict()
-    dict_of_question["view_number"] = None
+    dict_of_question["view_number"] = 0
     dict_of_question["image"] = None
     data_manager.add_new_question(dict_of_question)
     return redirect('/')
@@ -31,6 +31,7 @@ def save_question():
 @app.route('/details/<postid>')
 def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
+    data_manager.add_question_view(user_questions, postid)
     needed_post = utils.get_line_by_id(user_questions, postid)
     
 
