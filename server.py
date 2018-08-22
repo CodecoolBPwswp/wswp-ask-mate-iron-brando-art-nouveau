@@ -55,9 +55,12 @@ def voting_system_down():
 
     return redirect("/")
 
+
 @app.route('/details/<postid>/new-answer')
 def new_answer(postid):
-    return render_template("answer.html")
+    user_questions = data_manager.get_all_questions()
+    question_to_answer = utils.get_line_by_id(user_questions, postid)
+    return render_template("answer.html", questions = question_to_answer)
 
 
 if __name__ == "__main__":
