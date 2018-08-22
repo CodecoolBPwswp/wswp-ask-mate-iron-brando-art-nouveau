@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
+import utils
 
 app = Flask(__name__)
 
@@ -28,7 +29,7 @@ def save_question():
 @app.route('/details/<postid>')
 def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
-    needed_post = data_manager.get_line_by_id(user_questions, postid)
+    needed_post = utils.get_line_by_id(user_questions, postid)
     
 
     return render_template("details.html", postid = postid, needed_post = needed_post)

@@ -1,6 +1,5 @@
 import connection
-import datetime
-import uuid
+import utils
 
 FILE_PATH_TO_QUESTIONS = "questions.csv"
 FILE_PATH_TO_ANSWERS = "answers.csv"
@@ -15,26 +14,10 @@ def get_all_questions():
 
 def add_new_question(dict_of_new_question):
     # expected fields: view_number, title, message, image
-    dict_of_new_question = add_id_to_entry(dict_of_new_question)
-    dict_of_new_question = add_submission_time(dict_of_new_question)
+    dict_of_new_question = utils.add_id_to_entry(dict_of_new_question)
+    dict_of_new_question = utils.add_submission_time(dict_of_new_question)
     check_if_all_fields(dict_of_new_question, HEADER_QUESTIONS)
     connection.append_line_to_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, dict_of_new_question)
-
-
-def add_id_to_entry(dict_of_new_entry):
-    dict_of_new_entry["id"] = uuid.uuid4()
-    return dict_of_new_entry
-
-
-def add_submission_time(dict_of_new_entry):
-    current_time_str = str(datetime.datetime.now())[:-7]
-    dict_of_new_entry["submission_time"] = current_time_str
-    return dict_of_new_entry
-
-
-def get_line_by_id(dict_of_lines, _id, field_to_check="id"):
-    filtered_line = [line for line in dict_of_lines if line[field_to_check] == _id][0]
-    return filtered_line
 
 
 def get_all_answers():
@@ -44,8 +27,8 @@ def get_all_answers():
 
 def add_new_answer(dict_of_new_answer):
     # expected fields: vote_number, question_id, message, image
-    dict_of_new_answer = add_id_to_entry(dict_of_new_answer)
-    dict_of_new_answer = add_submission_time(dict_of_new_answer)
+    dict_of_new_answer = utils.add_id_to_entry(dict_of_new_answer)
+    dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
     check_if_all_fields(dict_of_new_answer, HEADER_ANSWERS)
     connection.append_line_to_csv(FILE_PATH_TO_ANSWERS, HEADER_ANSWERS, dict_of_new_answer)
 
