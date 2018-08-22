@@ -23,7 +23,7 @@ def add_new_question(dict_of_new_question):
 
 def get_all_answers():
     list_of_answers = connection.read_csv_to_list_of_dicts(FILE_PATH_TO_ANSWERS)
-    utils.set_integer_fields(list_of_answers, ["view_number", "vote_number"])
+    utils.set_integer_fields(list_of_answers, ["vote_number"])
     return list_of_answers
 
 
