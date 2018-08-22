@@ -32,7 +32,7 @@ def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
     data_manager.add_question_view(user_questions, postid)
     needed_post = utils.get_line_by_id(user_questions, postid)
-
+    url_for(new_answer, postid = postid)
     return render_template("details.html", postid = postid, needed_post = needed_post)
 
 

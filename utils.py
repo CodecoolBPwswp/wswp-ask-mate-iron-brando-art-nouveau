@@ -55,5 +55,6 @@ def decrease_field_by_1(data, _id, field_name):
 def set_integer_fields(data, list_of_field_names):
     for field in list_of_field_names:
         for line in data:
+            print(line[field])
             line[field] = int(line[field])
     return data
