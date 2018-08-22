@@ -4,15 +4,14 @@ import data_manager
 app = Flask(__name__)
 
 
-# routing functions here
-@app.route('/', methods=['POST',"GET"])
+@app.route('/')
 @app.route('/list')
 def route_list():
     user_questions = data_manager.get_all_questions()
     return render_template('lists.html', questions=user_questions)
 
 
-@app.route('/form', methods=["GET"])
+@app.route('/form')
 def form():
     return render_template('form.html')
 
@@ -26,7 +25,7 @@ def save_question():
     return redirect('/')
 
 
-@app.route('/details/<postid>', methods=("GET","POST"))
+@app.route('/details/<postid>')
 def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
     needed_post = data_manager.get_line_by_id(user_questions, postid)
@@ -34,10 +33,6 @@ def get_question_details(postid):
 
     return render_template("details.html", postid = postid, needed_post = needed_post)
 
-
-@app.route('/cancel')
-def cancel():
-    return('/')
 
 if __name__ == "__main__":
     app.run(
