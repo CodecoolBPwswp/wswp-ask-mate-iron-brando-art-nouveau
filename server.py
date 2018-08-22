@@ -9,16 +9,16 @@ app = Flask(__name__)
 @app.route('/list')
 def route_list():
     user_questions = data_manager.get_all_questions()
-
     return render_template('lists.html', questions=user_questions)
 
 
-@app.route('/form')
+@app.route('/form', methods=["GET"])
 def form():
     return render_template('form.html')
 
+
 @app.route('/form', methods=['POST'])
-def form():
+def save_question():
     dict_of_question = request.form.to_dict()
     dict_of_question["view_number"] = None
     dict_of_question["image"] = None
