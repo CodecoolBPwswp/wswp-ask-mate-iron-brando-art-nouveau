@@ -4,13 +4,28 @@
 
 <head> 
 	<title>AskMate by Iron Brando </title>
+	<style>
 
+			table {
+				border: 1px solid black;
+				border-collapse: collapse;
+				width: 100%;
+			}
+	
+			td, th {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+	
+		</style>
 
 </head>
 
 <body>
 	<h1>Ask Mate, latest questions: </h1>
-	<a href="/form">Ask a question</a>
+	<a href="/form">Ask a question</a> <br><br>
+
+
 	<table>
 
         <tr>
@@ -28,11 +43,11 @@
 	<tr>
 
 	 <td><a href="/details/{{ question['id'] }}">{{ question["id"][:8] + "..." }}</a></td>
-	 <td>{{ question["submission_time"] }}</td>
-  	 <td>{{ question["view_number"] }}</td>
-  	 <td>{{ question["vote_number"] }}</td>
-  	 <td>{{ question["title"] }}</td>
-   	 <td>{{ question["message"] }}</td>
+	 <td align="center">{{ question["submission_time"] }}</td>
+  	 <td align="center">{{ question["view_number"] }}</td>
+  	 <td align="center">{{ question["vote_number"] }}</td>
+  	 <td align="center">{{ question["title"] }}</td>
+   	 <td align="center">{{ question["message"] }}</td>
 	</tr>
 	{% endfor %}
 
