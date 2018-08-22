@@ -26,10 +26,19 @@ def form():
     return redirect('/')
 
 
-@app.route('/details')
-def get_question_details():
+@app.route('/details/<postid>', methods=("GET","POST"))
+def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
-    return render_template("details.html", questions=user_questions)
+    needed_post = ""
+
+    #data_managerben kéne lennie.
+    # for i in user_questions:
+    #     if postid in i:
+    #         i = needed_post
+
+    
+
+    return render_template("details.html", postid = postid, questions=user_questions)
 
 
 @app.route('/cancel')
