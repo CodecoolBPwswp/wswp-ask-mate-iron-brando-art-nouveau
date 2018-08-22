@@ -37,14 +37,12 @@ def get_question_details(postid):
     return render_template("details.html", postid = postid, needed_post = needed_post)
 
 
-@app.route('/up_vote/')
+@app.route('/details/<postid>')
 def voting_system(postid):
-    # user_questions = data_manager.get_all_questions()
-    # needed_post = data_manager.get_line_by_id(user_questions, postid)
     global up_vote
     up_vote += 1
 
-    return render_template("details.html", up_vote = up_vote)
+    return render_template("details.html", postid = postid, needed_post = needed_post, up_vote = up_vote)
 
 
 if __name__ == "__main__":
