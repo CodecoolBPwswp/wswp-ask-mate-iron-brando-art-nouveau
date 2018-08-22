@@ -55,6 +55,11 @@ def voting_system_down():
 
     return redirect("/")
 
+@app.route('/details/<postid>/new-answer')
+def new_answer(postid):
+    return render_template("answer.html")
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
