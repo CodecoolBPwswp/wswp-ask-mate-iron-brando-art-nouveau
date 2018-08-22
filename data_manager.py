@@ -7,6 +7,7 @@ FILE_PATH_TO_ANSWERS = "answers.csv"
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 
+
 def get_all_questions():
     list_of_questions = connection.read_csv_to_list_of_dicts(FILE_PATH_TO_QUESTIONS)
     return list_of_questions
@@ -14,7 +15,6 @@ def get_all_questions():
 
 def add_new_question(dict_of_new_question):
     # expected fields: view_number, title, message, image
-    # fields to add: id, submission_time
     dict_of_new_question = add_id_to_entry(dict_of_new_question)
     dict_of_new_question = add_submission_time(dict_of_new_question)
     for field_name in HEADER_QUESTIONS:
@@ -33,3 +33,8 @@ def add_submission_time(dict_of_new_entry):
     current_time_str = str(datetime.datetime.now())[:-7]
     dict_of_new_entry["submission_time"] = current_time_str
     return dict_of_new_entry
+
+
+def get_line_by_id(data, _id):
+    filtered_line = [line for line in data if line["id"] == _id][0]
+    return filtered_line
