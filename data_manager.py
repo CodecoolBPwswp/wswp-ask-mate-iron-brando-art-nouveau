@@ -35,8 +35,8 @@ def add_submission_time(dict_of_new_entry):
     return dict_of_new_entry
 
 
-def get_line_by_id(data, _id):
-    filtered_line = [line for line in data if line["id"] == _id][0]
+def get_line_by_id(dict_of_lines, _id, field_to_check="id"):
+    filtered_line = [line for line in dict_of_lines if line[field_to_check] == _id][0]
     return filtered_line
 
 
