@@ -16,9 +16,15 @@
     <h2>In details: <br></h2>
 	{{ needed_post["message"]}}<br><br>
 
-	<form action="/up_vote"> <input type="submit" value="Upvote this question" />
-	</form> 	<button>Downvote this question</button>
-	<p>number of upvotes: {{ up_vote }}</p>
+	<form action="/details" method = "post"> 
+		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
+		<input type="submit" value="Upvote this question" />
+	</form> 
+
+	<form action="/details_down" method = "post"> 
+		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
+		<input type="submit" value="Downvote this question" />
+	</form> 
 
 	<h2>Answer:</h2>
 		<form><textarea name="answer" id="answer" cols="60" rows="10"></textarea></form> <br>

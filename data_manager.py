@@ -3,13 +3,13 @@ import utils
 
 FILE_PATH_TO_QUESTIONS = "questions.csv"
 FILE_PATH_TO_ANSWERS = "answers.csv"
-HEADER_QUESTIONS = ["id", "submission_time", "view_number", "title", "message", "image"]
+HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 
 
 def get_all_questions():
     list_of_questions = connection.read_csv_to_list_of_dicts(FILE_PATH_TO_QUESTIONS)
-    utils.set_integer_fields(list_of_questions, ["view_number"])
+    utils.set_integer_fields(list_of_questions, ["view_number", "vote_number"])
     return list_of_questions
 
 
@@ -37,6 +37,16 @@ def add_new_answer(dict_of_new_answer):
 
 def add_question_view(list_of_dicts, _id):
     updated_data = utils.increase_field_by_1(list_of_dicts, _id, "view_number")
+    connection.update_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, updated_data)
+
+
+def add_question_up_voting(list_of_dicts, _id):
+    updated_data = utils.increase_field_by_1(list_of_dicts, _id, "vote_number")
+    connection.update_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, updated_data)
+
+
+def add_question_down_voting(list_of_dicts, _id):
+    updated_data = utils.decrease_field_by_1(list_of_dicts, _id, "vote_number")
     connection.update_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, updated_data)
 
 

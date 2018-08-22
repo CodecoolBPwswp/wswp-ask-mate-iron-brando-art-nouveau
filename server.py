@@ -4,8 +4,6 @@ import utils
 
 app = Flask(__name__)
 
-up_vote = 0
-down_vote = 0
 
 @app.route('/')
 @app.route('/list')
@@ -23,6 +21,7 @@ def form():
 def save_question():
     dict_of_question = request.form.to_dict()
     dict_of_question["view_number"] = 0
+    dict_of_question["vote_number"] = 0
     dict_of_question["image"] = None
     data_manager.add_new_question(dict_of_question)
     return redirect('/')
@@ -33,18 +32,28 @@ def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
     data_manager.add_question_view(user_questions, postid)
     needed_post = utils.get_line_by_id(user_questions, postid)
-    
 
     return render_template("details.html", postid = postid, needed_post = needed_post)
 
 
-@app.route('/details/<postid>')
-def voting_system(postid):
-    global up_vote
-    up_vote += 1
+@app.route('/details', methods = ["POST"])
+def voting_system_up():
+    user_questions = data_manager.get_all_questions()
+    postid = request.form["post_id"]
+    data_manager.add_question_up_voting(user_questions, postid)
+    
 
-    return render_template("details.html", postid = postid, needed_post = needed_post, up_vote = up_vote)
+    return redirect("/")
 
+
+@app.route('/details_down', methods = ["POST"])
+def voting_system_down():
+    user_questions = data_manager.get_all_questions()
+    postid = request.form["post_id"]
+    data_manager.add_question_down_voting(user_questions, postid)
+    
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(

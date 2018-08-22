@@ -45,6 +45,13 @@ def increase_field_by_1(data, _id, field_name):
     return updated_data
 
 
+def decrease_field_by_1(data, _id, field_name):
+    line_to_update = get_line_by_id(data, _id)
+    line_to_update[field_name] -= 1
+    updated_data = update_line_in_list_of_dicts(data, line_to_update)
+    return updated_data
+
+
 def set_integer_fields(data, list_of_field_names):
     for field in list_of_field_names:
         for line in data:
