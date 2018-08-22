@@ -3,6 +3,8 @@ import data_manager
 
 app = Flask(__name__)
 
+up_vote = 0
+down_vote = 0
 
 @app.route('/')
 @app.route('/list')
@@ -29,9 +31,18 @@ def save_question():
 def get_question_details(postid):
     user_questions = data_manager.get_all_questions()
     needed_post = data_manager.get_line_by_id(user_questions, postid)
-    
 
     return render_template("details.html", postid = postid, needed_post = needed_post)
+
+
+@app.route('/up_vote/')
+def voting_system(postid):
+    # user_questions = data_manager.get_all_questions()
+    # needed_post = data_manager.get_line_by_id(user_questions, postid)
+    global up_vote
+    up_vote += 1
+
+    return render_template("details.html", up_vote = up_vote)
 
 
 if __name__ == "__main__":
