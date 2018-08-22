@@ -38,3 +38,8 @@ def add_submission_time(dict_of_new_entry):
 def get_line_by_id(data, _id):
     filtered_line = [line for line in data if line["id"] == _id][0]
     return filtered_line
+
+
+def get_all_answers():
+    list_of_answers = connection.read_csv_to_list_of_dicts(FILE_PATH_TO_ANSWERS)
+    return list_of_answers
