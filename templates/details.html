@@ -12,12 +12,20 @@
 	<h1>Question details: </h1>
 	<h2>Question title:</h2> <br>
 	{{ needed_post["title"]}}<br><br>
-<form>
+
     <h2>In details: <br></h2>
 	{{ needed_post["message"]}}<br><br>
-</form>
+
+	<button>Upvote this question</button> 	<button>Downvote this question</button>
 
 
+	<h2>Answer:</h2>
+		<form><textarea name="answer" id="answer" cols="60" rows="10"></textarea></form> <br>
+
+            <input type="submit" value="Submit Answer">
+
+	
+	<h2>Previous Answers to this question: </h2>
 
 
 </body>
