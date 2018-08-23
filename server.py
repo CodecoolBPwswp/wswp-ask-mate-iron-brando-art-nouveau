@@ -33,10 +33,8 @@ def get_question_details(postid):
     data_manager.add_question_view(user_questions, postid)
     needed_post = utils.get_line_by_id(user_questions, postid)
     url_for_new_answer = url_for("new_answer", postid = postid)
-
     all_answers = data_manager.get_all_answers()
     answers_for_question = utils.get_line_by_id(all_answers, postid, field_to_check="question_id", as_list=True)
-
     return render_template("details.html", postid = postid, needed_post = needed_post,
                            url_for_new_answer = url_for_new_answer, answers_to_list = answers_for_question)
 
@@ -46,8 +44,6 @@ def voting_system_up():
     user_questions = data_manager.get_all_questions()
     postid = request.form["post_id"]
     data_manager.add_question_up_voting(user_questions, postid)
-    
-
     return redirect("/")
 
 
@@ -56,8 +52,6 @@ def voting_system_down():
     user_questions = data_manager.get_all_questions()
     postid = request.form["post_id"]
     data_manager.add_question_down_voting(user_questions, postid)
-    
-
     return redirect("/")
 
 
@@ -66,6 +60,16 @@ def new_answer(postid):
     user_questions = data_manager.get_all_questions()
     question_to_answer = utils.get_line_by_id(user_questions, postid)
     return render_template("answer.html", questions = question_to_answer)
+
+
+@app.route('/details/<postid>/new-answer', methods = ["POST"])
+def post_answer(postid):
+    dict_of_new_answer = request.form.to_dict()
+    dict_of_new_answer["vote_number"] = 0
+    dict_of_new_answer["image"] = None
+    dict_of_new_answer["question_id"] = postid
+    data_manager.add_new_answer(dict_of_new_answer)
+    return redirect(url_for("get_question_details", postid=postid))
 
 
 if __name__ == "__main__":
