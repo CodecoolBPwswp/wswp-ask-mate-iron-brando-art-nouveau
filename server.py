@@ -23,8 +23,8 @@ def save_question():
     dict_of_question["view_number"] = 0
     dict_of_question["vote_number"] = 0
     dict_of_question["image"] = None
-    data_manager.add_new_question(dict_of_question)
-    return redirect('/')
+    question_id = data_manager.add_new_question(dict_of_question)
+    return redirect(url_for("get_question_details",postid=question_id))
 
 
 @app.route('/details/<postid>')

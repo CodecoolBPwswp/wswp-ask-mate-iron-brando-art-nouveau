@@ -19,6 +19,7 @@ def add_new_question(dict_of_new_question):
     dict_of_new_question = utils.add_submission_time(dict_of_new_question)
     utils.check_if_all_fields(dict_of_new_question, HEADER_QUESTIONS)
     connection.append_line_to_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, dict_of_new_question)
+    return dict_of_new_question["id"]
 
 
 def get_all_answers():
