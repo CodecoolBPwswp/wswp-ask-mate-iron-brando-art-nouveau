@@ -18,6 +18,7 @@ def add_new_question(dict_of_new_question):
     dict_of_new_question = utils.add_id_to_entry(dict_of_new_question)
     dict_of_new_question = utils.add_submission_time(dict_of_new_question)
     utils.check_if_all_fields(dict_of_new_question, HEADER_QUESTIONS)
+    print(dict_of_new_question)
     connection.append_line_to_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, dict_of_new_question)
 
 
@@ -48,6 +49,15 @@ def add_question_up_voting(list_of_dicts, _id):
 def add_question_down_voting(list_of_dicts, _id):
     updated_data = utils.decrease_field_by_1(list_of_dicts, _id, "vote_number")
     connection.update_csv(FILE_PATH_TO_QUESTIONS, HEADER_QUESTIONS, updated_data)
+
+
+def add_answer_up_voting(list_of_dicts, _id):
+    updated_data = utils.increase_field_by_1(list_of_dicts, _id, "vote_number")
+    connection.update_csv(FILE_PATH_TO_ANSWERS, HEADER_ANSWERS, updated_data)
+
+def add_answer_down_voting(list_of_dicts, _id):
+    updated_data = utils.decrease_field_by_1(list_of_dicts, _id, "vote_number")
+    connection.update_csv(FILE_PATH_TO_ANSWERS, HEADER_ANSWERS, updated_data)
 
 
 def add_answer_view(list_of_dicts, _id):

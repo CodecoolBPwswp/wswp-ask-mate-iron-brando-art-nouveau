@@ -1,3 +1,2 @@
-id,submission_time,vote_number,question_id,message,image
-,today,-4,8b14150e-a5e4-4b2b-a7c2-dfc27b7d908e,One trial answer so I can list it,
-234564124357567,yesterday,5,8b14150e-a5e4-4b2b-a7c2-dfc27b7d908e,Looking a bit better folks!,
+id,submission_time,view_number,vote_number,title,message,image
+a8d93ed7-3d35-414c-afb4-bf0b74b439d8,2018-08-23 13:43:50,0,8b14150e-a5e4-4b2b-a7c2-dfc27b7d908e,test answer number2,

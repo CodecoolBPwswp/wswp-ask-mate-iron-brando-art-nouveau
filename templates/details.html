@@ -38,10 +38,17 @@
         </tr>
     {% for dict_of_answer in answers_to_list %}
         <tr>
-            <td>{{ dict_of_answer["id"] }}</td>
-            <td>{{ dict_of_answer["submission_time"] }}</td>
-            <td>{{ dict_of_answer["message"] }}</td>
-            <td>{{ dict_of_answer["vote_number"] }}</td>
+            <td align=center>{{ dict_of_answer["id"][:8] + "..."  }}</td>
+            <td align=center>{{ dict_of_answer["submission_time"] }}</td>
+            <td align=center>{{ dict_of_answer["message"] }}</td>
+            <td align=center>{{ dict_of_answer["vote_number"] }}</td>
+            <td><form action="/answer_up" method = "post"> 
+                <input name = "answer_id" value = "{{ dict_of_answer['id']}}" hidden>
+                <input type="submit" value="Upvote" />
+            </form> </td>
+            <td><form action="/answer_down" method = "post"> 
+                <input name = "answer_id" value = "{{ dict_of_answer['id']}}" hidden>
+                <input type="submit" value="Downvote" /></td>
         </tr>
     {% endfor %}
 
