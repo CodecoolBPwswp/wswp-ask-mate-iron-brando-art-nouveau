@@ -3,7 +3,7 @@
 <html>
 
 <head> 
-	<title>AskMate by Iron Brando </title>
+	<title>{{ needed_post["title"] }}</title>
     <style>
 
 			table {
@@ -20,12 +20,11 @@
     </style>
 </head>
 <body>
-	<h1>Question details </h1>
-	<h2>Question title:</h2> <br>
-	{{ needed_post["title"]}}<br><br>
+    <h1>{{ needed_post["title"] }}</h1>
+	<h2>Question details </h2>
 
-    <h2>In details: <br></h2>
-	{{ needed_post["message"]}}<br><br>
+    <p>Detailed question message:</p>
+    <p><em>{{ needed_post["message"] }}</em></p>
 
 	<form action="/details" method = "post"> 
 		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
@@ -43,7 +42,7 @@
 
 	<a href="{{url_for_new_answer}}">Add a new answer</a>
 	
-	<h2>Previous Answers to this question: </h2>
+	<h2>Previous Answers to this question</h2>
     <table>
         <tr>
             <th>Id</th>
