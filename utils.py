@@ -20,9 +20,14 @@ def check_if_all_fields(dict_to_check, header):
             raise KeyError(error_message)
 
 
-def get_line_by_id(dict_of_lines, _id, field_to_check="id"):
-    filtered_line = [line for line in dict_of_lines if line[field_to_check] == _id][0]
-    return filtered_line
+def get_line_by_id(dict_of_lines, _id, field_to_check="id", as_list=False):
+    filtered_lines = [line for line in dict_of_lines if line[field_to_check] == _id]
+    object_to_return = None
+    if not as_list:
+        object_to_return = filtered_lines[0]
+    else:
+        object_to_return = filtered_lines
+    return object_to_return
 
 
 def update_line_in_list_of_dicts(list_of_dicts, updated_dict):

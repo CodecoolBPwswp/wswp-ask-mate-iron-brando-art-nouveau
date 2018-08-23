@@ -29,8 +29,24 @@
 	<a href="{{url_for_new_answer}}">Add a new answer</a>
 	
 	<h2>Previous Answers to this question: </h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Submission time</th>
+            <th>Message</th>
+            <th>Vote number</th>
+        </tr>
+    {% for dict_of_answer in answers_to_list %}
+        <tr>
+            <td>{{ dict_of_answer["id"] }}</td>
+            <td>{{ dict_of_answer["submission_time"] }}</td>
+            <td>{{ dict_of_answer["message"] }}</td>
+            <td>{{ dict_of_answer["vote_number"] }}</td>
+        </tr>
+    {% endfor %}
 
-	<a href="/">Back to the Homepage</a>
+    </table>
+	<p><a href="/">Back to the Homepage</a></p>
 </body>
 
 </html>
