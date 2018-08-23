@@ -8,10 +8,8 @@
 <h1>My answer to {{ questions["title"]}}:</h1><br>
 <form action="{{ url_for("post_answer", postid=questions["id"]) }}" method="post">
     Type your answer here:<br><br>
-    <form><textarea name="message" id="message" cols="60" rows="10"></textarea><br><br>
+    <form><textarea name="message" placeholder="Minimum 10 characters..." required minlength="10" cols="60" rows="10"></textarea><br><br>
     <input type="submit">
-
-
 </form><br><br>
     <a href="/">Back to home</a><br><br>
     <a href="/details/{{ questions['id'] }}">Back to the Question</a>

@@ -1,2 +1,5 @@
-id,submission_time,view_number,vote_number,title,message,image
-a8d93ed7-3d35-414c-afb4-bf0b74b439d8,2018-08-23 13:43:50,0,8b14150e-a5e4-4b2b-a7c2-dfc27b7d908e,test answer number2,
+id,submission_time,vote_number,question_id,message,image
+,today,-4,8b14150e-a5e4-4b2b-a7c2-dfc27b7d908e,One trial answer so I can list it,
+8083484c-0569-4113-a261-e91566d862a5,2018-08-23 14:26:46,0,be6e8df9-27f5-4477-af07-0a80f75342bb,Testing answer giving now,
+2afe5e3f-da88-4076-a4c5-603cf586fa6f,2018-08-23 15:17:34,0,8b14150e-a5e4-4b2b-a7c2-dfc27b7d908e,"testing it again, should work
+",

@@ -23,8 +23,8 @@ def save_question():
     dict_of_question["view_number"] = 0
     dict_of_question["vote_number"] = 0
     dict_of_question["image"] = None
-    data_manager.add_new_question(dict_of_question)
-    return redirect('/')
+    question_id = data_manager.add_new_question(dict_of_question)
+    return redirect(url_for("get_question_details",postid=question_id))
 
 
 @app.route('/details/<postid>')
@@ -52,22 +52,6 @@ def voting_system_down():
     user_questions = data_manager.get_all_questions()
     postid = request.form["post_id"]
     data_manager.add_question_down_voting(user_questions, postid)
-    return redirect("/")
-
-
-@app.route('/answer_down', methods = ["POST"])
-def answer_voting_down():
-    user_answers = data_manager.get_all_answers()
-    answer_id = request.form["answer_id"]
-    data_manager.add_answer_down_voting(user_answers, answer_id)
-    return redirect("/")
-
-@app.route('/answer_up', methods = ["POST"])
-def answer_voting_up():
-    user_answers = data_manager.get_all_answers()
-    answer_id = request.form["answer_id"]
-    print(answer_id)
-    data_manager.add_answer_up_voting(user_answers, answer_id)
     return redirect("/")
 
 

@@ -19,12 +19,16 @@
 	<form action="/details" method = "post"> 
 		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
 		<input type="submit" value="Upvote this question" />
-	</form> 
+    </form> 
+    <br>
+
 
 	<form action="/details_down" method = "post"> 
 		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
 		<input type="submit" value="Downvote this question" />
-	</form> 
+    </form> 
+    <br>
+    
 
 	<a href="{{url_for_new_answer}}">Add a new answer</a>
 	
@@ -42,14 +46,7 @@
             <td align=center>{{ dict_of_answer["submission_time"] }}</td>
             <td align=center>{{ dict_of_answer["message"] }}</td>
             <td align=center>{{ dict_of_answer["vote_number"] }}</td>
-            <td><form action="/answer_up" method = "post"> 
-                <input name = "answer_id" value = "{{ dict_of_answer['id']}}" hidden>
-                <input type="submit" value="Upvote" />
-            </form> </td>
-            <td><form action="/answer_down" method = "post"> 
-                <input name = "answer_id" value = "{{ dict_of_answer['id']}}" hidden>
-                <input type="submit" value="Downvote" /></td>
-        </tr>
+
     {% endfor %}
 
     </table>
