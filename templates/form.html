@@ -9,9 +9,9 @@
         <h1>Asking a question</h1> <br><br>
         <form action="/form" method="post">
             <label for="question_title">Type in your question here:</label> <br>
-            <input type="text" name="title" id="question_title" required pattern=".{10,}" placeholder="At least 10 characters"> <br><br>
+            <input type="text" name="title" id="question_title" required minlength="10" placeholder="At least 10 characters"> <br><br>
             <label for="question_details">In details:</label>  <br>
-            <textarea name="message" id="question_details" required pattern=".{20,}" placeholder="At least 20 characters"></textarea> <br><br>
+            <textarea name="message" id="question_details" required minlength="20" placeholder="At least 20 characters"></textarea> <br><br>
             <input type="submit" value="Submit"> 
         </form>
         <p>
