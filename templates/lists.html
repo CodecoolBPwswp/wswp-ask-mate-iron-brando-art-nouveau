@@ -23,14 +23,16 @@
 
 <body>
 	<h1>Ask Mate, latest questions: </h1>
-	<a href="/form">Ask a question</a> <br><br>
+    <form action='/search' method="post"><textarea name="search" placeholder="Search questions..." ></textarea>
+    <input type="submit" value="Search">
+    </form>
+    <a href="/form">Ask a question</a> <br><br>
 
 
 	<table>
 
         <tr>
 
-            <th>Question ID</th>
             <th>Submission Time</th>
             <th>View Number</th>
             <th>Vote Number</th>
@@ -42,11 +44,10 @@
  	{% for question in questions %}
 	<tr>
 
-	 <td><a href="/details/{{ question['id'] }}">{{ question["id"][:8] + "..." }}</a></td>
-	 <td align="center">{{ question["submission_time"] }}</td>
+	 <td align="center">{{ question["submission_time"][:16]   }}</td>
   	 <td align="center">{{ question["view_number"] }}</td>
   	 <td align="center">{{ question["vote_number"] }}</td>
-  	 <td align="center">{{ question["title"] }}</td>
+  	 <td align="center"><a href="/details/{{ question['id'] }}">{{ question["title"] }}</td>
    	 <td align="center">{{ question["message"] }}</td>
 	</tr>
 	{% endfor %}

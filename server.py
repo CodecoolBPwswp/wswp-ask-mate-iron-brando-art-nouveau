@@ -72,6 +72,14 @@ def post_answer(postid):
     return redirect(url_for("get_question_details", postid=postid))
 
 
+@app.route('/search', methods = ["POST","GET"])
+def get_answer_to_qeustion():
+
+
+    return render_template('search_results.html')
+
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
