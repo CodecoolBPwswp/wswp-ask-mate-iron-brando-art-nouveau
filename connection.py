@@ -35,7 +35,7 @@ def open_database():
 
 
 def connection_handler(function_to_wrap):
-    def wrapper():
+    def wrapper(*args, **kwargs):
         connection = open_database()
         cursor = connection.cursor(cursor_factory=extras.RealDictCursor)
         returned_value = function_to_wrap(cursor, *args, **kwargs)
