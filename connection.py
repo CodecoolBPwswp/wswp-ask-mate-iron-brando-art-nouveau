@@ -29,7 +29,7 @@ def open_database():
         connection = psycopg2.connect(connection_string)
         connection.autocommit = True
     except psycopg2.DatabaseError as exception:
-        print("Database connaction problem")
+        print("Database connection problem")
         raise exception
     return connection
 

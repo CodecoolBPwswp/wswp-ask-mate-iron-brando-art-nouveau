@@ -37,18 +37,16 @@
             <th>View Number</th>
             <th>Vote Number</th>
             <th>Title</th>
-            <th>Message</th>
 
         </tr>
 
  	{% for question in questions %}
 	<tr>
 
-	 <td align="center">{{ question["submission_time"][:16]   }}</td>
+	 <td align="center">{{ question["submission_time"] }}</td>
   	 <td align="center">{{ question["view_number"] }}</td>
   	 <td align="center">{{ question["vote_number"] }}</td>
-  	 <td align="center"><a href="/details/{{ question['id'] }}">{{ question["title"] }}</td>
-   	 <td align="center">{{ question["message"] }}</td>
+  	 <td><a href="/details/{{ question['id'] }}">{{ question["title"] }}</td>
 	</tr>
 	{% endfor %}
 

@@ -20,69 +20,58 @@ def form():
 @app.route('/form', methods=['POST'])
 def save_question():
     dict_of_question = request.form.to_dict()
-    dict_of_question["view_number"] = 0
-    dict_of_question["vote_number"] = 0
-    dict_of_question["image"] = None
-    question_id = data_manager.add_new_question(dict_of_question)
-    return redirect(url_for("get_question_details",postid=question_id))
+    question_id = data_manager.add_new_question(dict_of_question)  # not working
+    question_page_url = url_for("get_question_details", postid=question_id)
+    return redirect(question_page_url)
 
 
 @app.route('/details/<postid>')
 def get_question_details(postid):
-    user_questions = data_manager.get_all_questions()
-    data_manager.add_question_view(user_questions, postid)
-    needed_post = utils.get_line_by_id(user_questions, postid)
-    url_for_new_answer = url_for("new_answer", postid = postid)
-    url_for_to_comment = url_for("to_comment", postid = postid)
-    all_answers = data_manager.get_all_answers()
-    answers_for_question = utils.get_line_by_id(all_answers, postid, field_to_check="question_id", as_list=True)
-    return render_template("details.html", postid = postid, needed_post = needed_post,
-                           url_for_new_answer = url_for_new_answer, url_for_to_comment = url_for_to_comment,
+    data_manager.add_question_view(postid)
+    question = data_manager.get_question_by_id(postid)
+    answers_for_question = data_manager.get_answers_by_question_id(postid)
+    return render_template("details.html", dict_of_question = question,
                            answers_to_list = answers_for_question)
 
 
 @app.route('/details', methods = ["POST"])
-def voting_system_up():
-    user_questions = data_manager.get_all_questions()
+def upvote_question():
     postid = request.form["post_id"]
-    data_manager.add_question_up_voting(user_questions, postid)
+    data_manager.add_question_upvote(postid)
     return redirect("/")
 
 
 @app.route('/details_down', methods = ["POST"])
-def voting_system_down():
-    user_questions = data_manager.get_all_questions()
+def downvote_question():
     postid = request.form["post_id"]
-    data_manager.add_question_down_voting(user_questions, postid)
+    data_manager.add_question_downvote(postid)
     return redirect("/")
 
 
-@app.route('/comment/<postid>/new-comment')
-def to_comment(postid):
-    user_questions = data_manager.get_all_questions()
+@app.route('/comment/<postid>/new-comment')  # to be finished
+def new_comment(postid):
+    user_questions = data_manager.get_all_questions()  # might want to use something else
     comment_to_answer = utils.get_line_by_id(user_questions, postid)
     return render_template("comments.html", questions=comment_to_answer)
 
 
 @app.route('/details/<postid>/new-answer')
 def new_answer(postid):
-    user_questions = data_manager.get_all_questions()
-    question_to_answer = utils.get_line_by_id(user_questions, postid)
-    return render_template("answer.html", questions = question_to_answer)
+    question_to_answer = data_manager.get_question_by_id(postid)
+    return render_template("answer.html", dict_of_question=question_to_answer)
 
 
 @app.route('/details/<postid>/new-answer', methods = ["POST"])
 def post_answer(postid):
     dict_of_new_answer = request.form.to_dict()
-    dict_of_new_answer["vote_number"] = 0
-    dict_of_new_answer["image"] = None
     dict_of_new_answer["question_id"] = postid
     data_manager.add_new_answer(dict_of_new_answer)
-    return redirect(url_for("get_question_details", postid=postid))
+    url_to_question_details = url_for("get_question_details", postid=postid)
+    return redirect(url_to_question_details)
 
 
 @app.route('/search', methods = ["POST","GET"])
-def get_answer_to_qeustion():
+def search_question():
 
 
     return render_template('search_results.html')

@@ -15,8 +15,22 @@ def get_all_questions(cursor):
 
 
 @connection.connection_handler
-def add_new_question(cursor, dict_of_new_question):
+def get_question_by_id(cursor, _id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %s
+                    """,
+                   _id)
+    dict_of_question = cursor.fetchone()
+    return dict_of_question
+
+
+@connection.connection_handler
+def add_new_question(cursor, dict_of_new_question):  # to be refactored
     dict_of_new_question = utils.add_submission_time(dict_of_new_question)
+    dict_of_new_question["view_number"] = 0
+    dict_of_new_question["vote_number"] = 0
+    dict_of_new_question["image"] = None
     dict_of_new_question = utils.add_missing_fields(dict_of_new_question, HEADER_QUESTIONS)
     cursor.execute("""
                     INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
@@ -34,8 +48,22 @@ def get_all_answers(cursor):
     return list_of_answers
 
 
-def add_new_answer(cursor, dict_of_new_answer):
+@connection.connection_handler
+def get_answers_by_question_id(cursor, _id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE question_id = %(question_id)s
+                    """,
+                   {'question_id': _id})
+    answers_for_question = cursor.fetchall()
+    return answers_for_question
+
+
+@connection.connection_handler
+def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
+    dict_of_new_answer["vote_number"] = 0
+    dict_of_new_answer["image"] = None
     dict_of_new_answer = utils.add_missing_fields(dict_of_new_answer, HEADER_ANSWERS)
     cursor.execute("""
                     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
@@ -44,6 +72,7 @@ def add_new_answer(cursor, dict_of_new_answer):
                    dict_of_new_answer)
 
 
+@connection.connection_handler
 def add_question_view(cursor, _id):
     cursor.execute("""
                     UPDATE question
@@ -53,6 +82,7 @@ def add_question_view(cursor, _id):
                    {"_id": _id})
 
 
+@connection.connection_handler
 def add_answer_upvote(cursor, _id):
     cursor.execute("""
                     UPDATE answer
@@ -62,6 +92,7 @@ def add_answer_upvote(cursor, _id):
                    {"_id": _id})
 
 
+@connection.connection_handler
 def add_answer_downvote(cursor, _id):
     cursor.execute("""
                     UPDATE answer
@@ -71,6 +102,7 @@ def add_answer_downvote(cursor, _id):
                    {"_id": _id})
 
 
+@connection.connection_handler
 def add_question_upvote(cursor, _id):
     cursor.execute("""
                     UPDATE question
@@ -80,6 +112,7 @@ def add_question_upvote(cursor, _id):
                    {"_id": _id})
 
 
+@connection.connection_handler
 def add_question_downvote(cursor, _id):
     cursor.execute("""
                     UPDATE question

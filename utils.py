@@ -13,7 +13,7 @@ def add_submission_time(dict_of_new_entry):
     return dict_of_new_entry
 
 
-def add_missing_fields(dict_to_check, header):
+def add_missing_fields(dict_to_check, header): # vote és view should be 0
     for field_name in header:
         if field_name not in dict_to_check:
             dict_to_check[field_name] = None

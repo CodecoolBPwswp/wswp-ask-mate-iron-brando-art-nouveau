@@ -3,7 +3,7 @@
 <html>
 
 <head> 
-	<title>{{ needed_post["title"] }}</title>
+	<title>{{ dict_of_question["title"] }}</title>
     <style>
 
 			table {
@@ -20,50 +20,52 @@
     </style>
 </head>
 <body>
-    <h1>{{ needed_post["title"] }}</h1>
+    <h1>{{ dict_of_question["title"] }}</h1>
 	<h2>Question details </h2>
 
     <p>Detailed question message:</p>
-    <p><em>{{ needed_post["message"] }}</em></p>
+    <p><em>{{ dict_of_question["message"] }}</em></p>
 
 
 	<form action="/details" method = "post"> 
-		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
+		<input name = "post_id" value = "{{ dict_of_question['id']}}" hidden>
 		<input type="submit" value="Upvote this question" />
     </form> 
     <br>
 
 
 	<form action="/details_down" method = "post"> 
-		<input name = "post_id" value = "{{ needed_post['id']}}" hidden>
+		<input name = "post_id" value = "{{ dict_of_question['id']}}" hidden>
 		<input type="submit" value="Downvote this question" />
     </form> 
     <br>
 
 
-    <a href="{{url_for_to_comment}}">Add a new comment</a> <br> <br>
+    <a href="{{ url_for('new_comment', postid=dict_of_question['id']) }}">Add a new comment</a> <br> <br>
     
 
-	<a href="{{url_for_new_answer}}">Add a new answer</a>
+	<a href="{{ url_for('new_answer', postid=dict_of_question['id']) }}">Add a new answer</a>
 	
-	<h2>Previous Answers to this question</h2>
-    <table>
-        <tr>
-git
-            <th>Submission time</th>
-            <th>Message</th>
-            <th>Vote number</th>
-        </tr>
-    {% for dict_of_answer in answers_to_list %}
-        <tr>
+	{% if answers_to_list %}
+        <h2>Previous Answers to this question</h2>
+        <table>
+            <tr>
+                <th>Submission time</th>
+                <th>Message</th>
+                <th>Vote number</th>
+            </tr>
+        {% for dict_of_answer in answers_to_list %}
+            <tr>
 
-            <td align=center>{{ dict_of_answer["submission_time"] }}</td>
-            <td align=center>{{ dict_of_answer["message"] }}</td>
-            <td align=center>{{ dict_of_answer["vote_number"] }}</td>
+                <td align=center>{{ dict_of_answer["submission_time"] }}</td>
+                <td align=center>{{ dict_of_answer["message"] }}</td>
+                <td align=center>{{ dict_of_answer["vote_number"] }}</td>
 
-    {% endfor %}
+        {% endfor %}
 
-    </table>
+        </table>
+    {% endif %}
+
 	<p><a href="/">Back to home</a></p>
 </body>
 
