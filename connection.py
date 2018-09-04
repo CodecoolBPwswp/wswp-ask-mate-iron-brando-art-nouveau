@@ -24,4 +24,15 @@ def get_connection_string():
 
 
 def open_database():
+    try:
+        connection_string = get_connection_string()
+        connection = psycopg2.connect(connection_string)
+        connection.autocommit = True
+    except psycopg2.DatabaseError as exception:
+        print("Database connaction problem")
+        raise exception
+    return connection
+
+
+def connection_handler(function):
     pass
