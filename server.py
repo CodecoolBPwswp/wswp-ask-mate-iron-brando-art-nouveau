@@ -33,10 +33,12 @@ def get_question_details(postid):
     data_manager.add_question_view(user_questions, postid)
     needed_post = utils.get_line_by_id(user_questions, postid)
     url_for_new_answer = url_for("new_answer", postid = postid)
+    url_for_to_comment = url_for("to_comment", postid = postid)
     all_answers = data_manager.get_all_answers()
     answers_for_question = utils.get_line_by_id(all_answers, postid, field_to_check="question_id", as_list=True)
     return render_template("details.html", postid = postid, needed_post = needed_post,
-                           url_for_new_answer = url_for_new_answer, answers_to_list = answers_for_question)
+                           url_for_new_answer = url_for_new_answer, url_for_to_comment = url_for_to_comment,
+                           answers_to_list = answers_for_question)
 
 
 @app.route('/details', methods = ["POST"])
@@ -55,6 +57,13 @@ def voting_system_down():
     return redirect("/")
 
 
+@app.route('/comment/<postid>/new-comment')
+def to_comment(postid):
+    user_questions = data_manager.get_all_questions()
+    comment_to_answer = utils.get_line_by_id(user_questions, postid)
+    return render_template("comments.html", questions=comment_to_answer)
+
+
 @app.route('/details/<postid>/new-answer')
 def new_answer(postid):
     user_questions = data_manager.get_all_questions()
@@ -70,6 +79,14 @@ def post_answer(postid):
     dict_of_new_answer["question_id"] = postid
     data_manager.add_new_answer(dict_of_new_answer)
     return redirect(url_for("get_question_details", postid=postid))
+
+
+@app.route('/search', methods = ["POST","GET"])
+def get_answer_to_qeustion():
+
+
+    return render_template('search_results.html')
+
 
 
 if __name__ == "__main__":
