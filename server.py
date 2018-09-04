@@ -33,10 +33,12 @@ def get_question_details(postid):
     data_manager.add_question_view(user_questions, postid)
     needed_post = utils.get_line_by_id(user_questions, postid)
     url_for_new_answer = url_for("new_answer", postid = postid)
+    url_for_to_comment = url_for("to_comment", postid = postid)
     all_answers = data_manager.get_all_answers()
     answers_for_question = utils.get_line_by_id(all_answers, postid, field_to_check="question_id", as_list=True)
     return render_template("details.html", postid = postid, needed_post = needed_post,
-                           url_for_new_answer = url_for_new_answer, answers_to_list = answers_for_question)
+                           url_for_new_answer = url_for_new_answer, url_for_to_comment = url_for_to_comment,
+                           answers_to_list = answers_for_question)
 
 
 @app.route('/details', methods = ["POST"])
@@ -53,6 +55,13 @@ def voting_system_down():
     postid = request.form["post_id"]
     data_manager.add_question_down_voting(user_questions, postid)
     return redirect("/")
+
+
+@app.route('/comment/<postid>/new-comment')
+def to_comment(postid):
+    user_questions = data_manager.get_all_questions()
+    comment_to_answer = utils.get_line_by_id(user_questions, postid)
+    return render_template("comments.html", questions=comment_to_answer)
 
 
 @app.route('/details/<postid>/new-answer')
