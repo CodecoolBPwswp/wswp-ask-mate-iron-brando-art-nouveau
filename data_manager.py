@@ -87,6 +87,3 @@ def add_question_downvote(cursor, _id):
                     WHERE id = %(_id)s;
                     """,
                    {"_id": _id})
-
-
-

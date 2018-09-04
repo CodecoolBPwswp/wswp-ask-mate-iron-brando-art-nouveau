@@ -8,9 +8,16 @@ def add_id_to_entry(dict_of_new_entry):
 
 
 def add_submission_time(dict_of_new_entry):
-    current_time_str = str(datetime.datetime.now())[:-7]
+    current_time_str = str(datetime.datetime.now())
     dict_of_new_entry["submission_time"] = current_time_str
     return dict_of_new_entry
+
+
+def add_missing_fields(dict_to_check, header):
+    for field_name in header:
+        if field_name not in dict_to_check:
+            dict_to_check[field_name] = None
+    return dict_to_check
 
 
 def check_if_all_fields(dict_to_check, header):
