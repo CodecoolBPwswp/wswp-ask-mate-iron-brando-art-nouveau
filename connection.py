@@ -1,21 +1,27 @@
-import csv
+import os
+import psycopg2
+from psycopg2 import extras
 
 
-def read_csv_to_list_of_dicts(file_path):
-    with open(file_path, "r") as csvfile:
-        reader = csv.DictReader(csvfile)
-        list_of_dicts = [dict(line) for line in reader]
-    return list_of_dicts
+def get_connection_string():
+    user_name = os.environ.get("PSQL_USER_NAME")
+    user_password = os.environ.get("PSQL_PASSWORD")
+    host = os.environ.get("PSQL_HOST")
+    database_name = os.environ.get("PSQL_DB_NAME")
+
+    environment_variables_defined = user_name and user_password and host and database_name
+
+    if not environment_variables_defined:
+        raise KeyError("Some of the needed environment variables are not defined")
+    else:
+        connection_string = "postgresql://{user_name}:{password}@{host}/{database_name}".format(
+            user_name=user_name,
+            password=user_password,
+            host=host,
+            database_name=database_name
+        )
+        return connection_string
 
 
-def append_line_to_csv(file_path, data_header, line_to_append):
-    with open(file_path, "a") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=data_header)
-        writer.writerow(line_to_append)
-
-
-def update_csv(file_path, data_header, updated_data):
-    with open(file_path, "w") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=data_header)
-        writer.writeheader()
-        writer.writerows(updated_data)
+def open_database():
+    pass
