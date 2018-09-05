@@ -117,7 +117,7 @@ def get_answers_by_question_id(cursor, _id):
 def get_search_results(cursor, keyword):
     cursor.execute("""
                     SELECT * FROM question
-                    WHERE message LIKE '%%keyword%%'
+                    WHERE message LIKE '%%' || %(keyword)s || '%%'
                          """, {'keyword': keyword})
     search_result = cursor.fetchall()
     return search_result
