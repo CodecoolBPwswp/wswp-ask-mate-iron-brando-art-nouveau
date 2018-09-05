@@ -19,11 +19,25 @@ def get_all_questions(cursor):
 def get_question_by_id(cursor, _id):
     cursor.execute("""
                     SELECT * FROM question
-                    WHERE id = %s
+                    WHERE id = %(id)s
                     """,
-                   _id)
+                   {'id': _id})
     dict_of_question = cursor.fetchone()
     return dict_of_question
+
+
+@connection.connection_handler
+def get_last_question_by_title(cursor, question_title):
+    cursor.execute("""
+                    SELECT id FROM question
+                    WHERE title = %(title)s
+                    ORDER BY submission_time DESC
+                    LIMIT 1;
+                    """,
+                   {"title": question_title})
+    dict_of_id = cursor.fetchone()
+    question_id = dict_of_id["id"]
+    return question_id
 
 
 @connection.connection_handler
@@ -78,6 +92,17 @@ def get_all_answers(cursor):
 
 
 @connection.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %s;
+                    """,
+                   answer_id)
+    dict_of_answer = cursor.fetchone()
+    return dict_of_answer
+
+
+@connection.connection_handler
 def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
                     SELECT * FROM answer
@@ -99,6 +124,17 @@ def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
                     VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s)
                     """,
                    dict_of_new_answer)
+
+
+@connection.connection_handler
+def update_answer(cursor, dict_of_updated_answer):
+    cursor.execute("""
+                    UPDATE answer
+                    SET message = %(message)s
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {"message": dict_of_updated_answer["message"],
+                    "answer_id": dict_of_updated_answer["id"]})
 
 
 @connection.connection_handler
