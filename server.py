@@ -6,10 +6,18 @@ app = Flask(__name__)
 
 
 @app.route('/')
+def route_index():
+    is_list_truncated = True
+    number_of_questions_to_show = 5
+    list_of_questions = data_manager.get_latest_questions(number_of_questions_to_show)
+    return render_template('lists.html', questions=list_of_questions, truncated=is_list_truncated)
+
+
 @app.route('/list')
 def route_list():
+    is_list_truncated = False
     user_questions = data_manager.get_all_questions()
-    return render_template('lists.html', questions=user_questions)
+    return render_template('lists.html', questions=user_questions, truncated=is_list_truncated)
 
 
 @app.route('/form')
@@ -131,9 +139,9 @@ def save_edited_answer():
 
 @app.route('/search', methods = ["POST","GET"])
 def search_question():
-
-
-    return render_template('search_results.html')
+    keyword = request.form['search']
+    search_result = data_manager.get_search_results(keyword)
+    return render_template('search_results.html', keyword=keyword, search_result = search_result)
 
 
 
