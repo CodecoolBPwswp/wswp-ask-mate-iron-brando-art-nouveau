@@ -30,7 +30,8 @@ def get_question_details(postid):
     data_manager.add_question_view(postid)
     question = data_manager.get_question_by_id(postid)
     answers_for_question = data_manager.get_answers_by_question_id(postid)
-    return render_template("details.html", dict_of_question = question,
+    comments_for_question = data_manager.get_comments_by_question_id(postid)
+    return render_template("details.html", dict_of_question = question, comments_to_list = comments_for_question,
                            answers_to_list = answers_for_question)
 
 
@@ -50,15 +51,26 @@ def downvote_question():
 
 @app.route('/comment/<postid>/new-comment')  # to be finished
 def new_comment(postid):
-    user_questions = data_manager.get_all_questions()  # might want to use something else
-    comment_to_answer = utils.get_line_by_id(user_questions, postid)
-    return render_template("comments.html", questions=comment_to_answer)
+    comment_to_answer = data_manager.get_question_by_id(postid)
+    return render_template("comments.html", dict_of_question=comment_to_answer)
+
+@app.route('/comment/<postid>/new-comment', methods = ["POST"])
+def post_comment(postid):
+    dict_of_new_comment = request.form.to_dict()
+    dict_of_new_comment["question_id"] = postid
+    data_manager.add_new_comment(dict_of_new_comment)
+    url_to_question_details = url_for("get_question_details", postid=postid)
+    return redirect(url_to_question_details)
 
 
 @app.route('/details/<postid>/new-answer')
 def new_answer(postid):
     question_to_answer = data_manager.get_question_by_id(postid)
-    return render_template("answer.html", dict_of_question=question_to_answer)
+    user_action = "Add new"
+    form_action = url_for("post_answer", postid=question_to_answer["id"])
+    return render_template("answer.html", dict_of_question=question_to_answer,
+                           dict_of_answer=None, user_action=user_action,
+                           form_action=form_action)
 
 
 @app.route('/details/<postid>/new-answer', methods = ["POST"])
@@ -68,6 +80,26 @@ def post_answer(postid):
     data_manager.add_new_answer(dict_of_new_answer)
     url_to_question_details = url_for("get_question_details", postid=postid)
     return redirect(url_to_question_details)
+
+
+@app.route('/answers/<answer_id>/edit-answer')
+def edit_answer(answer_id):
+    answer_to_edit = data_manager.get_answer_by_id(answer_id)
+    dict_of_question = data_manager.get_question_by_id(answer_to_edit["question_id"])
+    user_action = "Edit"
+    form_action = url_for("save_edited_answer")
+    return render_template('answer.html', dict_of_question=dict_of_question,
+                           dict_of_answer=answer_to_edit, user_action=user_action,
+                           form_action=form_action)
+
+
+@app.route('/save-edited-answer', methods=["POST"])
+def save_edited_answer():
+    edited_message = request.form.to_dict()
+    data_manager.update_answer(edited_message)
+    edited_answer = data_manager.get_answer_by_id(edited_message["id"])
+    url_to_question = url_for("get_question_details", postid=edited_answer["question_id"])
+    return redirect(url_to_question)
 
 
 @app.route('/search', methods = ["POST","GET"])
@@ -82,6 +114,6 @@ def search_question():
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
-        port=7000,
+        port=7550,
         debug=True
     )

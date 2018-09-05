@@ -3,12 +3,13 @@ import utils
 
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
+HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
 
 
 @connection.connection_handler
 def get_all_questions(cursor):
     cursor.execute("""
-                    SELECT * FROM question
+                    SELECT * FROM question;
                     """)
     list_of_questions = cursor.fetchall()
     return list_of_questions
@@ -18,9 +19,9 @@ def get_all_questions(cursor):
 def get_question_by_id(cursor, _id):
     cursor.execute("""
                     SELECT * FROM question
-                    WHERE id = %s
+                    WHERE id = %(id)s
                     """,
-                   _id)
+                   {'id': _id})
     dict_of_question = cursor.fetchone()
     return dict_of_question
 
@@ -38,6 +39,34 @@ def add_new_question(cursor, dict_of_new_question):  # to be refactored
                     """,
                    dict_of_new_question)
 
+@connection.connection_handler
+def get_all_comments(cursor):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    """)
+    list_of_comments = cursor.fetchall()
+    return list_of_comments
+
+@connection.connection_handler
+def get_comments_by_question_id(cursor, _id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE question_id = %(question_id)s
+                    """,
+                   {'question_id': _id})
+    comment_for_question = cursor.fetchall()
+    return comment_for_question
+
+@connection.connection_handler
+def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
+    dict_of_new_comment = utils.add_submission_time(dict_of_new_comment)
+    dict_of_new_comment = utils.add_missing_fields(dict_of_new_comment, HEADER_COMMENTS)
+    cursor.execute("""
+                    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
+                    VALUES (%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
+                    """,
+                   dict_of_new_comment)
+
 
 @connection.connection_handler
 def get_all_answers(cursor):
@@ -46,6 +75,17 @@ def get_all_answers(cursor):
                     """)
     list_of_answers = cursor.fetchall()
     return list_of_answers
+
+
+@connection.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %s;
+                    """,
+                   answer_id)
+    dict_of_answer = cursor.fetchone()
+    return dict_of_answer
 
 
 @connection.connection_handler
@@ -79,6 +119,17 @@ def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
                     VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s)
                     """,
                    dict_of_new_answer)
+
+
+@connection.connection_handler
+def update_answer(cursor, dict_of_updated_answer):
+    cursor.execute("""
+                    UPDATE answer
+                    SET message = %(message)s
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {"message": dict_of_updated_answer["message"],
+                    "answer_id": dict_of_updated_answer["id"]})
 
 
 @connection.connection_handler
