@@ -8,7 +8,7 @@ def add_id_to_entry(dict_of_new_entry):
 
 
 def add_submission_time(dict_of_new_entry):
-    current_time_str = str(datetime.datetime.now())
+    current_time_str = str(datetime.datetime.now())[:16]
     dict_of_new_entry["submission_time"] = current_time_str
     return dict_of_new_entry
 

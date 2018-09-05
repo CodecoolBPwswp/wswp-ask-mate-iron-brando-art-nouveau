@@ -9,7 +9,7 @@ HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time
 @connection.connection_handler
 def get_all_questions(cursor):
     cursor.execute("""
-                    SELECT * FROM question;
+                    SELECT id, submission_time, view_number, vote_number, title FROM question;
                     """)
     list_of_questions = cursor.fetchall()
     return list_of_questions
@@ -107,9 +107,9 @@ def get_all_answers(cursor):
 def get_answer_by_id(cursor, answer_id):
     cursor.execute("""
                     SELECT * FROM answer
-                    WHERE id = %s;
+                    WHERE id = %(answer_id)s;
                     """,
-                   answer_id)
+                   {"answer_id": answer_id})
     dict_of_answer = cursor.fetchone()
     return dict_of_answer
 

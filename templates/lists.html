@@ -39,19 +39,19 @@
         <tr>
 
             <th>Submission Time</th>
-            <th>View Number</th>
+            <th>Question Title</th>
+            <th>View_number</th>
             <th>Vote Number</th>
-            <th>Title</th>
 
         </tr>
 
  	{% for question in questions %}
 	<tr>
 
-	 <td align="center">{{ question["submission_time"] }}</td>
-  	 <td align="center">{{ question["view_number"] }}</td>
-  	 <td align="center">{{ question["vote_number"] }}</td>
-        <td><a href="/details/{{ question['id'] }}">{{ question["title"] }}</a></td>
+	    <td align="center">{{ question["submission_time"] }}</td>
+        <td><a href="/details/{{ question["id"] }}">{{ question["title"] }}</a></td>
+        <td align="center">{{ question["view_number"] }}</td>
+        <td align="center">{{ question["vote_number"] }}</td>
 	</tr>
 	{% endfor %}
 
