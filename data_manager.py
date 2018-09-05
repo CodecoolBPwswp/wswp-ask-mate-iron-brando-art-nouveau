@@ -3,12 +3,13 @@ import utils
 
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
+HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
 
 
 @connection.connection_handler
 def get_all_questions(cursor):
     cursor.execute("""
-                    SELECT * FROM question
+                    SELECT * FROM question;
                     """)
     list_of_questions = cursor.fetchall()
     return list_of_questions
@@ -37,6 +38,34 @@ def add_new_question(cursor, dict_of_new_question):  # to be refactored
                     VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
                     """,
                    dict_of_new_question)
+
+@connection.connection_handler
+def get_all_comments(cursor):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    """)
+    list_of_comments = cursor.fetchall()
+    return list_of_comments
+
+@connection.connection_handler
+def get_comments_by_question_id(cursor, _id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE question_id = %(question_id)s
+                    """,
+                   {'question_id': _id})
+    comment_for_question = cursor.fetchall()
+    return comment_for_question
+
+@connection.connection_handler
+def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
+    dict_of_new_comment = utils.add_submission_time(dict_of_new_comment)
+    dict_of_new_comment = utils.add_missing_fields(dict_of_new_comment, HEADER_COMMENTS)
+    cursor.execute("""
+                    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
+                    VALUES (%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
+                    """,
+                   dict_of_new_comment)
 
 
 @connection.connection_handler
