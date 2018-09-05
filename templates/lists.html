@@ -49,7 +49,7 @@
 	<tr>
 
 	    <td align="center">{{ question["submission_time"] }}</td>
-        <td><a href="/details/{{ question["id"] }}">{{ question["title"] }}</a></td>
+        <td><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
         <td align="center">{{ question["view_number"] }}</td>
         <td align="center">{{ question["vote_number"] }}</td>
 	</tr>
