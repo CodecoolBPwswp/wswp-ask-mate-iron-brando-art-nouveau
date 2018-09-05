@@ -27,6 +27,20 @@ def get_question_by_id(cursor, _id):
 
 
 @connection.connection_handler
+def get_last_question_by_title(cursor, question_title):
+    cursor.execute("""
+                    SELECT id FROM question
+                    WHERE title = %(title)s
+                    ORDER BY submission_time DESC
+                    LIMIT 1;
+                    """,
+                   {"title": question_title})
+    dict_of_id = cursor.fetchone()
+    question_id = dict_of_id["id"]
+    return question_id
+
+
+@connection.connection_handler
 def add_new_question(cursor, dict_of_new_question):  # to be refactored
     dict_of_new_question = utils.add_submission_time(dict_of_new_question)
     dict_of_new_question["view_number"] = 0
