@@ -18,7 +18,7 @@ def get_all_questions(cursor):
 @connection.connection_handler
 def get_latest_questions(cursor, how_many):
     cursor.execute("""
-                    SELECT submission_time, title, view_number, vote_number FROM question
+                    SELECT id, submission_time, title, view_number, vote_number FROM question
                     ORDER BY submission_time DESC
                     LIMIT %(number_of_rows)s;
                     """,
@@ -124,6 +124,15 @@ def get_answers_by_question_id(cursor, _id):
     answers_for_question = cursor.fetchall()
     return answers_for_question
 
+
+@connection.connection_handler
+def get_search_results(cursor, keyword):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE message LIKE '%%' || %(keyword)s || '%%'
+                         """, {'keyword': keyword})
+    search_result = cursor.fetchall()
+    return search_result
 
 @connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored

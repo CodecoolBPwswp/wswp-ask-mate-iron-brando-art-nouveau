@@ -23,8 +23,10 @@
 
 <body>
 	<h1>Ask Mate</h1>
-    <form action='/search' method="post"><textarea name="search" placeholder="Search questions..." ></textarea>
+    <form action='/search' method="post">
+        <input type="text" name="search" placeholder="Search questions..." required minlength="1">
         <input type="submit" value="Search">
+
     </form>
     <p><a href="/form">Ask a question</a></p>
 
@@ -49,7 +51,7 @@
 	 <td align="center">{{ question["submission_time"] }}</td>
   	 <td align="center">{{ question["view_number"] }}</td>
   	 <td align="center">{{ question["vote_number"] }}</td>
-  	 <td><a href="/details/{{ question['id'] }}">{{ question["title"] }}</td>
+        <td><a href="/details/{{ question['id'] }}">{{ question["title"] }}</a></td>
 	</tr>
 	{% endfor %}
 
