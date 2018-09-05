@@ -53,12 +53,14 @@ def downvote_question():
 ##### comment to question
 
 @app.route('/details/<postid>/new-comment')  # to be finished
-def new_comment(postid):
-    comment_to_question = data_manager.get_question_by_id(postid)
-    return render_template("comments.html", dict_of_question=comment_to_question)
+def comment_to_question(postid):
+    instance_to_comment = "question"
+    form_action = url_for('post_comment_to_question', postid=postid)
+    question_to_comment = data_manager.get_question_by_id(postid)
+    return render_template("comments.html", dict_of_record=question_to_comment, distinguish = instance_to_comment, form_action=form_action)
 
 @app.route('/details/<postid>/new-comment', methods = ["POST"])
-def post_comment(postid):
+def post_comment_to_question(postid):
     dict_of_new_comment = request.form.to_dict()
     dict_of_new_comment["question_id"] = postid
     data_manager.add_new_comment(dict_of_new_comment)
@@ -70,17 +72,21 @@ def post_comment(postid):
 
 @app.route('/answer/<postid>/new-comment')  # to be finished
 def comment_to_answer(postid):
-    return render_template("comments.html", dict_of_answer=postid)
+    form_action = url_for('post_comment_to_answer', answer_id=postid)
+    comment_to_answer = data_manager.get_answer_by_id(postid)
+    return render_template("comments.html", dict_of_record=comment_to_answer, form_action=form_action)
 
-@app.route('/answer/<postid>/new-comment', methods = ["POST"])
-def post_comment_to_answer(postid):
+@app.route('/answer/<answer_id>/new-comment', methods = ["POST"])
+def post_comment_to_answer(answer_id):
     dict_of_new_comment = request.form.to_dict()
-    dict_of_new_comment["question_id"] = postid
+    dict_of_new_comment["answer_id"] = answer_id
     data_manager.add_new_comment(dict_of_new_comment)
-    url_to_question_details = url_for("get_question_details", postid=postid)
+    question_id = data_manager.get_question_id_for_answer(answer_id)
+    url_to_question_details = url_for("get_question_details", postid=question_id)
     return redirect(url_to_question_details)
 
 #####
+
 
 
 

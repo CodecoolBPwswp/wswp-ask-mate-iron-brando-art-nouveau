@@ -41,7 +41,7 @@
     <br>
 
 
-    <a href="{{ url_for('new_comment', postid=dict_of_question['id']) }}">Add a new comment</a> <br> <br>
+    <a href="{{ url_for('comment_to_question', postid=dict_of_question['id']) }}">Add a new comment</a> <br> <br>
     
 
 	<a href="{{ url_for('new_answer',  postid=dict_of_question['id']) }}">Add a new answer</a>
@@ -81,6 +81,7 @@
                 </td>
                 <td align=center>{{ dict_of_answer["vote_number"] }}</td>
                 <td> <a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">Add new comment</a>  </td>
+                <td> <a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">See comments</a>  </td>
         {% endfor %}
         </table>
     {% endif %}

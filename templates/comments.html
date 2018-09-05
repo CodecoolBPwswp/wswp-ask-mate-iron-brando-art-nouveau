@@ -5,8 +5,19 @@
     <title>Add new comment</title>
 </head>
 <body>
-<h2>Writing a comment to {{ dict_of_question["title"]}}:<h2><br>
-    <form action="{{ url_for('post_comment', postid=dict_of_question["id"]) }}" method="post">
+{% if distinguish == "question" %}
+
+    <h2>Writing a comment to {{ dict_of_record["title"]}}:</h2><br>
+
+
+{% else %}
+
+    <h2>Writing a comment</h2><br>
+
+{% endif %}
+
+
+    <form action="{{ form_action }}" method="post">
         Type your comment here:<br><br>
         <form><textarea name="message" placeholder="Minimum 10 characters..." required minlength="10" cols="60" rows="10"></textarea><br><br>
         <input type="submit" value="Submit">

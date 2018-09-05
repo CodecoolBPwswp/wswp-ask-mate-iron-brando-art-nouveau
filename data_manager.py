@@ -185,3 +185,19 @@ def add_question_downvote(cursor, _id):
                     WHERE id = %(_id)s;
                     """,
                    {"_id": _id})
+
+
+@connection.connection_handler
+def get_question_id_for_answer(cursor, answer_id):
+    cursor.execute("""
+                    SELECT question_id
+                    FROM answer
+                    WHERE id =%(answer_id)s;
+                    """,
+                   {"answer_id": answer_id})
+    getting_id = cursor.fetchone()
+    return getting_id["question_id"]
+
+
+
+
