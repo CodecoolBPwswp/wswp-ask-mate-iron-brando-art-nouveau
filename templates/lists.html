@@ -5,48 +5,52 @@
 <head> 
 	<title>AskMate by Iron Brando </title>
 	<style>
-
 			table {
 				border: 1px solid black;
 				border-collapse: collapse;
 				width: 100%;
 			}
-	
+
 			td, th {
 				border: 1px solid black;
 				border-collapse: collapse;
 			}
-	
+
     </style>
 
 </head>
 
 <body>
-	<h1>Ask Mate, latest questions: </h1>
-    <form action='/search' method="post"><textarea name="search" placeholder="Search questions..." ></textarea>
-    <input type="submit" value="Search">
-    </form>
-    <a href="/form">Ask a question</a> <br><br>
+	<h1>Ask Mate</h1>
+    <form action='/search' method="post">
+        <input type="text" name="search" placeholder="Search database..." required minlength="1">
+        <input type="submit" value="Search">
 
+    </form>
+    <p><a href="/form">Ask a question</a></p>
+
+    {% if truncated %}
+        <p><a href="{{ url_for('route_list') }}">Show all questions</a></p>
+    {% endif %}
 
 	<table>
 
         <tr>
 
             <th>Submission Time</th>
-            <th>View Number</th>
+            <th>Question Title</th>
+            <th>View_number</th>
             <th>Vote Number</th>
-            <th>Title</th>
 
         </tr>
 
  	{% for question in questions %}
 	<tr>
 
-	 <td align="center">{{ question["submission_time"] }}</td>
-  	 <td align="center">{{ question["view_number"] }}</td>
-  	 <td align="center">{{ question["vote_number"] }}</td>
-  	 <td><a href="/details/{{ question['id'] }}">{{ question["title"] }}</td>
+	    <td align="center">{{ question["submission_time"] }}</td>
+        <td><a href="/details/{{ question["id"] }}">{{ question["title"] }}</a></td>
+        <td align="center">{{ question["view_number"] }}</td>
+        <td align="center">{{ question["vote_number"] }}</td>
 	</tr>
 	{% endfor %}
 
