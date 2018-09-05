@@ -71,12 +71,14 @@
                 <th>Submission time</th>
                 <th>Message</th>
                 <th>Vote number</th>
+                <th>Write a comment</th>
             </tr>
         {% for dict_of_answer in answers_to_list %}
             <tr>
                 <td align=center>{{ dict_of_answer["submission_time"] }}</td>
                 <td align=center>{{ dict_of_answer["message"] }}</td>
                 <td align=center>{{ dict_of_answer["vote_number"] }}</td>
+                <td> <a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">Add new comment</a>  </td>
         {% endfor %}
         </table>
     {% endif %}

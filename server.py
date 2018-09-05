@@ -49,18 +49,38 @@ def downvote_question():
     return redirect("/")
 
 
-@app.route('/comment/<postid>/new-comment')  # to be finished
-def new_comment(postid):
-    comment_to_answer = data_manager.get_question_by_id(postid)
-    return render_template("comments.html", dict_of_question=comment_to_answer)
+##### comment to question
 
-@app.route('/comment/<postid>/new-comment', methods = ["POST"])
+@app.route('/details/<postid>/new-comment')  # to be finished
+def new_comment(postid):
+    comment_to_question = data_manager.get_question_by_id(postid)
+    return render_template("comments.html", dict_of_question=comment_to_question)
+
+@app.route('/details/<postid>/new-comment', methods = ["POST"])
 def post_comment(postid):
     dict_of_new_comment = request.form.to_dict()
     dict_of_new_comment["question_id"] = postid
     data_manager.add_new_comment(dict_of_new_comment)
     url_to_question_details = url_for("get_question_details", postid=postid)
     return redirect(url_to_question_details)
+
+
+##### comment to answer
+
+@app.route('/answer/<postid>/new-comment')  # to be finished
+def comment_to_answer(postid):
+    return render_template("comments.html", dict_of_answer=postid)
+
+@app.route('/answer/<postid>/new-comment', methods = ["POST"])
+def post_comment_to_answer(postid):
+    dict_of_new_comment = request.form.to_dict()
+    dict_of_new_comment["question_id"] = postid
+    data_manager.add_new_comment(dict_of_new_comment)
+    url_to_question_details = url_for("get_question_details", postid=postid)
+    return redirect(url_to_question_details)
+
+#####
+
 
 
 @app.route('/details/<postid>/new-answer')
