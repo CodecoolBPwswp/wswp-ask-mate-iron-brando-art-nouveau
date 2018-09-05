@@ -106,7 +106,6 @@ def save_edited_answer():
 def search_question():
     keyword = request.form['search']
     search_result = data_manager.get_search_results(keyword)
-    print('a' + search_result)
     return render_template('search_results.html', keyword=keyword, search_result = search_result)
 
 
