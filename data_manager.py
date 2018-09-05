@@ -60,6 +60,15 @@ def get_answers_by_question_id(cursor, _id):
 
 
 @connection.connection_handler
+def get_search_results(cursor, keyword):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE message LIKE '%keyword%'
+                         """, {'keyword':keyword})
+    search_result = cursor.fetchall()
+    return search_result
+
+@connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
     dict_of_new_answer["vote_number"] = 0

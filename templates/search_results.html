@@ -6,6 +6,16 @@
 
 </head>
 <body>
-<h1>Search results: </h1>
+<h1>Search results for: {{ keyword }}</h1>
+{% for result in search_result %}
+	<tr>
+
+	 <td align="center">{{ result["submission_time"] }}</td>
+  	 <td align="center">{{ result["view_number"] }}</td>
+  	 <td align="center">{{ result["vote_number"] }}</td>
+  	 <td><a href="/details/{{ result['id'] }}">{{ question["title"] }}</td>
+        <td align="center">{{ result["message"] }}</td>
+	</tr>
+	{% endfor %}
 </body>
 </html>
