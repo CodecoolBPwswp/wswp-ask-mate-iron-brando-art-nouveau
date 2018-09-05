@@ -58,7 +58,9 @@
             <tr>
 
                 <td align=center>{{ dict_of_answer["submission_time"] }}</td>
-                <td align=center>{{ dict_of_answer["message"] }}</td>
+                <td align=center>
+                    <a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">{{ dict_of_answer["message"] }}</a>
+                </td>
                 <td align=center>{{ dict_of_answer["vote_number"] }}</td>
 
         {% endfor %}
