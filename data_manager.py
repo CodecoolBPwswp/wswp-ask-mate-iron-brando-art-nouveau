@@ -16,6 +16,18 @@ def get_all_questions(cursor):
 
 
 @connection.connection_handler
+def get_latest_questions(cursor, how_many):
+    cursor.execute("""
+                    SELECT submission_time, title, view_number, vote_number FROM question
+                    ORDER BY submission_time DESC
+                    LIMIT %(number_of_rows)s;
+                    """,
+                   {"number_of_rows": how_many})
+    list_of_questions = cursor.fetchall()
+    return list_of_questions
+
+
+@connection.connection_handler
 def get_question_by_id(cursor, _id):
     cursor.execute("""
                     SELECT * FROM question
