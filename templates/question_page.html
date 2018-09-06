@@ -65,7 +65,7 @@
     {% endif %}
 
 	{% if answers_to_list %}
-        <h2>Previous Answers to this question</h2>
+        <h2>Previous answers to this question</h2>
         <table>
             <tr>
                 <th>Submission time</th>
@@ -79,9 +79,21 @@
                 <td align=center>
                     <a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">{{ dict_of_answer["message"] }}</a>
                 </td>
-                <td align=center>{{ dict_of_answer["vote_number"] }}</td>
+                <td align=center>
+                    <p>
+                        <form action="{{ url_for("upvote_answer") }}" method="post">
+                            <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
+                            <input type="submit" value="Upvote">
+                        </form>
+                    </p>
+                    <p>
+                        <form action="{{ url_for("downvote_answer") }}" method="post">
+                            <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
+                            <input type="submit" value="Downvote">
+                        </form>
+                    </p>
+                    <p>{{ dict_of_answer["vote_number"] }}</p></td>
                 <td> <a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">Add new comment</a>  </td>
-                <td> <a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">See comments</a>  </td>
         {% endfor %}
         </table>
     {% endif %}

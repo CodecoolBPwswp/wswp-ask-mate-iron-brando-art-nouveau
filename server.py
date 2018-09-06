@@ -60,6 +60,24 @@ def downvote_question():
     return redirect(url_to_voted_question)
 
 
+@app.route('/answer-upvote', methods=["POST"])
+def upvote_answer():
+    answer_id = request.form["answer_id"]
+    data_manager.add_answer_upvote(answer_id)
+    question_id = data_manager.get_question_id_for_answer(answer_id)
+    url_to_question = url_for("get_question_details", question_id=question_id)
+    return redirect(url_to_question)
+
+
+@app.route('/answer-downvote', methods=["POST"])
+def downvote_answer():
+    answer_id = request.form["answer_id"]
+    data_manager.add_answer_downvote(answer_id)
+    question_id = data_manager.get_question_id_for_answer(answer_id)
+    url_to_question = url_for("get_question_details", question_id=question_id)
+    return redirect(url_to_question)
+
+
 @app.route('/questions/<question_id>/new-comment')  # to be finished
 def comment_to_question(question_id):
     instance_to_comment = "question"
