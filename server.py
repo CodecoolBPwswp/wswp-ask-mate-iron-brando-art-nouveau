@@ -20,6 +20,13 @@ def route_list():
     return render_template('lists.html', questions=user_questions, truncated=is_list_truncated)
 
 
+@app.route('/list/order-by/<column>/<order>')
+def order_questions(column, order):
+    is_list_truncated = False
+    list_of_questions = data_manager.get_all_questions(column, order)
+    return render_template('lists.html', questions=list_of_questions, truncated=is_list_truncated)
+
+
 @app.route('/new_question')
 def add_new_question():
     return render_template('question_form.html')
