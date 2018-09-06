@@ -4,20 +4,7 @@
 
 <head> 
 	<title>{{ dict_of_question["title"] }}</title>
-    <style>
 
-			table {
-				border: 1px solid black;
-				border-collapse: collapse;
-				width: 100%;
-			}
-
-			td, th {
-				border: 1px solid black;
-				border-collapse: collapse;
-			}
-
-    </style>
 </head>
 <body>
     <h1>{{ dict_of_question["title"] }}</h1>
@@ -39,7 +26,7 @@
 		<input type="submit" value="Downvote this question" />
     </form>
 
-    {{ comments_for_answer }}
+
     <br>
 
 
@@ -50,8 +37,8 @@
 
 
 
-    {% if comments_to_list %}
-        <h2>Comments</h2>
+    {% if comments_for_question %}
+        <h3>Comments for this question</h3>
         <table>
             <tr>
                 <th>Submission time</th>
@@ -65,39 +52,57 @@
         {% endfor %}
         </table>
     {% endif %}
-
+    <hr>
 	{% if answers_to_list %}
-        <h2>Previous answers to this question</h2>
-        <table>
-            <tr>
-                <th>Submission time</th>
-                <th>Message</th>
-                <th>Vote number</th>
-                <th>Write a comment</th>
-            </tr>
+        <h2>Answers</h2>
+
         {% for dict_of_answer in answers_to_list %}
-            <tr>
-                <td align=center>{{ dict_of_answer["submission_time"] }}</td>
-                <td align=center>
-                    <a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">{{ dict_of_answer["message"] }}</a>
-                </td>
-                <td align=center>
-                    <p>
-                        <form action="{{ url_for("upvote_answer") }}" method="post">
-                            <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
-                            <input type="submit" value="Upvote">
-                        </form>
-                    </p>
-                    <p>
-                        <form action="{{ url_for("downvote_answer") }}" method="post">
-                            <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
-                            <input type="submit" value="Downvote">
-                        </form>
-                    </p>
-                    <p>{{ dict_of_answer["vote_number"] }}</p></td>
-                <td> <a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">Add new comment</a>  </td>
+            <table>
+                <tr>
+                    <td>
+                        <p>Answer submission: {{ dict_of_answer["submission_time"] }}</p>
+                        <p><h3>{{ dict_of_answer["message"] }}</h3></p>
+                        <p><a href="{{ url_for('comment_to_answer', postid=dict_of_answer['id']) }}">Add new comment</a></p>
+                        <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">Edit answer</a></p>
+                    </td>
+                    <td>
+                        <p>
+                            <form action="{{ url_for("upvote_answer") }}" method="post">
+                                <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
+                                <input type="submit" value="Upvote">
+                            </form>
+                        </p>
+                        <p>
+                            <form action="{{ url_for("downvote_answer") }}" method="post">
+                                <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
+                                <input type="submit" value="Downvote">
+                            </form>
+                        </p>
+                        <p>{{ dict_of_answer["vote_number"] }}</p>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <th>Submission time</th>
+                    <th>Comment</th>
+                </tr>
+            {% for comment in comments_for_answer if comment["answer_id"] == dict_of_answer["id"] %}
+                <tr>
+                    <td>
+                        <p>{{ comment["submission_time"] }}</p>
+                    </td>
+                    <td>
+                        <p>{{ comment["message"] }}</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+            <hr>
+
         {% endfor %}
-        </table>
+
     {% endif %}
 
 
