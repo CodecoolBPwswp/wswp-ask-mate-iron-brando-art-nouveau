@@ -27,7 +27,7 @@
         <input type="submit" value="Search">
 
     </form>
-    <p><a href="/form">Ask a question</a></p>
+    <p><a href="{{ url_for('add_new_question') }}">Ask a question</a></p>
 
     {% if truncated %}
         <p><a href="{{ url_for('route_list') }}">Show all questions</a></p>
