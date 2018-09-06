@@ -20,13 +20,13 @@ def route_list():
     return render_template('lists.html', questions=user_questions, truncated=is_list_truncated)
 
 
-@app.route('/form')
-def form():
-    return render_template('form.html')
+@app.route('/new_question')
+def add_new_question():
+    return render_template('question_form.html')
 
 
-@app.route('/form', methods=['POST'])
-def save_question():
+@app.route('/new_question', methods=['POST'])
+def save_new_question():
     dict_of_question = request.form.to_dict()
     data_manager.add_new_question(dict_of_question)  # not working
     question_id = data_manager.get_last_question_by_title(dict_of_question["title"])
@@ -34,38 +34,58 @@ def save_question():
     return redirect(question_page_url)
 
 
-@app.route('/details/<postid>')
-def get_question_details(postid):
-    data_manager.add_question_view(postid)
-    question = data_manager.get_question_by_id(postid)
-    answers_for_question = data_manager.get_answers_by_question_id(postid)
-    comments_for_question = data_manager.get_comments_by_question_id(postid)
-    return render_template("details.html", dict_of_question = question, comments_to_list = comments_for_question,
+@app.route('/questions/<question_id>')
+def get_question_details(question_id):
+    data_manager.add_question_view(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    answers_for_question = data_manager.get_answers_by_question_id(question_id)
+    comments_for_question = data_manager.get_comments_by_question_id(question_id)
+    return render_template("question_page.html", dict_of_question = question, comments_to_list = comments_for_question,
                            answers_to_list = answers_for_question)
 
 
-@app.route('/details', methods = ["POST"])
+@app.route('/question-upvote', methods=["POST"])
 def upvote_question():
-    postid = request.form["post_id"]
-    data_manager.add_question_upvote(postid)
-    return redirect("/")
+    question_id = request.form["question_id"]
+    data_manager.add_question_upvote(question_id)
+    url_to_voted_question = url_for("get_question_details", question_id=question_id)
+    return redirect(url_to_voted_question)
 
 
-@app.route('/details_down', methods = ["POST"])
+@app.route('/question-downvote', methods = ["POST"])
 def downvote_question():
-    postid = request.form["post_id"]
-    data_manager.add_question_downvote(postid)
-    return redirect("/")
+    question_id = request.form["question_id"]
+    data_manager.add_question_downvote(question_id)
+    url_to_voted_question = url_for("get_question_details", question_id=question_id)
+    return redirect(url_to_voted_question)
 
 
-##### comment to question
+@app.route('/answer-upvote', methods=["POST"])
+def upvote_answer():
+    answer_id = request.form["answer_id"]
+    data_manager.add_answer_upvote(answer_id)
+    question_id = data_manager.get_question_id_for_answer(answer_id)
+    url_to_question = url_for("get_question_details", question_id=question_id)
+    return redirect(url_to_question)
 
-@app.route('/details/<postid>/new-comment')  # to be finished
-def comment_to_question(postid):
+
+@app.route('/answer-downvote', methods=["POST"])
+def downvote_answer():
+    answer_id = request.form["answer_id"]
+    data_manager.add_answer_downvote(answer_id)
+    question_id = data_manager.get_question_id_for_answer(answer_id)
+    url_to_question = url_for("get_question_details", question_id=question_id)
+    return redirect(url_to_question)
+
+
+@app.route('/questions/<question_id>/new-comment')  # to be finished
+def comment_to_question(question_id):
     instance_to_comment = "question"
-    form_action = url_for('post_comment_to_question', postid=postid)
-    question_to_comment = data_manager.get_question_by_id(postid)
-    return render_template("comments.html", dict_of_record=question_to_comment, distinguish = instance_to_comment, form_action=form_action)
+    form_action = url_for('post_comment_to_question', postid=question_id)
+    question_to_comment = data_manager.get_question_by_id(question_id)
+    return render_template("comments.html", dict_of_record=question_to_comment,
+                           distinguish = instance_to_comment, form_action=form_action)
+
 
 @app.route('/details/<postid>/new-comment', methods = ["POST"])
 def post_comment_to_question(postid):
