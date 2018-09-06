@@ -37,7 +37,9 @@
 	<form action="{{ url_for("downvote_question") }}" method = "post">
 		<input name = "question_id" value = "{{ dict_of_question['id']}}" hidden>
 		<input type="submit" value="Downvote this question" />
-    </form> 
+    </form>
+
+    {{ comments_for_answer }}
     <br>
 
 
@@ -55,7 +57,7 @@
                 <th>Submission time</th>
                 <th>Comment</th>
             </tr>
-        {% for comment in comments_to_list %}
+        {% for comment in comments_for_question %}
                 <tr>
                     <td> {{ comment["submission_time"] }} </td>
                     <td> {{ comment["message"] }} </td>

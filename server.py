@@ -30,7 +30,7 @@ def save_new_question():
     dict_of_question = request.form.to_dict()
     data_manager.add_new_question(dict_of_question)  # not working
     question_id = data_manager.get_last_question_by_title(dict_of_question["title"])
-    question_page_url = url_for("get_question_details", postid=question_id)
+    question_page_url = url_for("get_question_details", question_id=question_id)
     return redirect(question_page_url)
 
 
@@ -40,8 +40,9 @@ def get_question_details(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers_for_question = data_manager.get_answers_by_question_id(question_id)
     comments_for_question = data_manager.get_comments_by_question_id(question_id)
-    return render_template("question_page.html", dict_of_question = question, comments_to_list = comments_for_question,
-                           answers_to_list = answers_for_question)
+    comments_for_answer = data_manager.get_answer_comments_to_question(question_id)
+    return render_template("question_page.html", dict_of_question = question, comments_for_question = comments_for_question,
+                           answers_to_list = answers_for_question, comments_for_answer=comments_for_answer)
 
 
 @app.route('/question-upvote', methods=["POST"])
@@ -92,7 +93,7 @@ def post_comment_to_question(postid):
     dict_of_new_comment = request.form.to_dict()
     dict_of_new_comment["question_id"] = postid
     data_manager.add_new_comment(dict_of_new_comment)
-    url_to_question_details = url_for("get_question_details", postid=postid)
+    url_to_question_details = url_for("get_question_details", question_id=postid)
     return redirect(url_to_question_details)
 
 
@@ -110,7 +111,7 @@ def post_comment_to_answer(answer_id):
     dict_of_new_comment["answer_id"] = answer_id
     data_manager.add_new_comment(dict_of_new_comment)
     question_id = data_manager.get_question_id_for_answer(answer_id)
-    url_to_question_details = url_for("get_question_details", postid=question_id)
+    url_to_question_details = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question_details)
 
 #####
@@ -133,7 +134,7 @@ def post_answer(postid):
     dict_of_new_answer = request.form.to_dict()
     dict_of_new_answer["question_id"] = postid
     data_manager.add_new_answer(dict_of_new_answer)
-    url_to_question_details = url_for("get_question_details", postid=postid)
+    url_to_question_details = url_for("get_question_details", question_id=postid)
     return redirect(url_to_question_details)
 
 

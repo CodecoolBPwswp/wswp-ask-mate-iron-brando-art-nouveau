@@ -83,6 +83,29 @@ def get_comments_by_question_id(cursor, _id):
     comment_for_question = cursor.fetchall()
     return comment_for_question
 
+
+@connection.connection_handler
+def get_comments_by_answer_id(cursor, _id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE answer_id = %(answer_id)s
+                    
+                    """, {'answer_id': _id})
+    comment_for_answer = cursor.fetchall()
+    return comment_for_answer
+
+
+@connection.connection_handler
+def get_answer_comments_to_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT answer.question_id, comment.answer_id, comment.submission_time, comment.message
+                    FROM comment RIGHT JOIN answer ON answer.id = comment.answer_id
+                    WHERE answer.question_id = %(question_id)s
+    """,{'question_id': question_id})
+    list_of_comments = cursor.fetchall()
+    return list_of_comments
+
+
 @connection.connection_handler
 def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
     dict_of_new_comment = utils.add_submission_time(dict_of_new_comment)
@@ -110,7 +133,7 @@ def get_answer_by_id(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     """,
                    {"answer_id": answer_id})
-    dict_of_answer = cursor.fetchone()
+    dict_of_answer = cursor.fetchall()
     return dict_of_answer
 
 
