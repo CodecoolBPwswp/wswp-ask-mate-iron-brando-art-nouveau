@@ -1,5 +1,6 @@
 import connection
 import utils
+from psycopg2 import sql
 
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
@@ -7,10 +8,19 @@ HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time
 
 
 @connection.connection_handler
-def get_all_questions(cursor):
-    cursor.execute("""
-                    SELECT id, submission_time, view_number, vote_number, title FROM question;
-                    """)
+def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"):
+    if order_direction == "DESC":
+        cursor.execute(
+                sql.SQL("""
+                        SELECT id, submission_time, view_number, vote_number, title FROM question
+                        ORDER BY {} DESC
+                        """).format(sql.Identifier(order_by)))
+    else:
+        cursor.execute(
+            sql.SQL("""
+                    SELECT id, submission_time, view_number, vote_number, title FROM question
+                    ORDER BY {} ASC
+                    """).format(sql.Identifier(order_by)))
     list_of_questions = cursor.fetchall()
     return list_of_questions
 
@@ -119,6 +129,7 @@ def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
                     SELECT * FROM answer
                     WHERE question_id = %(question_id)s
+                    ORDER BY id DESC
                     """,
                    {'question_id': _id})
     answers_for_question = cursor.fetchall()

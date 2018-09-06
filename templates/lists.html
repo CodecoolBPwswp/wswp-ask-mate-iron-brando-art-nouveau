@@ -37,10 +37,26 @@
 
         <tr>
 
-            <th>Submission Time</th>
-            <th>Question Title</th>
-            <th>View_number</th>
-            <th>Vote Number</th>
+            <th>
+                Submission Time
+                <a href="{{ url_for('order_questions', column='submission_time', order='DESC') }}">↑</a>
+                <a href="{{ url_for('order_questions', column='submission_time', order='ASC') }}">↓</a>
+            </th>
+            <th>
+                Question Title
+                <a href="{{ url_for('order_questions', column='title', order='DESC') }}">↑</a>
+                <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
+            </th>
+            <th>
+                View_number
+                <a href="{{ url_for('order_questions', column='view_number', order='DESC') }}">↑</a>
+                <a href="{{ url_for('order_questions', column='view_number', order='ASC') }}">↓</a>
+            </th>
+            <th>
+                Vote Number
+                <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
+                <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
+            </th>
 
         </tr>
 
