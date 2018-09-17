@@ -1,26 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add new comment</title>
-</head>
-<body>
-{% if distinguish == "question" %}
+{% extends "layout.html" %}
 
-    <h2>Writing a comment to {{ dict_of_record["title"]}}:</h2><br>
+{% block content %}
 
+{% if instance_to_comment == "question" %}
+
+    <h2>Comment question "{{ dict_of_record["title"]}}"</h2>
 
 {% else %}
 
-    <h2>Writing a comment</h2><br>
+    <h2>Comment an answer</h2>
 
 {% endif %}
 
 
     <form action="{{ form_action }}" method="post">
-        Type your comment here:<br><br>
+        Type your comment here:
         <form><textarea name="message" placeholder="Minimum 10 characters..." required minlength="10" cols="60" rows="10"></textarea><br><br>
         <input type="submit" value="Submit">
-    </form><br><br>
-</body>
-</html>
+    </form>
+
+    {% include "footer.html" %}
+
+{% endblock %}

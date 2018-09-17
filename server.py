@@ -5,30 +5,30 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def route_index():
+def index():
     is_list_truncated = True
     number_of_questions_to_show = 5
     list_of_questions = data_manager.get_latest_questions(number_of_questions_to_show)
-    return render_template('lists.html', questions=list_of_questions, truncated=is_list_truncated)
+    return render_template('list.html', questions=list_of_questions, truncated=is_list_truncated)
 
 
 @app.route('/list')
 def route_list():
     is_list_truncated = False
     list_of_questions = data_manager.get_all_questions()
-    return render_template('lists.html', questions=list_of_questions, truncated=is_list_truncated)
+    return render_template('list.html', questions=list_of_questions, truncated=is_list_truncated)
 
 
 @app.route('/list/order-by/<column>/<order>')
 def order_questions(column, order):
     is_list_truncated = False
     list_of_questions = data_manager.get_all_questions(column, order)
-    return render_template('lists.html', questions=list_of_questions, truncated=is_list_truncated)
+    return render_template('list.html', questions=list_of_questions, truncated=is_list_truncated)
 
 
 @app.route('/new_question')
 def add_new_question():
-    return render_template('question_form.html')
+    return render_template('new_question.html')
 
 
 @app.route('/new_question', methods=['POST'])
@@ -90,8 +90,8 @@ def comment_to_question(question_id):
     instance_to_comment = "question"
     form_action = url_for('post_comment_to_question', postid=question_id)
     question_to_comment = data_manager.get_question_by_id(question_id)
-    return render_template("comments.html", dict_of_record=question_to_comment,
-                           distinguish=instance_to_comment, form_action=form_action)
+    return render_template("new_comment.html", dict_of_record=question_to_comment,
+                           instance_to_comment=instance_to_comment, form_action=form_action)
 
 
 @app.route('/details/<question_id>/new-comment', methods=["POST"])
@@ -107,7 +107,7 @@ def post_comment_to_question(question_id):
 def comment_to_answer(answer_id):
     form_action = url_for('post_comment_to_answer', answer_id=answer_id)
     answer_to_comment = data_manager.get_answer_by_id(answer_id)
-    return render_template("comments.html", dict_of_record=answer_to_comment, form_action=form_action)
+    return render_template("new_comment.html", dict_of_record=answer_to_comment, form_action=form_action)
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=["POST"])
@@ -125,7 +125,7 @@ def new_answer(question_id):
     question_to_answer = data_manager.get_question_by_id(question_id)
     user_action = "Add new"
     form_action = url_for("post_answer", postid=question_to_answer["id"])
-    return render_template("answer.html", dict_of_question=question_to_answer,
+    return render_template("new_answer.html", dict_of_question=question_to_answer,
                            dict_of_answer=None, user_action=user_action,
                            form_action=form_action)
 
@@ -145,7 +145,7 @@ def edit_answer(answer_id):
     dict_of_question = data_manager.get_question_by_id(answer_to_edit["question_id"])
     user_action = "Edit"
     form_action = url_for("save_edited_answer")
-    return render_template('answer.html', dict_of_question=dict_of_question,
+    return render_template('new_answer.html', dict_of_question=dict_of_question,
                            dict_of_answer=answer_to_edit, user_action=user_action,
                            form_action=form_action)
 
@@ -159,7 +159,7 @@ def save_edited_answer():
     return redirect(url_to_question)
 
 
-@app.route('/search', methods=["POST", "GET"])
+@app.route('/search', methods=["POST"])
 def search_question():
     keyword = request.form['search']
     search_result = data_manager.get_search_results(keyword)

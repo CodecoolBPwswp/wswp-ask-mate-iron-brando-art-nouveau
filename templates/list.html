@@ -1,77 +1,66 @@
-<!DOCTYPE HTML> 
+{% extends "layout.html" %}
 
-<html>
 
-<head> 
-	<title>AskMate by Iron Brando </title>
-	<style>
-			table {
-				border: 1px solid black;
-				border-collapse: collapse;
-				width: 100%;
-			}
+{% block content %}
+    
+    <div class="search">
+        <form action="{{ url_for("search_question") }}" method="post">
+            <input type="text" name="search" placeholder="Search database..." required minlength="1">
+            <input type="submit" value="Search">
+    
+        </form>
+    </div>
 
-			td, th {
-				border: 1px solid black;
-				border-collapse: collapse;
-			}
+    <div class="link-box">
+        <p><a href="{{ url_for('add_new_question') }}">Ask a question</a></p>
+    </div>
 
-    </style>
-
-</head>
-
-<body>
-	<h1>Ask Mate</h1>
-    <form action='/search' method="post">
-        <input type="text" name="search" placeholder="Search database..." required minlength="1">
-        <input type="submit" value="Search">
-
-    </form>
-    <p><a href="{{ url_for('add_new_question') }}">Ask a question</a></p>
 
     {% if truncated %}
-        <p><a href="{{ url_for('route_list') }}">Show all questions</a></p>
+        <div class="link-box">
+            <p><a href="{{ url_for('route_list') }}">Show all questions</a></p>
+        </div>
     {% endif %}
 
-	<table>
+    <div class="table-container">
+        <table>
 
-        <tr>
+            <tr>
 
-            <th>
-                Submission Time
-                <a href="{{ url_for('order_questions', column='submission_time', order='DESC') }}">↑</a>
-                <a href="{{ url_for('order_questions', column='submission_time', order='ASC') }}">↓</a>
-            </th>
-            <th>
-                Question Title
-                <a href="{{ url_for('order_questions', column='title', order='DESC') }}">↑</a>
-                <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
-            </th>
-            <th>
-                View_number
-                <a href="{{ url_for('order_questions', column='view_number', order='DESC') }}">↑</a>
-                <a href="{{ url_for('order_questions', column='view_number', order='ASC') }}">↓</a>
-            </th>
-            <th>
-                Vote Number
-                <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
-                <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
-            </th>
+                <th>
+                    Submission Time
+                    <a href="{{ url_for('order_questions', column='submission_time', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='submission_time', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    Question Title
+                    <a href="{{ url_for('order_questions', column='title', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    View_number
+                    <a href="{{ url_for('order_questions', column='view_number', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='view_number', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    Vote Number
+                    <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
+                </th>
 
-        </tr>
+            </tr>
 
- 	{% for question in questions %}
-	<tr>
+        {% for question in questions %}
+            <tr>
 
-	    <td align="center">{{ question["submission_time"] }}</td>
-        <td><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
-        <td align="center">{{ question["view_number"] }}</td>
-        <td align="center">{{ question["vote_number"] }}</td>
-	</tr>
-	{% endfor %}
+                <td align="center">{{ question["submission_time"] }}</td>
+                <td><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
+                <td align="center">{{ question["view_number"] }}</td>
+                <td align="center">{{ question["vote_number"] }}</td>
+            </tr>
+        {% endfor %}
 
-	</table>
+        </table>
+        </div>
 
-</body>
-
-</html>
+{% endblock %}
