@@ -3,13 +3,11 @@
 {% block content %}
 
     <h2>{{ user_action }} answer</h2><br>
-    <h3>{{ dict_of_question["title"] }}</h3>
+
+    {% include "question_details.html" %}
 
     <div>
-        <p>Question message: </p>
-        <p>{{ dict_of_question["message"] }}</p>
             <form action="{{ form_action }}" method="post" id="new-answer">
-                <p>Answer message:</p>
 
                 <textarea name="message"
                           placeholder="Minimum 10 characters..."
@@ -18,11 +16,11 @@
                 {% if dict_of_answer is not none %}
                     <input name="id" type="text" value="{{ dict_of_answer["id"]}}" hidden>
                 {% endif %}
-                <button type="submit" form="new-answer">Send answer</button>
+                <p><button type="submit" form="new-answer">Send answer</button></p>
             </form>
-
-            <p><a href="{{ url_for("get_question_details", question_id = dict_of_question["id"]) }}">Back to question</a></p>
     </div>
+            <p><a href="{{ url_for("get_question_details", question_id = dict_of_question["id"]) }}">Back to question</a></p>
+
 
     {% include "footer.html" %}
 

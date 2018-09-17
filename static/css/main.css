@@ -18,6 +18,7 @@ div {
     align-content: center;
     margin: auto;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 div.table-container {
@@ -29,30 +30,41 @@ div.table-container {
 
 div.link-box {
     background-color: white;
+    width: 25%;
 }
 
-.question-voting, .question-details, .question-comments {
-    display: inline-table;
-
-}
-
-div.question-upper {
+div.question-page-frame {
     display: block;
-    width: 100%;
-    border: 1px solid black;
+    width: 90%;
+    margin: 10px auto;
+    padding: 15px;
+    background-color: white;
+}
+
+div.question-page-content {
+    display: inline-table;
+    vertical-align: top;
 }
 
 div.question-details {
     width: 40%;
-    border: 2px dashed navy;
-    margin: auto;
 }
 
 div.question-comments {
     width: 40%;
-    display: inline-table;
-    border: 2px dashed navy;
-    margin: auto;
+}
+
+div.answer-container {
+    width: 50%;
+}
+
+div.answer-comments {
+    width: 30%;
+}
+
+div.answer-frame {
+    background-color: #fdf7e9;
+    border: 1px solid white;
 }
 
 a {
@@ -98,4 +110,15 @@ button {
     background-color: #f4cc70;
     border-color: #b6641c;
     margin: 5px;
+}
+
+p.main-message {
+    font-size: 20px;
+}
+
+footer {
+    width: 300px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 7px;
 }

@@ -3,65 +3,20 @@
 {% block content %}
 
 
-    <h2>{{ dict_of_question["title"] }}</h2>
-    <div class="question-upper">
-
-        <div class="question-voting">
-            <form action="{{ url_for("upvote_question") }}" method = "post" id="question-upvote">
-                <input name ="question_id" value = "{{ dict_of_question['id']}}" hidden>
-                <button type="submit" form="question-upvote">Upvote question</button>
-            </form>
-
-
-            <form action="{{ url_for("downvote_question") }}" method = "post" id="question-downvote">
-                <input name = "question_id" value = "{{ dict_of_question['id']}}" hidden>
-                <button type="submit" form="question-downvote">Downvote question</button>
-            </form>
-
-        </div>
-
-        <div class="question-details">
-            <h3>Question details</h3>
-
-            <p>Detailed question message:</p>
-            <p><em>{{ dict_of_question["message"] }}</em></p>
-
-
-
-            <p><a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}">Add a new answer</a></p>
-        </div>
-
-        <div class="question-comments">
-            <h3>Comments</h3>
-            <p><a href="{{ url_for('comment_to_question', question_id=dict_of_question['id']) }}">Add new comment</a></p>
-            {% if comments_for_question %}
-                <table>
-                    <tr>
-                        <th>Submission time</th>
-                        <th>Comment</th>
-                    </tr>
-                {% for comment in comments_for_question %}
-                        <tr>
-                            <td> {{ comment["submission_time"] }} </td>
-                            <td> {{ comment["message"] }} </td>
-                        </tr>
-                {% endfor %}
-                </table>
-            {% endif %}
-        </div>
-    </div>
+    {% include "question_details.html" %}
 
 	{% if answers_to_list %}
-    <div class="question-lower">
+
         <h3>Answers</h3>
 
         {% for dict_of_answer in answers_to_list %}
-            <div>
+        <div class="question-page-frame answer-frame">
+            <div class="question-page-content answer-container">
                 <table>
                     <tr>
                         <td>
                             <p>Answer submission: {{ dict_of_answer["submission_time"] }}</p>
-                            <p><h3>{{ dict_of_answer["message"] }}</h3></p>
+                            <p class="main-message">{{ dict_of_answer["message"] }}</p>
                             <p><a href="{{ url_for('comment_to_answer', answer_id=dict_of_answer['id']) }}">Add new comment</a></p>
                             <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">Edit answer</a></p>
                         </td>
@@ -82,12 +37,10 @@
                         </td>
                     </tr>
                 </table>
+            </div>
 
+            <div class="question-page-content answer-comments">
                 <table>
-                    <tr>
-                        <th>Submission time</th>
-                        <th>Comment</th>
-                    </tr>
                 {% for comment in comments_for_answer if comment["answer_id"] == dict_of_answer["id"] %}
                     <tr>
                         <td>
@@ -100,8 +53,8 @@
                 {% endfor %}
                 </table>
             </div>
+        </div>
         {% endfor %}
-    </div>
     {% endif %}
 
 

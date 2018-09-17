@@ -117,7 +117,7 @@ def get_answer_by_id(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     """,
                    {"answer_id": answer_id})
-    dict_of_answer = cursor.fetchall()
+    dict_of_answer = cursor.fetchone()
     return dict_of_answer
 
 

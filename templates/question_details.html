@@ -1,0 +1,43 @@
+    <div class="question-page-frame question-frame">
+    <h2>{{ dict_of_question["title"] }}</h2>
+
+        <div class="question-voting question-page-content">
+            <p>
+            <form action="{{ url_for("upvote_question") }}" method = "post" id="question-upvote">
+                <input name ="question_id" value = "{{ dict_of_question['id']}}" hidden>
+                <button type="submit" form="question-upvote">Upvote question</button>
+            </form>
+            </p>
+            <p>
+            <form action="{{ url_for("downvote_question") }}" method = "post" id="question-downvote">
+                <input name = "question_id" value = "{{ dict_of_question['id']}}" hidden>
+                <button type="submit" form="question-downvote">Downvote question</button>
+            </form>
+            </p>
+        </div>
+
+        <div class="question-details question-page-content">
+            <h3>Question details</h3>
+
+            <p><em>{{ dict_of_question["message"] }}</em></p>
+
+
+
+            <p><a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}">Add new answer</a></p>
+        </div>
+
+        <div class="question-comments question-page-content">
+            <h3>Comments</h3>
+            <p><a href="{{ url_for('comment_to_question', question_id=dict_of_question['id']) }}">Add new comment</a></p>
+            {% if comments_for_question %}
+                <table>
+                {% for comment in comments_for_question %}
+                        <tr>
+                            <td> {{ comment["submission_time"] }} </td>
+                            <td> {{ comment["message"] }} </td>
+                        </tr>
+                {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
