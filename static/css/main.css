@@ -1,0 +1,69 @@
+body, input, textarea, button, ::placeholder {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: lighter;
+    font-size: 15px;
+}
+
+body {
+    color: #021c1e;
+    background-color: #fcf1d8;
+}
+
+h1 {
+    text-align: center;
+    color: #b6641c;
+}
+
+div {
+    align-content: center;
+    margin: auto;
+    border-radius: 5px;
+}
+
+div.table-container {
+    width: 1200px;
+    background-color: #f1f7f4;
+    padding: 10px;
+    border: #de7a22 1px solid;
+}
+
+a {
+    color: #1b7a72;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+table {
+    border-collapse: collapse;
+    padding: 5px;
+    width: 100%;
+}
+
+th {
+    border-bottom: 1px solid #61a17b;
+    padding: 5px;
+}
+
+.content-wrapper {
+    text-align: center;
+}
+
+td {
+    padding: 5px;
+}
+
+td.question-title {
+    text-align: left;
+}
+
+input, textarea, button {
+    border-radius: 5px;
+    border: #61a17b 0.5px solid;
+    padding: 7px;
+}
+
+button {
+    background-color: #f4cc70;
+    border-color: #b6641c;
+    margin: 5px;
+}

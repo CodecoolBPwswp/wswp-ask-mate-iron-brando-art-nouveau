@@ -4,9 +4,9 @@
 {% block content %}
     
     <div class="search">
-        <form action="{{ url_for("search_question") }}" method="post">
+        <form action="{{ url_for("search_question") }}" method="post" id="searching-bar">
             <input type="text" name="search" placeholder="Search database..." required minlength="1">
-            <input type="submit" value="Search">
+            <button type="submit" form="searching-bar">Search</button>
     
         </form>
     </div>
@@ -24,9 +24,7 @@
 
     <div class="table-container">
         <table>
-
             <tr>
-
                 <th>
                     Submission Time
                     <a href="{{ url_for('order_questions', column='submission_time', order='DESC') }}">↑</a>
@@ -38,7 +36,7 @@
                     <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
                 </th>
                 <th>
-                    View_number
+                    View Number
                     <a href="{{ url_for('order_questions', column='view_number', order='DESC') }}">↑</a>
                     <a href="{{ url_for('order_questions', column='view_number', order='ASC') }}">↓</a>
                 </th>
@@ -47,20 +45,19 @@
                     <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
                     <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
                 </th>
-
             </tr>
 
         {% for question in questions %}
             <tr>
 
                 <td align="center">{{ question["submission_time"] }}</td>
-                <td><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
+                <td class="question-title"><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
                 <td align="center">{{ question["view_number"] }}</td>
                 <td align="center">{{ question["vote_number"] }}</td>
             </tr>
         {% endfor %}
 
         </table>
-        </div>
+    </div>
 
 {% endblock %}

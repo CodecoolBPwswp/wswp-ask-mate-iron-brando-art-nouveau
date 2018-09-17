@@ -13,10 +13,10 @@
 {% endif %}
 
 
-    <form action="{{ form_action }}" method="post">
+    <form action="{{ form_action }}" method="post" id="send-comment">
         Type your comment here:
-        <form><textarea name="message" placeholder="Minimum 10 characters..." required minlength="10" cols="60" rows="10"></textarea><br><br>
-        <input type="submit" value="Submit">
+        <textarea name="message" placeholder="Minimum 10 characters..." required minlength="10" cols="60" rows="10"></textarea>
+        <button type="submit" form="send-comment">Send comment</button>
     </form>
 
     {% include "footer.html" %}

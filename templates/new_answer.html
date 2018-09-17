@@ -8,7 +8,7 @@
     <div>
         <p>Question message: </p>
         <p>{{ dict_of_question["message"] }}</p>
-            <form action="{{ form_action }}" method="post">
+            <form action="{{ form_action }}" method="post" id="new-answer">
                 <p>Answer message:</p>
 
                 <textarea name="message"
@@ -18,7 +18,7 @@
                 {% if dict_of_answer is not none %}
                     <input name="id" type="text" value="{{ dict_of_answer["id"]}}" hidden>
                 {% endif %}
-                <input type="submit" value="Submit">
+                <button type="submit" form="new-answer">Send answer</button>
             </form>
 
             <p><a href="{{ url_for("get_question_details", question_id = dict_of_question["id"]) }}">Back to question</a></p>
