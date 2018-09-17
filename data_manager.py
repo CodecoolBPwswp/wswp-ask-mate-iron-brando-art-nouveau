@@ -75,13 +75,6 @@ def add_new_question(cursor, dict_of_new_question):  # to be refactored
                     """,
                    dict_of_new_question)
 
-@connection.connection_handler
-def get_all_comments(cursor):
-    cursor.execute("""
-                    SELECT * FROM comment
-                    """)
-    list_of_comments = cursor.fetchall()
-    return list_of_comments
 
 @connection.connection_handler
 def get_comments_by_question_id(cursor, _id):
@@ -95,29 +88,19 @@ def get_comments_by_question_id(cursor, _id):
 
 
 @connection.connection_handler
-def get_comments_by_answer_id(cursor, _id):
-    cursor.execute("""
-                    SELECT * FROM comment
-                    WHERE answer_id = %(answer_id)s
-                    
-                    """, {'answer_id': _id})
-    comment_for_answer = cursor.fetchall()
-    return comment_for_answer
-
-
-@connection.connection_handler
 def get_answer_comments_to_question(cursor, question_id):
     cursor.execute("""
                     SELECT answer.question_id, comment.answer_id, comment.submission_time, comment.message
-                    FROM comment RIGHT JOIN answer ON answer.id = comment.answer_id
+                    FROM comment JOIN answer ON answer.id = comment.answer_id
                     WHERE answer.question_id = %(question_id)s
-    """,{'question_id': question_id})
+                    """,
+                   {'question_id': question_id})
     list_of_comments = cursor.fetchall()
     return list_of_comments
 
 
 @connection.connection_handler
-def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
+def add_new_comment(cursor, dict_of_new_comment):
     dict_of_new_comment = utils.add_submission_time(dict_of_new_comment)
     dict_of_new_comment = utils.add_missing_fields(dict_of_new_comment, HEADER_COMMENTS)
     cursor.execute("""
@@ -125,15 +108,6 @@ def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
                     VALUES (%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                     """,
                    dict_of_new_comment)
-
-
-@connection.connection_handler
-def get_all_answers(cursor):
-    cursor.execute("""
-                    SELECT * FROM answer
-                    """)
-    list_of_answers = cursor.fetchall()
-    return list_of_answers
 
 
 @connection.connection_handler
@@ -163,10 +137,12 @@ def get_answers_by_question_id(cursor, _id):
 def get_search_results(cursor, keyword):
     cursor.execute("""
                         SELECT * FROM question full join answer on question.id = answer.question_id
-                          WHERE answer.message LIKE '%%' || %(keyword)s || '%%' OR question.message LIKE '%%' || %(keyword)s || '%%'
+                          WHERE answer.message LIKE '%%' || %(keyword)s || '%%' 
+                           OR question.message LIKE '%%' || %(keyword)s || '%%'
                          """, {'keyword': keyword})
     search_result = cursor.fetchall()
     return search_result
+
 
 @connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
@@ -252,7 +228,3 @@ def get_question_id_for_answer(cursor, answer_id):
                    {"answer_id": answer_id})
     getting_id = cursor.fetchone()
     return getting_id["question_id"]
-
-
-
-
