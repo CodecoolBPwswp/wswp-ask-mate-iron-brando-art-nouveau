@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AskMate by Iron Brando</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/main.css") }}">
+</head>
+<body>
+    <h1>AskMate</h1>
+
+    <div class="content-wrapper">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>
