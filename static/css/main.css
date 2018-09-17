@@ -27,10 +27,42 @@ div.table-container {
     border: #de7a22 1px solid;
 }
 
+div.link-box {
+    background-color: white;
+}
+
+.question-voting, .question-details, .question-comments {
+    display: inline-table;
+
+}
+
+div.question-upper {
+    display: block;
+    width: 100%;
+    border: 1px solid black;
+}
+
+div.question-details {
+    width: 40%;
+    border: 2px dashed navy;
+    margin: auto;
+}
+
+div.question-comments {
+    width: 40%;
+    display: inline-table;
+    border: 2px dashed navy;
+    margin: auto;
+}
+
 a {
     color: #1b7a72;
     text-decoration: none;
     font-weight: normal;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 table {
