@@ -3,13 +3,6 @@
 
 {% block content %}
     
-    <div class="search">
-        <form action="{{ url_for("search_question") }}" method="post" id="searching-bar">
-            <input type="text" name="search" placeholder="Search database..." required minlength="1">
-            <button type="submit" form="searching-bar">Search</button>
-    
-        </form>
-    </div>
 
     <div class="link-box">
         <p><a href="{{ url_for('add_new_question') }}">Ask a question</a></p>

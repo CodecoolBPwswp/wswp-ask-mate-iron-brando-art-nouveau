@@ -9,6 +9,14 @@
 <body>
     <h1>AskMate by Iron Brando</h1>
 
+    <div class="search">
+        <form action="{{ url_for("search_question") }}" method="post" id="searching-bar">
+            <input type="text" name="search" placeholder="Search database..." required minlength="1">
+            <button type="submit" form="searching-bar">Search</button>
+
+        </form>
+    </div>
+
     <div class="content-wrapper">
         {% block content %} {% endblock %}
     </div>

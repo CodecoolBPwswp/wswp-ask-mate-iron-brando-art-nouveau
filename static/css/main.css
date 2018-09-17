@@ -18,19 +18,36 @@ div {
     align-content: center;
     margin: auto;
     border-radius: 5px;
-    box-sizing: border-box;
 }
 
 div.table-container {
     width: 1200px;
-    background-color: #f1f7f4;
+    background-color: #fdf7e9;
     padding: 10px;
-    border: #de7a22 1px solid;
+    border: white 1px solid;
 }
 
 div.link-box {
     background-color: white;
     width: 25%;
+}
+
+div.new-question {
+    width: 600px;
+    background-color: #fdf7e9;
+    padding: 5px;
+}
+
+div.new-question input, textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+div.new-answer {
+    width: 90%;
+    background-color: #fdf7e9;
+    padding: 25px 60px;
+    box-sizing: border-box;
 }
 
 div.question-page-frame {
@@ -104,6 +121,7 @@ input, textarea, button {
     border-radius: 5px;
     border: #61a17b 0.5px solid;
     padding: 7px;
+    box-sizing: border-box;
 }
 
 button {

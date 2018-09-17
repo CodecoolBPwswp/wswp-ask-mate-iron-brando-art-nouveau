@@ -6,13 +6,13 @@
 
     {% include "question_details.html" %}
 
-    <div>
+    <div class="new-answer">
             <form action="{{ form_action }}" method="post" id="new-answer">
 
                 <textarea name="message"
                           placeholder="Minimum 10 characters..."
                           required minlength="10"
-                          cols="60" rows="10">{{ dict_of_answer["message"] }}</textarea>
+                          rows="10">{{ dict_of_answer["message"] }}</textarea>
                 {% if dict_of_answer is not none %}
                     <input name="id" type="text" value="{{ dict_of_answer["id"]}}" hidden>
                 {% endif %}
