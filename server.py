@@ -88,7 +88,7 @@ def downvote_answer():
 @app.route('/questions/<question_id>/new-comment')  # to be finished
 def comment_to_question(question_id):
     instance_to_comment = "question"
-    form_action = url_for('post_comment_to_question', postid=question_id)
+    form_action = url_for('post_comment_to_question', question_id=question_id)
     question_to_comment = data_manager.get_question_by_id(question_id)
     return render_template("new_comment.html", dict_of_record=question_to_comment,
                            instance_to_comment=instance_to_comment, form_action=form_action)
