@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import data_manager
+import utils
 
 app = Flask(__name__)
 
@@ -168,7 +169,9 @@ def search_question():
 
 @app.route('/registration')
 def register_user():
-    return render_template("new_user.html")
+    form_action = url_for("save_new_user")
+    user_action = "Sign up"
+    return render_template("new_user.html", form_action=form_action, user_action=user_action)
 
 
 @app.route('/registration', methods=["POST"])
@@ -178,7 +181,33 @@ def save_new_user():
     return redirect(url_for("index"))
 
 
+@app.route('/sign-in')
+def sign_in_page():
+    form_action = url_for("user_verification")
+    user_action = "Sign in"
+    return render_template("new_user.html", form_action=form_action, user_action=user_action)
+
+
+@app.route('/sign-in', methods=["POST"])
+def user_verification():
+    attempt_email = request.form["email"]
+    user_hash = data_manager.get_password_hash_by_email(attempt_email)  # invaild email?
+    attempt_password = request.form["plain_text_password"]
+    verified = utils.verify_password(attempt_password, user_hash)
+    if verified:
+        session["user"] = attempt_email
+        return redirect(url_for("index"))
+    return
+
+
+@app.route('/', methods=["POST"])
+def sign_out():
+    session.pop("user")
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
+    app.secret_key = "Brandon_is_the_best"
     app.run(
         host="0.0.0.0",
         port=7550,

@@ -244,3 +244,14 @@ def add_new_user(cursor, dict_of_new_user):
                     VALUES (%(registration_time)s, %(email)s, %(password_hash)s, %(name)s, %(last_login)s, %(reputation)s)
                     """,
                    dict_of_new_user)
+
+
+@connection.connection_handler
+def get_password_hash_by_email(cursor, email):
+    cursor.execute("""
+                    SELECT password_hash FROM users
+                    WHERE email = %s
+                    """,
+                   (email, ))
+    saved_hash = cursor.fetchone()["password_hash"]
+    return saved_hash

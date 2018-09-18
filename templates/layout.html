@@ -18,10 +18,20 @@
         </form>
     </div>
 
-    <div class="reg-frame">
-        <form action="{{ url_for("register_user") }}">
-            <button type="submit"><i class="fas fa-angle-up"></i>Sign up</button>
-        </form>
+    <div class="user-frame">
+        {% if "user" in session %}
+            <p>{{ session["user"] }}</p>
+            <form action="{{ url_for("sign_out") }}" method="post">
+                <button type="submit">Sign out</button>
+            </form>
+        {% else %}
+            <form action="{{ url_for("register_user") }}">
+                <button type="submit"><i class="fas fa-angle-up"></i>Sign up</button>
+            </form>
+            <form action="{{ url_for("user_verification") }}">
+                <button type="submit">Sign in</button>
+            </form>
+        {% endif %}
     </div>
 
     <div class="content-wrapper">

@@ -2,18 +2,18 @@
 
 {% block content %}
 
-    <h2>Registration</h2>
+    <h2>{{ user_action }}</h2>
 
-    <form action="{{ url_for("save_new_user") }}" method="post" id="user-reg">
+    <form action="{{ form_action }}" method="post" id="user-reg">
         <p>
-        <label for="reg-email">Email address: </label>
-        <input type="text" id="reg-email" name="email" placeholder="example@codecool.com">
+        <label for="user-email">Email address: </label>
+        <input type="text" id="user-email" name="email" placeholder="example@codecool.com">
         </p>
         <p>
-        <label for="reg-pw">Password: </label>
-        <input type="password" id="reg-pw" name="plain_text_password" placeholder="s3cur3_p4ssw0rd">
+        <label for="user-pw">Password: </label>
+        <input type="password" id="user-pw" name="plain_text_password" placeholder="s3cur3_p4ssw0rd">
         </p>
-        <button type="submit">Registration</button>
+        <button type="submit">{{ user_action }}</button>
     </form>
 
     {% include "footer.html" %}
