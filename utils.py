@@ -1,4 +1,5 @@
 import datetime
+import bcrypt
 
 
 def get_current_time():
@@ -22,3 +23,13 @@ def initialize_counter_fields(dict_of_entry, field_names):
     for field in field_names:
         dict_of_entry[field] = 0
     return dict_of_entry
+
+
+def hash_password(plain_text_password):
+    hashed_password = bcrypt.hashpw(plain_text_password.encode("utf-8"), bcrypt.gensalt())
+    return hashed_password.decode("utf-8")
+
+
+def verify_password(entered_password, hashed_password):
+    is_correct = bcrypt.checkpw(entered_password.encode("utf-8"), hashed_password.encode("utf-8"))
+    return is_correct
