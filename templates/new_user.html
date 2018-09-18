@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h2>Registration</h2>
+
+    <form action="{{ url_for("save_new_user") }}" method="post" id="user-reg">
+        <p>
+        <label for="reg-email">Email address: </label>
+        <input type="text" id="reg-email" name="email" placeholder="example@codecool.com">
+        </p>
+        <p>
+        <label for="reg-pw">Password: </label>
+        <input type="text" id="reg-pw" name="plain_text_password" placeholder="s3cur3_p4ssw0rd">
+        </p>
+        <button type="submit">Registration</button>
+    </form>
+
+    {% include "footer.html" %}
+
+{% endblock %}
