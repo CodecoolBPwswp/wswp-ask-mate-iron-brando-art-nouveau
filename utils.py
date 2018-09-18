@@ -3,7 +3,7 @@ import bcrypt
 
 
 def get_current_time():
-    current_time_str = str(datetime.datetime.now())[:16]
+    current_time_str = str(datetime.datetime.now())[:19]
     return current_time_str
 
 
@@ -25,7 +25,7 @@ def initialize_counter_fields(dict_of_entry, field_names):
     return dict_of_entry
 
 
-def hash_password(plain_text_password):
+def create_password_hash(plain_text_password):
     hashed_password = bcrypt.hashpw(plain_text_password.encode("utf-8"), bcrypt.gensalt())
     return hashed_password.decode("utf-8")
 
@@ -33,3 +33,9 @@ def hash_password(plain_text_password):
 def verify_password(entered_password, hashed_password):
     is_correct = bcrypt.checkpw(entered_password.encode("utf-8"), hashed_password.encode("utf-8"))
     return is_correct
+
+
+def store_password_hash(dict_of_user):
+    dict_of_user["password_hash"] = create_password_hash(dict_of_user["plain_text_password"])
+    dict_of_user.pop("plain_text_password")
+    return dict_of_user

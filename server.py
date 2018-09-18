@@ -166,6 +166,18 @@ def search_question():
     return render_template('search_results.html', keyword=keyword, search_result=search_result)
 
 
+@app.route('/registration')
+def register_user():
+    return render_template("new_user.html")
+
+
+@app.route('/registration', methods=["POST"])
+def save_new_user():
+    dict_of_new_user = request.form.to_dict()
+    data_manager.add_new_user(dict_of_new_user)
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
