@@ -84,6 +84,30 @@ div.answer-frame {
     border: 1px solid white;
 }
 
+div.page-header {
+    height: 100px;
+}
+
+div.page-header-content {
+    display: inline-block;
+    width: 33%;
+}
+
+div.user-frame {
+    margin-left: auto;
+    margin-right: 5px;
+    text-align: right;
+    float: right;
+}
+
+div.search {
+    float: left;
+}
+
+div.user-activities {
+    text-align: center;
+}
+
 a {
     color: #1b7a72;
     text-decoration: none;
@@ -137,6 +161,12 @@ button {
 
 p.main-message {
     font-size: 20px;
+}
+
+p.question-author {
+    font-style: italic;
+    font-weight: 200;
+    color: #8c9798;
 }
 
 footer {
