@@ -7,10 +7,14 @@
 
     {% include "question_details.html" %}
 
+        {% if "user" in session %}
+        <p><a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}">Add new answer</a></p>
+        {% endif %}
 
 	{% if answers_to_list %}
 
         <h3>Answers</h3>
+
 
         {% for dict_of_answer in answers_to_list %}
         <div class="question-page-frame answer-frame">

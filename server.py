@@ -129,6 +129,8 @@ def post_comment_to_answer(answer_id):
 
 @app.route('/details/<question_id>/new-answer')
 def new_answer(question_id):
+    if "user" not in session:
+        return redirect(url_for("index"))
     question_to_answer = data_manager.get_question_by_id(question_id)
     question_author = data_manager.get_user_email_by_id(question_to_answer["user_id"])
     user_action = "Add new"
