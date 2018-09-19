@@ -239,6 +239,9 @@ def get_question_id_for_answer(cursor, answer_id):
 
 @connection.connection_handler
 def add_new_user(cursor, dict_of_new_user):
+    saved_emails = get_all_user_emails()
+    if dict_of_new_user["email"] in saved_emails:
+        raise ValueError("Email already registered")
     dict_of_new_user = utils.store_password_hash(dict_of_new_user)
     counter_fields = ["reputation"]
     dict_of_new_user = utils.initialize_counter_fields(dict_of_new_user, counter_fields)
@@ -295,3 +298,12 @@ def get_user_email_by_id(cursor, user_id):
                    (user_id, ))
     user_id = cursor.fetchone()["email"]
     return user_id
+
+@connection.connection_handler
+def get_all_user_emails(cursor):
+    cursor.execute("""
+                    SELECT email FROM users
+                    """)
+    query_result = cursor.fetchall()
+    list_of_emails = [row["email"] for row in query_result]
+    return list_of_emails

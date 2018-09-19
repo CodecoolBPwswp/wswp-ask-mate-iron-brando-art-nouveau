@@ -186,8 +186,13 @@ def register_user():
 
 @app.route('/registration', methods=["POST"])
 def save_new_user():
+    form_action = url_for("save_new_user")
+    user_action = "Sign up"
     dict_of_new_user = request.form.to_dict()
-    data_manager.add_new_user(dict_of_new_user)
+    try:
+        data_manager.add_new_user(dict_of_new_user)
+    except ValueError:
+        return render_template("new_user.html", form_action=form_action, user_action=user_action, failed=True)
     return redirect(url_for("index"))
 
 

@@ -16,6 +16,12 @@
         <button type="submit">{{ user_action }}</button>
     </form>
 
+    {% if failed is sameas true %}
+        <div>
+        <p class="error-message">Error: email already registered!</p>
+        </div>
+    {% endif %}
+
     {% include "footer.html" %}
 
 {% endblock %}
