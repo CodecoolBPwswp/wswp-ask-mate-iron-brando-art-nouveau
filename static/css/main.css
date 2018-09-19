@@ -90,6 +90,11 @@ a {
     font-weight: normal;
 }
 
+div.user_list {
+    width: 30%
+}
+
+
 a:hover {
     text-decoration: underline;
 }

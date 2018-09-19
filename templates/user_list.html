@@ -1,10 +1,23 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>User list</title>
 </head>
 <body>
-$END$
+{% block content %}
+    <div class="user_list">
+ <table>
+     {% for user in user_list %}
+         <tr>
+             <td> {{ user["id"] }} </td>
+             <td> {{ user["name"] }} </td>
+             <td> {{ user["last_login"] }} </td>
+             <td> {{ user["reputation"] }} </td>
+         </tr>
+     {% endfor %}
+ </table>
+    	{% include "footer.html" %}
+{% endblock %}
 </body>
 </html>
