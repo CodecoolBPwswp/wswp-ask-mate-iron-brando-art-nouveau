@@ -111,6 +111,17 @@ def add_new_comment(cursor, dict_of_new_comment):
 
 
 @connection.connection_handler
+def delete_comment(cursor, comment_id):
+    cursor.execute("""
+                    DELETE * FROM comment
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {"comment_id": comment_id})
+
+
+
+
+@connection.connection_handler
 def get_answer_by_id(cursor, answer_id):
     cursor.execute("""
                     SELECT * FROM answer

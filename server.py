@@ -120,6 +120,20 @@ def post_comment_to_answer(answer_id):
     return redirect(url_to_question_details)
 
 
+@app.route('/comment/<comment_id>/delete-comment', methods=["GET"])
+def delete_comment(comment_id):
+    delete_comment = data_manager.delete_comment(comment_id)
+    return redirect(url_for("route_list"))
+
+@app.route('/comment/<comment_id>/edit-comment')
+def edit_comment(comment_id):
+    pass
+
+@app.route('/comment/<comment_id>/edit-comment', methods=["GET"])
+def save_edited_comment(comment_id):
+    pass
+
+
 @app.route('/details/<question_id>/new-answer')
 def new_answer(question_id):
     question_to_answer = data_manager.get_question_by_id(question_id)
