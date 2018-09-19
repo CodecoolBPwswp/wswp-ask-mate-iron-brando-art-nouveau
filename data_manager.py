@@ -5,6 +5,7 @@ from psycopg2 import sql
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
+HEADER_USER = ["id", "registration_time", "email", "password_hash", "name", "last_login", "reputation"]
 
 
 @connection.connection_handler
@@ -63,11 +64,11 @@ def get_last_question_by_title(cursor, question_title):
 
 
 @connection.connection_handler
-def add_new_question(cursor, dict_of_new_question):  # to be refactored
+def add_new_question(cursor, dict_of_new_question):
     dict_of_new_question = utils.add_submission_time(dict_of_new_question)
-    dict_of_new_question["view_number"] = 0
-    dict_of_new_question["vote_number"] = 0
-    dict_of_new_question["image"] = None
+    counter_fields = ["vote_number", "view_number"]
+    dict_of_new_question = utils.initialize_counter_fields(dict_of_new_question, counter_fields)
+    dict_of_new_question["image"] = None  # to be refactored
     dict_of_new_question = utils.add_missing_fields(dict_of_new_question, HEADER_QUESTIONS)
     cursor.execute("""
                     INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
@@ -158,7 +159,8 @@ def get_search_results(cursor, keyword):
 @connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
-    dict_of_new_answer["vote_number"] = 0
+    counter_fields = ["vote_number"]
+    dict_of_new_answer = utils.initialize_counter_fields(dict_of_new_answer, counter_fields)
     dict_of_new_answer["image"] = None
     dict_of_new_answer = utils.add_missing_fields(dict_of_new_answer, HEADER_ANSWERS)
     cursor.execute("""
@@ -239,3 +241,28 @@ def get_question_id_for_answer(cursor, answer_id):
                    {"answer_id": answer_id})
     getting_id = cursor.fetchone()
     return getting_id["question_id"]
+
+
+@connection.connection_handler
+def add_new_user(cursor, dict_of_new_user):
+    dict_of_new_user = utils.store_password_hash(dict_of_new_user)
+    counter_fields = ["reputation"]
+    dict_of_new_user = utils.initialize_counter_fields(dict_of_new_user, counter_fields)
+    dict_of_new_user["registration_time"] = utils.get_current_time()
+    dict_of_new_user = utils.add_missing_fields(dict_of_new_user, HEADER_USER)
+    cursor.execute("""
+                    INSERT INTO users (registration_time, email, password_hash, name, last_login, reputation) 
+                    VALUES (%(registration_time)s, %(email)s, %(password_hash)s, %(name)s, %(last_login)s, %(reputation)s)
+                    """,
+                   dict_of_new_user)
+
+
+@connection.connection_handler
+def get_password_hash_by_email(cursor, email):
+    cursor.execute("""
+                    SELECT password_hash FROM users
+                    WHERE email = %s
+                    """,
+                   (email, ))
+    saved_hash = cursor.fetchone()["password_hash"]
+    return saved_hash

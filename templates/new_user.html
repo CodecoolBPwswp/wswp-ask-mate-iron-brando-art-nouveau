@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h2>{{ user_action }}</h2>
+
+    <form action="{{ form_action }}" method="post" id="user-reg">
+        <p>
+        <label for="user-email">Email address: </label>
+        <input type="text" id="user-email" name="email" placeholder="example@codecool.com">
+        </p>
+        <p>
+        <label for="user-pw">Password: </label>
+        <input type="password" id="user-pw" name="plain_text_password" placeholder="s3cur3_p4ssw0rd">
+        </p>
+        <button type="submit">{{ user_action }}</button>
+    </form>
+
+    {% include "footer.html" %}
+
+{% endblock %}
