@@ -5,6 +5,7 @@ from psycopg2 import sql
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
+HEADER_USER = ["id", "registration_time", "email", "password_hash", "name", "last_login", "reputation"]
 
 
 @connection.connection_handler
@@ -63,11 +64,11 @@ def get_last_question_by_title(cursor, question_title):
 
 
 @connection.connection_handler
-def add_new_question(cursor, dict_of_new_question):  # to be refactored
+def add_new_question(cursor, dict_of_new_question):
     dict_of_new_question = utils.add_submission_time(dict_of_new_question)
-    dict_of_new_question["view_number"] = 0
-    dict_of_new_question["vote_number"] = 0
-    dict_of_new_question["image"] = None
+    counter_fields = ["vote_number", "view_number"]
+    dict_of_new_question = utils.initialize_counter_fields(dict_of_new_question, counter_fields)
+    dict_of_new_question["image"] = None  # to be refactored
     dict_of_new_question = utils.add_missing_fields(dict_of_new_question, HEADER_QUESTIONS)
     cursor.execute("""
                     INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
@@ -75,13 +76,6 @@ def add_new_question(cursor, dict_of_new_question):  # to be refactored
                     """,
                    dict_of_new_question)
 
-@connection.connection_handler
-def get_all_comments(cursor):
-    cursor.execute("""
-                    SELECT * FROM comment
-                    """)
-    list_of_comments = cursor.fetchall()
-    return list_of_comments
 
 @connection.connection_handler
 def get_comments_by_question_id(cursor, _id):
@@ -95,29 +89,19 @@ def get_comments_by_question_id(cursor, _id):
 
 
 @connection.connection_handler
-def get_comments_by_answer_id(cursor, _id):
-    cursor.execute("""
-                    SELECT * FROM comment
-                    WHERE answer_id = %(answer_id)s
-                    
-                    """, {'answer_id': _id})
-    comment_for_answer = cursor.fetchall()
-    return comment_for_answer
-
-
-@connection.connection_handler
 def get_answer_comments_to_question(cursor, question_id):
     cursor.execute("""
                     SELECT answer.question_id, comment.answer_id, comment.submission_time, comment.message
-                    FROM comment RIGHT JOIN answer ON answer.id = comment.answer_id
+                    FROM comment JOIN answer ON answer.id = comment.answer_id
                     WHERE answer.question_id = %(question_id)s
-    """,{'question_id': question_id})
+                    """,
+                   {'question_id': question_id})
     list_of_comments = cursor.fetchall()
     return list_of_comments
 
 
 @connection.connection_handler
-def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
+def add_new_comment(cursor, dict_of_new_comment):
     dict_of_new_comment = utils.add_submission_time(dict_of_new_comment)
     dict_of_new_comment = utils.add_missing_fields(dict_of_new_comment, HEADER_COMMENTS)
     cursor.execute("""
@@ -128,22 +112,13 @@ def add_new_comment(cursor, dict_of_new_comment):  # to be refactored
 
 
 @connection.connection_handler
-def get_all_answers(cursor):
-    cursor.execute("""
-                    SELECT * FROM answer
-                    """)
-    list_of_answers = cursor.fetchall()
-    return list_of_answers
-
-
-@connection.connection_handler
 def get_answer_by_id(cursor, answer_id):
     cursor.execute("""
                     SELECT * FROM answer
                     WHERE id = %(answer_id)s;
                     """,
                    {"answer_id": answer_id})
-    dict_of_answer = cursor.fetchall()
+    dict_of_answer = cursor.fetchone()
     return dict_of_answer
 
 
@@ -165,13 +140,17 @@ def get_search_results(cursor, keyword):
                         SELECT * FROM question full join answer on question.id = answer.question_id
                           WHERE answer.message LIKE %(keyword)s OR question.message LIKE %(keyword)s
                          """, {'keyword': '%' + keyword + '%'})
+
     search_result = cursor.fetchall()
     return search_result
+
+
 
 @connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
-    dict_of_new_answer["vote_number"] = 0
+    counter_fields = ["vote_number"]
+    dict_of_new_answer = utils.initialize_counter_fields(dict_of_new_answer, counter_fields)
     dict_of_new_answer["image"] = None
     dict_of_new_answer = utils.add_missing_fields(dict_of_new_answer, HEADER_ANSWERS)
     cursor.execute("""
@@ -254,5 +233,26 @@ def get_question_id_for_answer(cursor, answer_id):
     return getting_id["question_id"]
 
 
+@connection.connection_handler
+def add_new_user(cursor, dict_of_new_user):
+    dict_of_new_user = utils.store_password_hash(dict_of_new_user)
+    counter_fields = ["reputation"]
+    dict_of_new_user = utils.initialize_counter_fields(dict_of_new_user, counter_fields)
+    dict_of_new_user["registration_time"] = utils.get_current_time()
+    dict_of_new_user = utils.add_missing_fields(dict_of_new_user, HEADER_USER)
+    cursor.execute("""
+                    INSERT INTO users (registration_time, email, password_hash, name, last_login, reputation) 
+                    VALUES (%(registration_time)s, %(email)s, %(password_hash)s, %(name)s, %(last_login)s, %(reputation)s)
+                    """,
+                   dict_of_new_user)
 
 
+@connection.connection_handler
+def get_password_hash_by_email(cursor, email):
+    cursor.execute("""
+                    SELECT password_hash FROM users
+                    WHERE email = %s
+                    """,
+                   (email, ))
+    saved_hash = cursor.fetchone()["password_hash"]
+    return saved_hash

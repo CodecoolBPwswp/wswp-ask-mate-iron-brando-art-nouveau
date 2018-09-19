@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AskMate by Iron Brando</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/main.css") }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+<body>
+    <h1>AskMate by Iron Brando</h1>
+
+    <div class="search">
+        <form action="{{ url_for("search_question") }}" method="post" id="searching-bar">
+            <input type="text" name="search" placeholder="Search database..." required minlength="1">
+            <button type="submit" form="searching-bar">Search</button>
+
+        </form>
+    </div>
+
+    <div class="user-frame">
+        {% if "user" in session %}
+            <p>{{ session["user"] }}</p>
+            <form action="{{ url_for("sign_out") }}" method="post">
+                <button type="submit">Sign out</button>
+            </form>
+        {% else %}
+            <form action="{{ url_for("register_user") }}">
+                <button type="submit"><i class="fas fa-angle-up"></i>Sign up</button>
+            </form>
+            <form action="{{ url_for("user_verification") }}">
+                <button type="submit">Sign in</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="content-wrapper">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>

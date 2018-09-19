@@ -1,54 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Search results</title>
-    	<style>
+{% extends "layout.html" %}
 
-			table {
-				border: 1px solid black;
-				border-collapse: collapse;
-				width: 100%;
-			}
+{% block content %}
 
-			td, th {
-				border: 1px solid black;
-				border-collapse: collapse;
-			}
-
-    </style>
-
-</head>
-<body>
-<h1>Search results for: {{ keyword }}</h1>
+<h2>Search results for: {{ keyword }}</h2>
     {% if search_result %}
-<table>
-        <tr>
+        <div class="table-container">
+            <table>
+                <tr>
 
-            <th>Submission Time</th>
-            <th>View Number</th>
-            <th>Vote Number</th>
-            <th>Title </th>
-            <th>Message</th>
+                    <th>Submission Time</th>
+                    <th>View Number</th>
+                    <th>Vote Number</th>
+                    <th>Title </th>
+                    <th>Message</th>
+                </tr>
 
-        </tr>
+            {% for result in search_result %}
 
-{% for result in search_result %}
+                <tr>
 
-	<tr>
+                     <td align="center">{{ result["submission_time"] }}</td>
+                     <td align="center">{{ result["view_number"] }}</td>
+                     <td align="center">{{ result["vote_number"] }}</td>
+                     <td align="center"><a href="{{ url_for("get_question_details", question_id = result["id"]) }}">{{ result["title"] }}</a></td>
+                     <td>{{ result["message"] }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                    <h2>Sorry, we didn't find anything. :(</h2>
+                {% endif %}
 
-	 <td align="center">{{ result["submission_time"] }}</td>
-  	 <td align="center">{{ result["view_number"] }}</td>
-  	 <td align="center">{{ result["vote_number"] }}</td>
-  	 <td align="center">{{ result["title"] }}</td>
-     <td>{{ result["message"] }}</td>
-	</tr>
-	{% endfor %}
-    {% else %}
-        <h2>Ooops, we didnt find anything...</h2>
-    {% endif %}
+            </table>
+        </div>
 
-</table>
-        <p><a href="/">Back to home</a></p>
-</body>
-</html>
+    {% include "footer.html" %}
+
+{% endblock %}

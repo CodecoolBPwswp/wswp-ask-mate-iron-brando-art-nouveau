@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h2>Add new question</h2>
+    <h3>Please find a short title for your question and provide all the important details below.</h3>
+
+    <div class="new-question">
+        <form action="{{ url_for("save_new_question") }}" method="post" id="new-question">
+            <label for="question_title">Question title:</label>
+            <p><input type="text" name="title" id="question_title" required minlength="10" placeholder="At least 10 characters"></p>
+            <label for="question_details">Detailed question message:</label>
+            <p><textarea cols="60" rows="10" name="message" id="question_details" required minlength="20" placeholder="At least 20 characters"></textarea></p>
+            <button type="submit" form="new-question">Send question</button>
+        </form>
+    </div>
+
+    {% include "footer.html" %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h2>{{ user_action }} answer</h2><br>
+
+    {% include "question_details.html" %}
+
+    <div class="new-answer">
+            <form action="{{ form_action }}" method="post" id="new-answer">
+
+                <textarea name="message"
+                          placeholder="Minimum 10 characters..."
+                          required minlength="10"
+                          rows="10">{{ dict_of_answer["message"] }}</textarea>
+                {% if dict_of_answer is not none %}
+                    <input name="id" type="text" value="{{ dict_of_answer["id"]}}" hidden>
+                {% endif %}
+                <p><button type="submit" form="new-answer">Send answer</button></p>
+            </form>
+    </div>
+            <p><a href="{{ url_for("get_question_details", question_id = dict_of_question["id"]) }}">Back to question</a></p>
+
+
+    {% include "footer.html" %}
+
+{% endblock %}

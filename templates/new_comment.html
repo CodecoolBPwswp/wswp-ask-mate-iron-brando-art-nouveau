@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% if instance_to_comment == "question" %}
+
+    <h2>Comment question "{{ dict_of_record["title"]}}"</h2>
+
+{% else %}
+
+    <h2>Comment an answer</h2>
+
+{% endif %}
+
+
+    <form action="{{ form_action }}" method="post" id="send-comment">
+        Type your comment here:
+        <textarea name="message" placeholder="Minimum 10 characters..." required minlength="10" cols="60" rows="10"></textarea>
+        <button type="submit" form="send-comment">Send comment</button>
+    </form>
+
+    {% include "footer.html" %}
+
+{% endblock %}
