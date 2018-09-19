@@ -192,7 +192,7 @@ def save_new_user():
     try:
         data_manager.add_new_user(dict_of_new_user)
     except ValueError:
-        return render_template("new_user.html", form_action=form_action, user_action=user_action, failed=True)
+        return render_template("new_user.html", form_action=form_action, user_action=user_action, registration_failed=True)
     return redirect(url_for("index"))
 
 
@@ -212,7 +212,11 @@ def user_verification():
     if verified:
         session["user"] = attempt_email
         return redirect(url_for("index"))
-    return redirect(url_for("user_verification"))
+    else:
+        form_action = url_for("user_verification")
+        user_action = "Sign in"
+        return render_template("new_user.html", form_action=form_action, user_action=user_action,
+                               verification_failed=True)
 
 
 @app.route('/', methods=["POST"])

@@ -16,9 +16,15 @@
         <button type="submit">{{ user_action }}</button>
     </form>
 
-    {% if failed is sameas true %}
+    {% if registration_failed is sameas true %}
         <div>
         <p class="error-message">Error: email already registered!</p>
+        </div>
+    {% endif %}
+
+    {% if verification_failed is sameas true %}
+        <div>
+        <p class="error-message">Error: invalid email or password</p>
         </div>
     {% endif %}
 
