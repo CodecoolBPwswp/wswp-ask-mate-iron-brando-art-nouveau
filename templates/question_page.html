@@ -1,52 +1,13 @@
 {% extends "layout.html" %}
 
+{% set question_author = question_author %}
+
 {% block content %}
 
 
     {% include "question_details.html" %}
 
 
-    <p>Detailed question message:</p>
-    <p><em>{{ dict_of_question["message"] }}</em></p>
-
-
-	<form action="{{ url_for("upvote_question") }}" method = "post">
-		<input name ="question_id" value = "{{ dict_of_question['id']}}" hidden>
-		<input type="submit" value="Upvote this question" >
-    </form> 
-    <br>
-	<form action="{{ url_for("downvote_question") }}" method = "post">
-		<input name = "question_id" value = "{{ dict_of_question['id']}}" hidden>
-		<input type="submit" value="Downvote this question" />
-    </form>
-
-
-    <br>
-
-
-    <a href="{{ url_for('comment_to_question', question_id=dict_of_question['id']) }}">Add a new comment</a> <br> <br>
-    
-
-	<a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}">Add a new answer</a>
-
-
-
-    {% if comments_for_question %}
-        <h3>Comments for this question</h3>
-        <table>
-            <tr>
-                <th>Submission time</th>
-                <th>Comment</th>
-            </tr>
-        {% for comment in comments_for_question %}
-                <tr>
-                    <td> {{ comment["submission_time"] }} </td>
-                    <td> {{ comment["message"] }} </td>
-                </tr>
-        {% endfor %}
-        </table>
-    {% endif %}
-    <hr>
 	{% if answers_to_list %}
 
         <h3>Answers</h3>

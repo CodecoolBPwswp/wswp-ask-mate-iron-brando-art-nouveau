@@ -4,17 +4,14 @@
 {% block content %}
     
 
-    <div class="link-box">
-        <p><a href="{{ url_for('add_new_question') }}">Ask a question</a></p>
-    </div>
-
-
     {% if truncated %}
         <div class="link-box">
             <p><a href="{{ url_for('route_list') }}">Show all questions</a></p>
         </div>
     {% endif %}
-<a href="{{ url_for('list_users')}}">User list</a>
+
+<a href="">User list</a>
+
     <div class="table-container">
         <table>
             <tr>
@@ -27,6 +24,11 @@
                     Question Title
                     <a href="{{ url_for('order_questions', column='title', order='DESC') }}">↑</a>
                     <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    Author
+                    <a href="{{ url_for('order_questions', column='author_email', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='author_email', order='ASC') }}">↓</a>
                 </th>
                 <th>
                     View Number
@@ -43,10 +45,11 @@
         {% for question in questions %}
             <tr>
 
-                <td align="center">{{ question["submission_time"] }}</td>
+                <td>{{ question["submission_time"] }}</td>
                 <td class="question-title"><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
-                <td align="center">{{ question["view_number"] }}</td>
-                <td align="center">{{ question["vote_number"] }}</td>
+                <td>{{ question["author_email"] }}</td>
+                <td>{{ question["view_number"] }}</td>
+                <td>{{ question["vote_number"] }}</td>
             </tr>
         {% endfor %}
 

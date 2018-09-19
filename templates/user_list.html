@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-{% for user in user_lost %}
-	{{ user['id']
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="user_list">
+ <table>
+     {% for user in user_list %}
+         <tr>
+             <td> {{ user["id"] }} </td>
+             <td> {{ user["name"] }} </td>
+             <td> {{ user["last_login"] }} </td>
+             <td> {{ user["reputation"] }} </td>
+         </tr>
+     {% endfor %}
+ </table>
+    	{% include "footer.html" %}
+{% endblock %}
