@@ -2,7 +2,7 @@ import connection
 import utils
 from psycopg2 import sql
 
-HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image", "user_id"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
 HEADER_USER = ["id", "registration_time", "email", "password_hash", "name", "last_login", "reputation"]
@@ -71,8 +71,8 @@ def add_new_question(cursor, dict_of_new_question):
     dict_of_new_question["image"] = None  # to be refactored
     dict_of_new_question = utils.add_missing_fields(dict_of_new_question, HEADER_QUESTIONS)
     cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
-                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id) 
+                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s, %(user_id)s)
                     """,
                    dict_of_new_question)
 
@@ -255,3 +255,14 @@ def get_password_hash_by_email(cursor, email):
                    (email, ))
     saved_hash = cursor.fetchone()["password_hash"]
     return saved_hash
+
+
+@connection.connection_handler
+def get_user_id_by_email(cursor, user_email):
+    cursor.execute("""
+                    SELECT id FROM users
+                    WHERE email = %s;
+                    """,
+                   (user_email, ))
+    user_id = cursor.fetchone()["id"]
+    return user_id

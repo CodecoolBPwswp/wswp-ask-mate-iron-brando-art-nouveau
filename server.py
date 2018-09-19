@@ -38,6 +38,7 @@ def add_new_question():
 @app.route('/new_question', methods=['POST'])
 def save_new_question():
     dict_of_question = request.form.to_dict()
+    dict_of_question["user_id"] = data_manager.get_user_id_by_email(session["user"])
     data_manager.add_new_question(dict_of_question)
     question_id = data_manager.get_last_question_by_title(dict_of_question["title"])
     question_page_url = url_for("get_question_details", question_id=question_id)
