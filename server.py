@@ -212,13 +212,12 @@ def sign_out():
     return redirect(url_for("index"))
 
 
-
 @app.route('/list_users')
 def list_users():
+    if "user" not in session:
+        return redirect(url_for("index"))
     user_list = data_manager.get_users()
     return render_template('user_list.html', user_list=user_list)
-
-
 
 
 if __name__ == "__main__":
