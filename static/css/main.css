@@ -158,6 +158,12 @@ p.main-message {
     font-size: 20px;
 }
 
+p.question-author {
+    font-style: italic;
+    font-weight: 200;
+    color: #8c9798;
+}
+
 footer {
     width: 300px;
     margin: 20px auto;

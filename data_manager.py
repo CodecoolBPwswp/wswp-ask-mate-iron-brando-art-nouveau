@@ -266,3 +266,14 @@ def get_user_id_by_email(cursor, user_email):
                    (user_email, ))
     user_id = cursor.fetchone()["id"]
     return user_id
+
+
+@connection.connection_handler
+def get_user_email_by_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT email FROM users
+                    WHERE id = %s;
+                    """,
+                   (user_id, ))
+    user_id = cursor.fetchone()["email"]
+    return user_id
