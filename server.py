@@ -134,18 +134,19 @@ def new_answer(question_id):
     question_to_answer = data_manager.get_question_by_id(question_id)
     question_author = data_manager.get_user_email_by_id(question_to_answer["user_id"])
     user_action = "Add new"
-    form_action = url_for("post_answer", postid=question_to_answer["id"])
+    form_action = url_for("post_answer", question_id=question_to_answer["id"])
     return render_template("new_answer.html", dict_of_question=question_to_answer,
                            dict_of_answer=None, user_action=user_action,
                            form_action=form_action, question_author=question_author)
 
 
-@app.route('/details/<postid>/new-answer', methods=["POST"])
-def post_answer(postid):
+@app.route('/details/<question_id>/new-answer', methods=["POST"])
+def post_answer(question_id):
     dict_of_new_answer = request.form.to_dict()
-    dict_of_new_answer["question_id"] = postid
+    dict_of_new_answer["question_id"] = question_id
+    dict_of_new_answer["user_id"] = data_manager.get_user_id_by_email(session["user"])
     data_manager.add_new_answer(dict_of_new_answer)
-    url_to_question_details = url_for("get_question_details", question_id=postid)
+    url_to_question_details = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question_details)
 
 

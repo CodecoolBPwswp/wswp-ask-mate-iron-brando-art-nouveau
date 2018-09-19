@@ -3,7 +3,7 @@ import utils
 from psycopg2 import sql
 
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image", "user_id"]
-HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
+HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image", "user_id"]
 HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
 HEADER_USER = ["id", "registration_time", "email", "password_hash", "name", "last_login", "reputation"]
 
@@ -129,7 +129,8 @@ def get_answer_by_id(cursor, answer_id):
 @connection.connection_handler
 def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
-                    SELECT * FROM answer
+                    SELECT answer.id, submission_time, vote_number, question_id, message, users.email AS author_email
+                    FROM answer JOIN users ON answer.user_id = users.id
                     WHERE question_id = %(question_id)s
                     ORDER BY id DESC
                     """,
@@ -149,7 +150,6 @@ def get_search_results(cursor, keyword):
     return search_result
 
 
-
 @connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
@@ -158,8 +158,8 @@ def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer["image"] = None
     dict_of_new_answer = utils.add_missing_fields(dict_of_new_answer, HEADER_ANSWERS)
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s, %(user_id)s)
                     """,
                    dict_of_new_answer)
 
