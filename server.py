@@ -29,7 +29,10 @@ def order_questions(column, order):
 
 @app.route('/new_question')
 def add_new_question():
-    return render_template('new_question.html')
+    if "user" in session:
+        return render_template('new_question.html')
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route('/new_question', methods=['POST'])
