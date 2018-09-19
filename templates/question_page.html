@@ -50,10 +50,10 @@
                             <p>{{ comment["message"] }}</p>
                         </td>
                         <td>
-                            <p>{{ comment["id"] }}</p>
+                            <p>{{ comment["question_id"] }}</p>
                         </td>
                         <td>
-                            <p><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}"> <i class="fas fa-trash-alt"></i>Delete</a></p>
+                            <p><a href="{{ url_for('delete_comment', comment_id=comment['id'])}}"> <i class="fas fa-trash-alt"></i>Delete</a></p>
                         </td>
                         <td>
                             <p><a href="{{ url_for('edit_comment',   comment_id=comment['id']) }}"> <i class="fas fa-edit"></i>Edit</a></p>
