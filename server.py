@@ -207,7 +207,7 @@ def user_verification():
     if verified:
         session["user"] = attempt_email
         return redirect(url_for("index"))
-    return
+    return redirect(url_for("user_verification"))
 
 
 @app.route('/', methods=["POST"])

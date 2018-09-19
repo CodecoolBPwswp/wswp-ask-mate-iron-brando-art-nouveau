@@ -258,7 +258,10 @@ def get_password_hash_by_email(cursor, email):
                     WHERE email = %s
                     """,
                    (email, ))
-    saved_hash = cursor.fetchone()["password_hash"]
+    try:
+        saved_hash = cursor.fetchone()["password_hash"]
+    except (KeyError, TypeError):
+        saved_hash = ""
     return saved_hash
 
 
