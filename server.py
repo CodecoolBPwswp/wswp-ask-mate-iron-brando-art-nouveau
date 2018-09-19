@@ -221,7 +221,7 @@ def sign_out():
 
 
 if __name__ == "__main__":
-    app.secret_key = "Brandon_is_the_best"
+    app.secret_key = "HERE I COME!"
     app.run(
         host="0.0.0.0",
         port=7550,

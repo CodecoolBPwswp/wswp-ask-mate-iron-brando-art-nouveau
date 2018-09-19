@@ -91,7 +91,7 @@ def get_comments_by_question_id(cursor, _id):
 @connection.connection_handler
 def get_answer_comments_to_question(cursor, question_id):
     cursor.execute("""
-                    SELECT answer.question_id, comment.answer_id, comment.submission_time, comment.message
+                    SELECT comment.id, answer.question_id, comment.answer_id, comment.submission_time, comment.message
                     FROM comment JOIN answer ON answer.id = comment.answer_id
                     WHERE answer.question_id = %(question_id)s
                     """,
@@ -114,8 +114,8 @@ def add_new_comment(cursor, dict_of_new_comment):
 @connection.connection_handler
 def delete_comment(cursor, comment_id):
     cursor.execute("""
-                    DELETE * FROM comment
-                    WHERE id = %(comment_id)s;
+                    DELETE from comment
+                    WHERE id = %(comment_id)s
                     """,
                    {"comment_id": comment_id})
 
