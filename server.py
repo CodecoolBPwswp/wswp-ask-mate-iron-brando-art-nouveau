@@ -207,6 +207,15 @@ def sign_out():
     return redirect(url_for("index"))
 
 
+
+@app.route('/list_users')
+def list_users():
+    user_list = data_manager.get_users()
+    return render_template('user_list.html', user_list=user_list)
+
+
+
+
 if __name__ == "__main__":
     app.secret_key = "Brandon_is_the_best"
     app.run(

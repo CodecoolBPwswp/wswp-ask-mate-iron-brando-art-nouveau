@@ -256,3 +256,15 @@ def get_password_hash_by_email(cursor, email):
                    (email, ))
     saved_hash = cursor.fetchone()["password_hash"]
     return saved_hash
+
+
+@connection.connection_handler
+def get_users(cursor):
+    cursor.execute("""
+                    SELECT id,name,last_login,reputation
+                    FROM users
+                        """)
+    user_list = cursor.fetchall()
+    return user_list
+
+
