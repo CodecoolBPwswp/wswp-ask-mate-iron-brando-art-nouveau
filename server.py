@@ -29,12 +29,16 @@ def order_questions(column, order):
 
 @app.route('/new_question')
 def add_new_question():
-    return render_template('new_question.html')
+    if "user" in session:
+        return render_template('new_question.html')
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route('/new_question', methods=['POST'])
 def save_new_question():
     dict_of_question = request.form.to_dict()
+    dict_of_question["user_id"] = data_manager.get_user_id_by_email(session["user"])
     data_manager.add_new_question(dict_of_question)
     question_id = data_manager.get_last_question_by_title(dict_of_question["title"])
     question_page_url = url_for("get_question_details", question_id=question_id)
@@ -45,11 +49,13 @@ def save_new_question():
 def get_question_details(question_id):
     data_manager.add_question_view(question_id)
     question = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question["user_id"])
     answers_for_question = data_manager.get_answers_by_question_id(question_id)
     comments_for_question = data_manager.get_comments_by_question_id(question_id)
     comments_for_answer = data_manager.get_answer_comments_to_question(question_id)
-    return render_template("question_page.html", dict_of_question=question, comments_for_question=comments_for_question,
-                           answers_to_list=answers_for_question, comments_for_answer=comments_for_answer)
+    return render_template("question_page.html", dict_of_question=question, question_author=question_author,
+                           comments_for_question=comments_for_question, answers_to_list=answers_for_question,
+                           comments_for_answer=comments_for_answer)
 
 
 @app.route('/question-upvote', methods=["POST"])

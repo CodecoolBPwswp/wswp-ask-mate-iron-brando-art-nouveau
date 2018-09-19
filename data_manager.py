@@ -2,7 +2,7 @@ import connection
 import utils
 from psycopg2 import sql
 
-HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image", "user_id"]
 HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
 HEADER_USER = ["id", "registration_time", "email", "password_hash", "name", "last_login", "reputation"]
@@ -13,15 +13,18 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
     if order_direction == "DESC":
         cursor.execute(
                 sql.SQL("""
-                        SELECT id, submission_time, view_number, vote_number, title FROM question
-                        ORDER BY {} DESC
+                        SELECT question.id, submission_time, view_number, vote_number, title, users.email AS author_email
+                        FROM question JOIN users ON question.user_id = users.id
+                        ORDER BY {} DESC;
                         """).format(sql.Identifier(order_by)))
     else:
         cursor.execute(
             sql.SQL("""
-                    SELECT id, submission_time, view_number, vote_number, title FROM question
+                    SELECT question.id, submission_time, view_number, vote_number, title, users.email AS author_email
+                    FROM question JOIN users ON question.user_id = users.id
                     ORDER BY {} ASC
-                    """).format(sql.Identifier(order_by)))
+                    """).format(sql.Identifier(order_by))
+        )
     list_of_questions = cursor.fetchall()
     return list_of_questions
 
@@ -29,7 +32,8 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
 @connection.connection_handler
 def get_latest_questions(cursor, how_many):
     cursor.execute("""
-                    SELECT id, submission_time, title, view_number, vote_number FROM question
+                    SELECT question.id, submission_time, view_number, vote_number, title, users.email AS author_email
+                    FROM question JOIN users ON question.user_id = users.id
                     ORDER BY submission_time DESC
                     LIMIT %(number_of_rows)s;
                     """,
@@ -71,8 +75,8 @@ def add_new_question(cursor, dict_of_new_question):
     dict_of_new_question["image"] = None  # to be refactored
     dict_of_new_question = utils.add_missing_fields(dict_of_new_question, HEADER_QUESTIONS)
     cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
-                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s)
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id) 
+                    VALUES (%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s, %(user_id)s)
                     """,
                    dict_of_new_question)
 
@@ -158,11 +162,12 @@ def get_answers_by_question_id(cursor, _id):
 def get_search_results(cursor, keyword):
     cursor.execute("""
                         SELECT * FROM question full join answer on question.id = answer.question_id
-                          WHERE answer.message LIKE '%%' || %(keyword)s || '%%' 
-                           OR question.message LIKE '%%' || %(keyword)s || '%%'
-                         """, {'keyword': keyword})
+                          WHERE answer.message LIKE %(keyword)s OR question.message LIKE %(keyword)s
+                         """, {'keyword': '%' + keyword + '%'})
+
     search_result = cursor.fetchall()
     return search_result
+
 
 
 @connection.connection_handler
@@ -275,3 +280,25 @@ def get_password_hash_by_email(cursor, email):
                    (email, ))
     saved_hash = cursor.fetchone()["password_hash"]
     return saved_hash
+
+
+@connection.connection_handler
+def get_user_id_by_email(cursor, user_email):
+    cursor.execute("""
+                    SELECT id FROM users
+                    WHERE email = %s;
+                    """,
+                   (user_email, ))
+    user_id = cursor.fetchone()["id"]
+    return user_id
+
+
+@connection.connection_handler
+def get_user_email_by_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT email FROM users
+                    WHERE id = %s;
+                    """,
+                   (user_id, ))
+    user_id = cursor.fetchone()["email"]
+    return user_id
