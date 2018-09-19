@@ -130,11 +130,12 @@ def post_comment_to_answer(answer_id):
 @app.route('/details/<question_id>/new-answer')
 def new_answer(question_id):
     question_to_answer = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question_to_answer["user_id"])
     user_action = "Add new"
     form_action = url_for("post_answer", postid=question_to_answer["id"])
     return render_template("new_answer.html", dict_of_question=question_to_answer,
                            dict_of_answer=None, user_action=user_action,
-                           form_action=form_action)
+                           form_action=form_action, question_author=question_author)
 
 
 @app.route('/details/<postid>/new-answer', methods=["POST"])
