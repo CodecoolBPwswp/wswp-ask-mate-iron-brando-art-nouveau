@@ -62,6 +62,9 @@ def get_question_details(question_id):
 def upvote_question():
     question_id = request.form["question_id"]
     data_manager.add_question_upvote(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question['user_id'])
+    data_manager.add_reputation_5(question_author)
     url_to_voted_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_voted_question)
 
@@ -70,6 +73,9 @@ def upvote_question():
 def downvote_question():
     question_id = request.form["question_id"]
     data_manager.add_question_downvote(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question['user_id'])
+    data_manager.minus_reputation_2(question_author)
     url_to_voted_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_voted_question)
 
@@ -78,6 +84,9 @@ def downvote_question():
 def upvote_answer():
     answer_id = request.form["answer_id"]
     data_manager.add_answer_upvote(answer_id)
+    answer = data_manager.get_answer_by_id(answer_id)
+    answer_author = data_manager.get_user_email_by_id(answer['user_id'])
+    data_manager.add_reputation_10(answer_author)
     question_id = data_manager.get_question_id_for_answer(answer_id)
     url_to_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question)
@@ -87,6 +96,9 @@ def upvote_answer():
 def downvote_answer():
     answer_id = request.form["answer_id"]
     data_manager.add_answer_downvote(answer_id)
+    answer = data_manager.get_answer_by_id(answer_id)
+    answer_author = data_manager.get_user_email_by_id(answer['user_id'])
+    data_manager.minus_reputation_2(answer_author)
     question_id = data_manager.get_question_id_for_answer(answer_id)
     url_to_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question)

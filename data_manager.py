@@ -307,3 +307,44 @@ def get_all_user_emails(cursor):
     query_result = cursor.fetchall()
     list_of_emails = [row["email"] for row in query_result]
     return list_of_emails
+
+
+@connection.connection_handler
+def add_reputation_5(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 5
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+
+@connection.connection_handler
+def add_reputation_10(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 10
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+@connection.connection_handler
+def add_reputation_15(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 15
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+@connection.connection_handler
+def minus_reputation_2(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation - 2
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+
+
