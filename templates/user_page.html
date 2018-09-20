@@ -1,9 +1,40 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h2>Content by {{ user_email }}</h2>
+
+    {% if "user" in session %}
+        <div>
+            <h2>Data of {{ dict_of_user["name"] }}</h2>
+            <table>
+                <tr>
+                    <td>Name:</td>
+                    <td>{{ dict_of_user["name"] }}</td>
+                </tr>
+                <tr>
+                    <td>Reputation:</td>
+                    <td>{{ dict_of_user["reputation"] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Email:</td>
+                    <td>{{ dict_of_user["email"] }}</td>
+                </tr>
+                <tr>
+                    <td>Registration time:</td>
+                    <td>{{ dict_of_user["registration_time"] }}</td>
+                </tr>
+                <tr>
+                    <td>Last login:</td>
+                    <td>{{ dict_of_user["last_login"] }}</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+
 
     <div class="user_page_box">
+        <h2>Content by {{ dict_of_user["email"] }}</h2>
+
         <h3>Questions</h3>
 
     {% if questions %}
