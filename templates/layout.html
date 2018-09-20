@@ -31,7 +31,6 @@
         <div class="user-frame page-header-content">
             {% if "user" in session %}
                 <p><i class="fas fa-user"></i> {{ session[session["user"]]["name"] }}</p>
-                <p>Signed in as {{ session[session["user"]]["name"] }}</p>
                 <p>
                     <a href="{{ url_for("user_page", user_id = session[session["user"]]["id"]) }}">
                         My page
