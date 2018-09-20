@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    {% if "user" in session %}
+        <h2>{{ dict_of_user["name"] }}'s data</h2>
+        <div>
+            <table>
+                <tr>
+                    <td>Name:</td>
+                    <td>{{ dict_of_user["name"] }}</td>
+                </tr>
+                <tr>
+                    <td>Reputation:</td>
+                    <td>{{ dict_of_user["reputation"] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Email:</td>
+                    <td>{{ dict_of_user["email"] }}</td>
+                </tr>
+                <tr>
+                    <td>Registration time:</td>
+                    <td>{{ dict_of_user["registration_time"]|string|truncate(19, True, "") }}</td>
+                </tr>
+                <tr>
+                    <td>Last login:</td>
+                    <td>{{ dict_of_user["last_login"]|string|truncate(19, True, "") }}</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+
+
+    <h2>Content by {{ dict_of_user["name"] }}</h2>
+    <div class="user_page_box table-container">
+
+        <h3>Questions</h3>
+
+    {% if questions %}
+        <table>
+            <tr>
+                <th>Submission Time</th>
+                <th>Question Title</th>
+                <th>View Number</th>
+                <th>Vote Number</th>
+                <th>Number of Answers</th>
+            </tr>
+
+        {% for dict_of_questions in questions %}
+            <tr>
+
+                <td>{{ dict_of_questions["submission_time"]|string|truncate(19, True, "") }}</td>
+                <td class="question-title">
+                    <a href="{{ url_for('get_question_details', question_id = dict_of_questions["id"]) }}">
+                        {{ dict_of_questions["title"] }}
+                    </a>
+                </td>
+                <td>{{ dict_of_questions["view_number"] }}</td>
+                <td>{{ dict_of_questions["vote_number"] }}</td>
+                <td>{{ dict_of_questions["number_of_answers"] }}</td>
+            </tr>
+        {% endfor %}
+
+        </table>
+    {% else %}
+        <p>No questions to show - yet.</p>
+    {% endif %}
+    </div>
+
+    <div class="user_page_box table-container">
+        <h3>Answers</h3>
+
+    {% if answers %}
+        <table>
+            <tr>
+                <th>Submission Time</th>
+                <th>Answer</th>
+                <th>Question Title</th>
+                <th>Vote Number</th>
+            </tr>
+
+        {% for dict_of_answer in answers %}
+            <tr>
+
+                <td>{{ dict_of_answer["submission_time"]|string|truncate(19, True, "") }}</td>
+                <td>{{ dict_of_answer["message"] }}</td>
+                <td class="question-title">
+                    <a href="{{ url_for('get_question_details', question_id = dict_of_answer["id"]) }}">
+                        {{ dict_of_answer["question_title"] }}
+                    </a>
+                </td>
+                <td>{{ dict_of_answer["vote_number"] }}</td>
+            </tr>
+        {% endfor %}
+
+        </table>
+    {% else %}
+        <p>No answers to show - yet.</p>
+    {% endif %}
+    </div>
+
+    {% include "footer.html" %}
+
+{% endblock %}

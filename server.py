@@ -50,11 +50,11 @@ def save_new_question():
 def get_question_details(question_id):
     data_manager.add_question_view(question_id)
     question = data_manager.get_question_by_id(question_id)
-    question_author = data_manager.get_user_email_by_id(question["user_id"])
+    question_author = data_manager.get_user_data_by_id(question["user_id"])
     answers_for_question = data_manager.get_answers_by_question_id(question_id)
     comments_for_question = data_manager.get_comments_by_question_id(question_id)
     comments_for_answer = data_manager.get_answer_comments_to_question(question_id)
-    return render_template("question_page.html", dict_of_question=question, question_author=question_author,
+    return render_template("question_page.html", dict_of_question=question, question_author_data=question_author,
                            comments_for_question=comments_for_question, answers_to_list=answers_for_question,
                            comments_for_answer=comments_for_answer)
 
@@ -238,7 +238,8 @@ def save_new_user():
     try:
         data_manager.add_new_user(dict_of_new_user)
     except ValueError:
-        return render_template("new_user.html", form_action=form_action, user_action=user_action, registration_failed=True)
+        return render_template("new_user.html", form_action=form_action,
+                               user_action=user_action, registration_failed=True)
     return redirect(url_for("index"))
 
 
@@ -252,11 +253,13 @@ def sign_in_page():
 @app.route('/sign-in', methods=["POST"])
 def user_verification():
     attempt_email = request.form["email"]
-    user_hash = data_manager.get_password_hash_by_email(attempt_email)  # invaild email?
+    user_hash = data_manager.get_password_hash_by_email(attempt_email)
     attempt_password = request.form["plain_text_password"]
     verified = utils.verify_password(attempt_password, user_hash)
     if verified:
         session["user"] = attempt_email
+        session[attempt_email] = data_manager.get_user_data_by_email(attempt_email)
+        data_manager.save_login_time(session[session["user"]]["id"])
         return redirect(url_for("index"))
     else:
         form_action = url_for("user_verification")
@@ -277,6 +280,18 @@ def list_users():
         return redirect(url_for("index"))
     user_list = data_manager.get_users()
     return render_template('user_list.html', user_list=user_list)
+
+
+@app.route('/user/<user_id>')
+def user_page(user_id):
+    user_data = data_manager.get_user_data_by_id(user_id)
+    if user_data is None:
+        error_msg = "Invalid user ID"
+        return render_template("error_page.html", error_message=error_msg)
+    questions_of_user = data_manager.get_questions_by_user(user_id)
+    answers_of_user = data_manager.get_answers_by_user(user_id)
+    return render_template("user_page.html", dict_of_user=user_data,
+                           questions=questions_of_user, answers=answers_of_user)
 
 
 if __name__ == "__main__":

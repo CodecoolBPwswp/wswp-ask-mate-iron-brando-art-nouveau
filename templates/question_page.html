@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
-{% set question_author = question_author %}
+{% set question_author = question_author_data["name"] %}
+{% set author_id = dict_of_question["user_id"] %}
 
 {% block content %}
 
@@ -22,7 +23,10 @@
                 <table>
                     <tr>
                         <td>
-                            <p>Written by {{ dict_of_answer["author_email"] }} {{ dict_of_answer["submission_time"] }}</p>
+                            <p>Written by <a href="{{ url_for("user_page", user_id=dict_of_answer["user_id"]) }}">
+                                {{ question_author_data["name"] }}
+                            </a></p>
+                            <p>{{ dict_of_answer["submission_time"]|string|truncate(19, True, "") }}</p>
                             <p class="main-message">{{ dict_of_answer["message"] }}</p>
                             <p><a href="{{ url_for('comment_to_answer', answer_id=dict_of_answer['id']) }}"><i class="fas fa-plus"></i> Add new comment</a></p>
                             <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}"><i class="fas fa-edit"></i> Edit answer</a></p>

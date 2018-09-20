@@ -14,6 +14,10 @@ h1 {
     color: #b6641c;
 }
 
+h2 {
+    text-align: center;
+}
+
 div {
     align-content: center;
     margin: auto;
@@ -85,7 +89,7 @@ div.answer-frame {
 }
 
 div.page-header {
-    height: 100px;
+    height: 110px;
 }
 
 div.page-header-content {
@@ -95,7 +99,7 @@ div.page-header-content {
 
 div.user-frame {
     margin-left: auto;
-    margin-right: 5px;
+    margin-right: 10px;
     text-align: right;
     float: right;
 }
@@ -106,6 +110,12 @@ div.search {
 
 div.user-activities {
     text-align: center;
+}
+
+div.user_page_box {
+    width: 75%;
+    display: inline-table;
+    margin: 10px;
 }
 
 a {

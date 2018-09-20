@@ -2,8 +2,8 @@ import datetime
 import bcrypt
 
 
-def get_current_time():
-    current_time_str = str(datetime.datetime.now())[:19]
+def get_current_time():  # timestamp should be sliced when displayed not when stored!
+    current_time_str = str(datetime.datetime.now())
     return current_time_str
 
 
@@ -12,7 +12,7 @@ def add_submission_time(dict_of_new_entry):
     return dict_of_new_entry
 
 
-def add_missing_fields(dict_to_check, header): # vote és view should be 0
+def add_missing_fields(dict_to_check, header):
     for field_name in header:
         if field_name not in dict_to_check:
             dict_to_check[field_name] = None

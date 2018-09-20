@@ -6,12 +6,18 @@
 
     <form action="{{ form_action }}" method="post" id="user-reg">
         <p>
-        <label for="user-email">Email address: </label>
-        <input type="text" id="user-email" name="email" placeholder="example@codecool.com">
+            <label for="user-email">Email address: </label>
+            <input type="text" id="user-email" name="email" placeholder="example@codecool.com" required>
         </p>
+        {% if user_action == "Sign up" %}
         <p>
-        <label for="user-pw">Password: </label>
-        <input type="password" id="user-pw" name="plain_text_password" placeholder="s3cur3_p4ssw0rd">
+            <label for="user-name">Name: </label>
+            <input type="text" id="user-name" name="name" placeholder="Jane Doe" required>
+        </p>
+        {% endif %}
+        <p>
+            <label for="user-pw">Password: </label>
+            <input type="password" id="user-pw" name="plain_text_password" placeholder="s3cur3_p4ssw0rd" required>
         </p>
         <button type="submit"><i class="fas fa-sign-in-alt"></i> {{ user_action }}</button>
     </form>

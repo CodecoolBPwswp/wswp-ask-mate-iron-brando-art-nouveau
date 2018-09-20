@@ -45,7 +45,7 @@
         {% for question in questions %}
             <tr>
 
-                <td>{{ question["submission_time"] }}</td>
+                <td>{{ question["submission_time"]|string|truncate(19, True, "") }}</td>
                 <td class="question-title"><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
                 <td>{{ question["author_email"] }}</td>
                 <td>{{ question["view_number"] }}</td>

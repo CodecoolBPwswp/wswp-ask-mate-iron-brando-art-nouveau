@@ -198,7 +198,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection.connection_handler
 def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
-                    SELECT answer.id, submission_time, vote_number, question_id, message, users.email AS author_email
+                    SELECT answer.id, submission_time, vote_number, question_id, message, user_id, users.email AS author_email
                     FROM answer JOIN users ON answer.user_id = users.id
                     WHERE question_id = %(question_id)s
                     ORDER BY id DESC
@@ -338,6 +338,17 @@ def get_password_hash_by_email(cursor, email):
 
 
 @connection.connection_handler
+def save_login_time(cursor, user_id):
+    current_time = utils.get_current_time()
+    cursor.execute("""
+                    UPDATE users
+                    SET last_login = %(login_time)s
+                    WHERE id = %(user_id)s
+                    """,
+                   {"login_time": current_time, "user_id": user_id})
+
+
+@connection.connection_handler
 def get_users(cursor):
     cursor.execute("""
                     SELECT id,name,last_login,reputation
@@ -365,8 +376,34 @@ def get_user_email_by_id(cursor, user_id):
                     WHERE id = %s;
                     """,
                    (user_id, ))
-    user_id = cursor.fetchone()["email"]
-    return user_id
+    query_result = cursor.fetchone()
+    if query_result is None:
+        return None
+    else:
+        return query_result["email"]
+
+
+@connection.connection_handler
+def get_user_data_by_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT registration_time, email, name, last_login, reputation FROM users
+                    WHERE id = %s
+                    """,
+                   (user_id, ))
+    dict_of_user = cursor.fetchone()
+    return dict_of_user
+
+
+@connection.connection_handler
+def get_user_data_by_email(cursor, user_email):
+    cursor.execute("""
+                    SELECT id, registration_time, email, name, last_login, reputation FROM users
+                    WHERE email = %s
+                    """,
+                   (user_email, ))
+    dict_of_user = cursor.fetchone()
+    return dict_of_user
+
 
 @connection.connection_handler
 def get_all_user_emails(cursor):
@@ -376,6 +413,34 @@ def get_all_user_emails(cursor):
     query_result = cursor.fetchall()
     list_of_emails = [row["email"] for row in query_result]
     return list_of_emails
+
+
+@connection.connection_handler
+def get_questions_by_user(cursor, user_id):
+    cursor.execute("""
+                    SELECT question.id, question.submission_time, title, question.vote_number, view_number, 
+                        COUNT(a.id) AS number_of_answers 
+                    FROM question JOIN answer a on question.id = a.question_id
+                    WHERE question.user_id = %s
+                    GROUP BY question.id
+                    ORDER BY question.submission_time DESC
+                    """,
+                   (user_id, ))
+    list_of_questions = cursor.fetchall()
+    return list_of_questions
+
+
+@connection.connection_handler
+def get_answers_by_user(cursor, user_id):
+    cursor.execute("""
+                    SELECT answer.id, answer.submission_time, answer.message, answer.vote_number, q.title AS question_title 
+                    FROM answer JOIN question q on answer.question_id = q.id
+                    WHERE answer.user_id = %s
+                    ORDER BY answer.submission_time DESC
+                    """,
+                   (user_id, ))
+    list_of_answers = cursor.fetchall()
+    return list_of_answers
 
 
 @connection.connection_handler
@@ -413,7 +478,3 @@ def minus_reputation_2(cursor,email):
                       SET reputation = reputation - 2
                       WHERE email LIKE %s;
                     """,(email, ))
-
-
-
-

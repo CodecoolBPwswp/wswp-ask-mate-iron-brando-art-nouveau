@@ -12,8 +12,12 @@
      {% for user in user_list %}
          <tr>
              <td> {{ user["id"] }} </td>
-             <td> {{ user["name"] }} </td>
-             <td> {{ user["last_login"] }} </td>
+             <td>
+                 <a href="{{ url_for("user_page", user_id=user["id"]) }}">
+                     {{ user["name"] }}
+                 </a>
+             </td>
+             <td> {{ user["last_login"]|string|truncate(19, True, "") }} </td>
              <td> {{ user["reputation"] }} </td>
 
          </tr>
