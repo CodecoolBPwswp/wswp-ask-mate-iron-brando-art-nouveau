@@ -17,7 +17,7 @@
                      {{ user["name"] }}
                  </a>
              </td>
-             <td> {{ user["last_login"] }} </td>
+             <td> {{ user["last_login"]|string|truncate(19, True, "") }} </td>
              <td> {{ user["reputation"] }} </td>
 
          </tr>

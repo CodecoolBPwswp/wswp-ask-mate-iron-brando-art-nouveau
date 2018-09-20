@@ -225,6 +225,7 @@ def user_verification():
     if verified:
         session["user"] = attempt_email
         session[attempt_email] = data_manager.get_user_data_by_email(attempt_email)
+        data_manager.save_login_time(session[session["user"]]["id"])
         return redirect(url_for("index"))
     else:
         form_action = url_for("user_verification")

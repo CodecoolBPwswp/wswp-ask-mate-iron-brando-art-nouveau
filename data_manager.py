@@ -269,6 +269,17 @@ def get_password_hash_by_email(cursor, email):
 
 
 @connection.connection_handler
+def save_login_time(cursor, user_id):
+    current_time = utils.get_current_time()
+    cursor.execute("""
+                    UPDATE users
+                    SET last_login = %(login_time)s
+                    WHERE id = %(user_id)s
+                    """,
+                   {"login_time": current_time, "user_id": user_id})
+
+
+@connection.connection_handler
 def get_users(cursor):
     cursor.execute("""
                     SELECT id,name,last_login,reputation

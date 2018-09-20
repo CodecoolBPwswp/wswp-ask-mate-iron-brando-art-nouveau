@@ -21,11 +21,11 @@
                 </tr>
                 <tr>
                     <td>Registration time:</td>
-                    <td>{{ dict_of_user["registration_time"] }}</td>
+                    <td>{{ dict_of_user["registration_time"]|string|truncate(19, True, "") }}</td>
                 </tr>
                 <tr>
                     <td>Last login:</td>
-                    <td>{{ dict_of_user["last_login"] }}</td>
+                    <td>{{ dict_of_user["last_login"]|string|truncate(19, True, "") }}</td>
                 </tr>
             </table>
         </div>
