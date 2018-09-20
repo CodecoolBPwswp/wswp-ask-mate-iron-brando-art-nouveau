@@ -98,7 +98,7 @@ def comment_to_question(question_id):
     form_action = url_for('post_comment_to_question', question_id=question_id)
     question_to_comment = data_manager.get_question_by_id(question_id)
     return render_template("new_comment.html", dict_of_record=question_to_comment,
-                           instance_to_comment=instance_to_comment, form_action=form_action)
+                           instance_to_comment=instance_to_comment, form_action=form_action, dict_of_comment=None)
 
 
 @app.route('/details/<question_id>/new-comment', methods=["POST"])
@@ -114,7 +114,7 @@ def post_comment_to_question(question_id):
 def comment_to_answer(answer_id):
     form_action = url_for('post_comment_to_answer', answer_id=answer_id)
     answer_to_comment = data_manager.get_answer_by_id(answer_id)
-    return render_template("new_comment.html", dict_of_record=answer_to_comment, form_action=form_action)
+    return render_template("new_comment.html", dict_of_record=answer_to_comment, form_action=form_action, dict_of_comment=None)
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=["POST"])
@@ -138,11 +138,25 @@ def delete_comment(comment_id):
 
 @app.route('/comment/<comment_id>/edit-comment')
 def edit_comment(comment_id):
-    pass
+    comment_to_edit = data_manager.get_comment_by_id(comment_id)
+    form_action = url_for("save_edited_comment")
+    user_action = "Edit"
+    return render_template("new_comment.html", dict_of_comment=comment_to_edit, form_action=form_action, user_action=user_action)
 
-@app.route('/comment/<comment_id>/edit-comment', methods=["GET"])
-def save_edited_comment(comment_id):
-    pass
+@app.route('/save-edited-comment', methods=["POST"])
+def save_edited_comment():
+    edited_message = request.form.to_dict()
+    data_manager.update_comment(edited_message)
+
+
+    edited_comment = data_manager.get_comment_by_id(edited_message["id"])   #id of the comment --> comment
+
+    if edited_comment["question_id"] == None:
+        qu_id = data_manager.get_question_id_by_answer_id(edited_comment["answer_id"])
+    else:
+        qu_id = edited_comment["question_id"]
+    url_to_question = url_for("get_question_details", question_id=qu_id)
+    return redirect(url_to_question)
 
 
 @app.route('/details/<question_id>/new-answer')
@@ -180,7 +194,7 @@ def save_edited_answer():
     edited_message = request.form.to_dict()
     data_manager.update_answer(edited_message)
     edited_answer = data_manager.get_answer_by_id(edited_message["id"])
-    url_to_question = url_for("get_question_details", postid=edited_answer["question_id"])
+    url_to_question = url_for("get_question_details", question_id=edited_answer["question_id"])
     return redirect(url_to_question)
 
 

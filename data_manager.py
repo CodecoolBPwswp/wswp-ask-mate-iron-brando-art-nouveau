@@ -123,6 +123,28 @@ def delete_comment(cursor, comment_id):
                     """,
                    {"comment_id": comment_id})
 
+@connection.connection_handler
+def get_comment_by_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {"comment_id": comment_id})
+    dict_of_comment = cursor.fetchone()
+    return dict_of_comment
+
+
+@connection.connection_handler
+def update_comment(cursor, dict_of_updated_comment):
+    cursor.execute("""
+                    UPDATE comment
+                    SET message = %(message)s
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {"message": dict_of_updated_comment["message"],
+                    "comment_id": dict_of_updated_comment["id"]})
+
+
 
 @connection.connection_handler
 def get_question_id_by_comment_id(cursor, comment_id):
@@ -133,6 +155,20 @@ def get_question_id_by_comment_id(cursor, comment_id):
                    {"comment_id": comment_id})
     to_return = cursor.fetchone()
     return to_return
+
+
+@connection.connection_handler
+def get_question_id_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT answer.question_id
+                    FROM answer
+                    JOIN comment
+                    ON comment.answer_id = answer.id
+                    WHERE answer.id = %(answer_id)s;
+                    """,
+                   {"answer_id": answer_id})
+    search_result = cursor.fetchone()
+    return search_result["question_id"]
 
 
 @connection.connection_handler
