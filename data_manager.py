@@ -333,3 +333,40 @@ def get_answers_by_user(cursor, user_id):
                    (user_id, ))
     list_of_answers = cursor.fetchall()
     return list_of_answers
+
+
+@connection.connection_handler
+def add_reputation_5(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 5
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+
+@connection.connection_handler
+def add_reputation_10(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 10
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+@connection.connection_handler
+def add_reputation_15(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 15
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+@connection.connection_handler
+def minus_reputation_2(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation - 2
+                      WHERE email LIKE %s;
+                    """,(email, ))
