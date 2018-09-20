@@ -13,14 +13,14 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
     if order_direction == "DESC":
         cursor.execute(
                 sql.SQL("""
-                        SELECT question.id, submission_time, view_number, vote_number, title, users.email AS author_email
+                        SELECT question.id, submission_time, view_number, vote_number, title, users.name AS author
                         FROM question JOIN users ON question.user_id = users.id
                         ORDER BY {} DESC;
                         """).format(sql.Identifier(order_by)))
     else:
         cursor.execute(
             sql.SQL("""
-                    SELECT question.id, submission_time, view_number, vote_number, title, users.email AS author_email
+                    SELECT question.id, submission_time, view_number, vote_number, title, users.name AS author
                     FROM question JOIN users ON question.user_id = users.id
                     ORDER BY {} ASC
                     """).format(sql.Identifier(order_by))
@@ -32,7 +32,7 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
 @connection.connection_handler
 def get_latest_questions(cursor, how_many):
     cursor.execute("""
-                    SELECT question.id, submission_time, view_number, vote_number, title, users.email AS author_email
+                    SELECT question.id, submission_time, view_number, vote_number, title, users.name AS author
                     FROM question JOIN users ON question.user_id = users.id
                     ORDER BY submission_time DESC
                     LIMIT %(number_of_rows)s;
@@ -211,8 +211,12 @@ def get_answers_by_question_id(cursor, _id):
 @connection.connection_handler
 def get_search_results(cursor, keyword):
     cursor.execute("""
-                        SELECT * FROM question full join answer on question.id = answer.question_id
-                          WHERE answer.message LIKE %(keyword)s OR question.message LIKE %(keyword)s
+                        SELECT question.id, question.submission_time, question.view_number, question.vote_number,
+                                question.user_id, title, question.message
+                        FROM question FULL JOIN answer ON question.id = answer.question_id
+                          WHERE answer.message LIKE %(keyword)s 
+                                OR question.message LIKE %(keyword)s
+                                OR question.title LIKE %(keyword)s
                          """, {'keyword': '%' + keyword + '%'})
 
     search_result = cursor.fetchall()

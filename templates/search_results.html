@@ -19,11 +19,15 @@
 
                 <tr>
 
-                     <td align="center">{{ result["submission_time"] }}</td>
-                     <td align="center">{{ result["view_number"] }}</td>
-                     <td align="center">{{ result["vote_number"] }}</td>
-                     <td align="center"><a href="{{ url_for("get_question_details", question_id = result["id"]) }}">{{ result["title"] }}</a></td>
-                     <td>{{ result["message"] }}</td>
+                     <td>{{ result["submission_time"]|string|truncate(19, True, "") }}</td>
+                     <td>{{ result["view_number"] }}</td>
+                     <td>{{ result["vote_number"] }}</td>
+                     <td class="align-left">
+                         <a href="{{ url_for("get_question_details", question_id = result["id"]) }}">
+                             {{ result["title"] }}
+                         </a>
+                         </td>
+                     <td class="align-left text-container">{{ result["message"] }}</td>
                 </tr>
                 {% endfor %}
                 {% else %}

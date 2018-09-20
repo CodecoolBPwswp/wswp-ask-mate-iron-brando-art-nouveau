@@ -51,7 +51,7 @@
             <tr>
 
                 <td>{{ dict_of_questions["submission_time"]|string|truncate(19, True, "") }}</td>
-                <td class="question-title">
+                <td class="align-left">
                     <a href="{{ url_for('get_question_details', question_id = dict_of_questions["id"]) }}">
                         {{ dict_of_questions["title"] }}
                     </a>

@@ -12,7 +12,7 @@
     
     <div class="page-header">
         <div class="search page-header-content">
-            <p><form action="{{ url_for("search_question") }}" method="post" id="searching-bar">
+            <p><form action="{{ url_for("search_question") }}" method="get" id="searching-bar">
                 <input type="text" name="search" placeholder="Search database..." required minlength="1">
                 <button type="submit" form="searching-bar"><i class="fas fa-search"></i> Search</button>
     

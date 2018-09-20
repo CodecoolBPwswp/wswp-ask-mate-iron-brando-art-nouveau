@@ -216,9 +216,9 @@ def save_edited_answer():
     return redirect(url_to_question)
 
 
-@app.route('/search', methods=["POST"])
+@app.route('/search', methods=["GET"])
 def search_question():
-    keyword = request.form['search']
+    keyword = request.args['search']
     search_result = data_manager.get_search_results(keyword)
     return render_template('search_results.html', keyword=keyword, search_result=search_result)
 
