@@ -192,7 +192,8 @@ def save_new_user():
     try:
         data_manager.add_new_user(dict_of_new_user)
     except ValueError:
-        return render_template("new_user.html", form_action=form_action, user_action=user_action, registration_failed=True)
+        return render_template("new_user.html", form_action=form_action,
+                               user_action=user_action, registration_failed=True)
     return redirect(url_for("index"))
 
 
@@ -235,9 +236,11 @@ def list_users():
 
 @app.route('/user/<user_id>')
 def user_page(user_id):
-    questions_to_list = data_manager.get_questions_by_user(user_id)
     user = data_manager.get_user_email_by_id(user_id)
-    return render_template("user_page.html", questions=questions_to_list, user_email=user)
+    questions_of_user = data_manager.get_questions_by_user(user_id)
+    answers_of_user = data_manager.get_answers_by_user(user_id)
+    return render_template("user_page.html", user_email=user,
+                           questions=questions_of_user, answers=answers_of_user)
 
 
 if __name__ == "__main__":

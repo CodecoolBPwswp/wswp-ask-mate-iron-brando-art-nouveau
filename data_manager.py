@@ -315,7 +315,21 @@ def get_questions_by_user(cursor, user_id):
     cursor.execute("""
                     SELECT id, submission_time, title, vote_number, view_number FROM question
                     WHERE user_id = %s
+                    ORDER BY submission_time DESC
                     """,
                    (user_id, ))
     list_of_questions = cursor.fetchall()
     return list_of_questions
+
+
+@connection.connection_handler
+def get_answers_by_user(cursor, user_id):
+    cursor.execute("""
+                    SELECT answer.id, answer.submission_time, answer.message, answer.vote_number, q.title AS question_title 
+                    FROM answer JOIN question q on answer.question_id = q.id
+                    WHERE answer.user_id = %s
+                    ORDER BY answer.submission_time DESC
+                    """,
+                   (user_id, ))
+    list_of_answers = cursor.fetchall()
+    return list_of_answers

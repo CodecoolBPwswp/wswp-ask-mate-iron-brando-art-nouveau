@@ -7,35 +7,19 @@
         <h3>Questions</h3>
         <table>
             <tr>
-                <th>
-                    Submission Time
-                    <a href="{{ url_for('order_questions', column='submission_time', order='DESC') }}">↑</a>
-                    <a href="{{ url_for('order_questions', column='submission_time', order='ASC') }}">↓</a>
-                </th>
-                <th>
-                    Question Title
-                    <a href="{{ url_for('order_questions', column='title', order='DESC') }}">↑</a>
-                    <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
-                </th>
-                <th>
-                    View Number
-                    <a href="{{ url_for('order_questions', column='view_number', order='DESC') }}">↑</a>
-                    <a href="{{ url_for('order_questions', column='view_number', order='ASC') }}">↓</a>
-                </th>
-                <th>
-                    Vote Number
-                    <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
-                    <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
-                </th>
+                <th>Submission Time</th>
+                <th>Question Title</th>
+                <th>View Number</th>
+                <th>Vote Number</th>
             </tr>
 
-        {% for question in questions %}
+        {% for dict_of_questions in questions %}
             <tr>
 
-                <td>{{ question["submission_time"] }}</td>
-                <td class="question-title"><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
-                <td>{{ question["view_number"] }}</td>
-                <td>{{ question["vote_number"] }}</td>
+                <td>{{ dict_of_questions["submission_time"] }}</td>
+                <td class="question-title"><a href="{{ url_for('get_question_details', question_id = dict_of_questions["id"]) }}">{{ dict_of_questions["title"] }}</a></td>
+                <td>{{ dict_of_questions["view_number"] }}</td>
+                <td>{{ dict_of_questions["vote_number"] }}</td>
             </tr>
         {% endfor %}
 
@@ -43,6 +27,30 @@
     </div>
 
     <div class="user_page_box">
+        <h3>Answers</h3>
+        <table>
+            <tr>
+                <th>Submission Time</th>
+                <th>Answer</th>
+                <th>Question Title</th>
+                <th>Vote Number</th>
+            </tr>
+
+        {% for dict_of_answer in answers %}
+            <tr>
+
+                <td>{{ dict_of_answer["submission_time"] }}</td>
+                <td>{{ dict_of_answer["message"] }}</td>
+                <td class="question-title">
+                    <a href="{{ url_for('get_question_details', question_id = dict_of_answer["id"]) }}">
+                        {{ dict_of_answer["question_title"] }}
+                    </a>
+                </td>
+                <td>{{ dict_of_answer["vote_number"] }}</td>
+            </tr>
+        {% endfor %}
+
+        </table>
 
     </div>
 
