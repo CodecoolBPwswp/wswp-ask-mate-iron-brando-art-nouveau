@@ -49,11 +49,11 @@ def save_new_question():
 def get_question_details(question_id):
     data_manager.add_question_view(question_id)
     question = data_manager.get_question_by_id(question_id)
-    question_author = data_manager.get_user_email_by_id(question["user_id"])
+    question_author = data_manager.get_user_data_by_id(question["user_id"])
     answers_for_question = data_manager.get_answers_by_question_id(question_id)
     comments_for_question = data_manager.get_comments_by_question_id(question_id)
     comments_for_answer = data_manager.get_answer_comments_to_question(question_id)
-    return render_template("question_page.html", dict_of_question=question, question_author=question_author,
+    return render_template("question_page.html", dict_of_question=question, question_author_data=question_author,
                            comments_for_question=comments_for_question, answers_to_list=answers_for_question,
                            comments_for_answer=comments_for_answer)
 
@@ -224,6 +224,7 @@ def user_verification():
     verified = utils.verify_password(attempt_password, user_hash)
     if verified:
         session["user"] = attempt_email
+        session[attempt_email] = data_manager.get_user_data_by_email(attempt_email)
         return redirect(url_for("index"))
     else:
         form_action = url_for("user_verification")

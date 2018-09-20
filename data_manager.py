@@ -315,6 +315,17 @@ def get_user_data_by_id(cursor, user_id):
 
 
 @connection.connection_handler
+def get_user_data_by_email(cursor, user_email):
+    cursor.execute("""
+                    SELECT id, registration_time, email, name, last_login, reputation FROM users
+                    WHERE email = %s
+                    """,
+                   (user_email, ))
+    dict_of_user = cursor.fetchone()
+    return dict_of_user
+
+
+@connection.connection_handler
 def get_all_user_emails(cursor):
     cursor.execute("""
                     SELECT email FROM users

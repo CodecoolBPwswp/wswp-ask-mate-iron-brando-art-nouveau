@@ -24,13 +24,18 @@
             <p><form action="{{ url_for("add_new_question") }}">
                 <button type="submit">New question</button>
             </form></p>
-        <a class="link-box" href="{{ url_for('list_users') }}">List of all users</a>
+        <a class="link-box" href="{{ url_for('list_users') }}">List all users</a>
         </div>
         {% endif %}
 
         <div class="user-frame page-header-content">
             {% if "user" in session %}
-                <p>{{ session["user"] }}</p>
+                <p>Signed in as {{ session[session["user"]]["name"] }}</p>
+                <p>
+                    <a href="{{ url_for("user_page", user_id = session[session["user"]]["id"]) }}">
+                        My page
+                    </a>
+                </p>
                 <form action="{{ url_for("sign_out") }}" method="post">
                     <button type="submit">Sign out</button>
                 </form>

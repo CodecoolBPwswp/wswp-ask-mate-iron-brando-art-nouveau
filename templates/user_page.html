@@ -3,8 +3,8 @@
 {% block content %}
 
     {% if "user" in session %}
+        <h2>{{ dict_of_user["name"] }}'s data</h2>
         <div>
-            <h2>Data of {{ dict_of_user["name"] }}</h2>
             <table>
                 <tr>
                     <td>Name:</td>
@@ -32,7 +32,7 @@
     {% endif %}
 
 
-    <h2>Content by {{ dict_of_user["email"] }}</h2>
+    <h2>Content by {{ dict_of_user["name"] }}</h2>
     <div class="user_page_box table-container">
 
         <h3>Questions</h3>
