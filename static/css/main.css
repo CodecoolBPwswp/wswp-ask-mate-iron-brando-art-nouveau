@@ -108,6 +108,12 @@ div.user-activities {
     text-align: center;
 }
 
+div.user_page_box {
+    width: 75%;
+    display: inline-table;
+    margin: 10px;
+}
+
 a {
     color: #1b7a72;
     text-decoration: none;

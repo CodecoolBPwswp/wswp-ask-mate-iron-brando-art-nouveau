@@ -32,8 +32,8 @@
     {% endif %}
 
 
-    <div class="user_page_box">
-        <h2>Content by {{ dict_of_user["email"] }}</h2>
+    <h2>Content by {{ dict_of_user["email"] }}</h2>
+    <div class="user_page_box table-container">
 
         <h3>Questions</h3>
 
@@ -44,15 +44,21 @@
                 <th>Question Title</th>
                 <th>View Number</th>
                 <th>Vote Number</th>
+                <th>Number of Answers</th>
             </tr>
 
         {% for dict_of_questions in questions %}
             <tr>
 
                 <td>{{ dict_of_questions["submission_time"] }}</td>
-                <td class="question-title"><a href="{{ url_for('get_question_details', question_id = dict_of_questions["id"]) }}">{{ dict_of_questions["title"] }}</a></td>
+                <td class="question-title">
+                    <a href="{{ url_for('get_question_details', question_id = dict_of_questions["id"]) }}">
+                        {{ dict_of_questions["title"] }}
+                    </a>
+                </td>
                 <td>{{ dict_of_questions["view_number"] }}</td>
                 <td>{{ dict_of_questions["vote_number"] }}</td>
+                <td>{{ dict_of_questions["number_of_answers"] }}</td>
             </tr>
         {% endfor %}
 
@@ -62,7 +68,7 @@
     {% endif %}
     </div>
 
-    <div class="user_page_box">
+    <div class="user_page_box table-container">
         <h3>Answers</h3>
 
     {% if answers %}

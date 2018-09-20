@@ -327,9 +327,12 @@ def get_all_user_emails(cursor):
 @connection.connection_handler
 def get_questions_by_user(cursor, user_id):
     cursor.execute("""
-                    SELECT id, submission_time, title, vote_number, view_number FROM question
-                    WHERE user_id = %s
-                    ORDER BY submission_time DESC
+                    SELECT question.id, question.submission_time, title, question.vote_number, view_number, 
+                        COUNT(a.id) AS number_of_answers 
+                    FROM question JOIN answer a on question.id = a.question_id
+                    WHERE question.user_id = %s
+                    GROUP BY question.id
+                    ORDER BY question.submission_time DESC
                     """,
                    (user_id, ))
     list_of_questions = cursor.fetchall()
