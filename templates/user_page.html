@@ -5,6 +5,8 @@
 
     <div class="user_page_box">
         <h3>Questions</h3>
+
+    {% if questions %}
         <table>
             <tr>
                 <th>Submission Time</th>
@@ -24,10 +26,15 @@
         {% endfor %}
 
         </table>
+    {% else %}
+        <p>No questions to show - yet.</p>
+    {% endif %}
     </div>
 
     <div class="user_page_box">
         <h3>Answers</h3>
+
+    {% if answers %}
         <table>
             <tr>
                 <th>Submission Time</th>
@@ -51,7 +58,9 @@
         {% endfor %}
 
         </table>
-
+    {% else %}
+        <p>No answers to show - yet.</p>
+    {% endif %}
     </div>
 
     {% include "footer.html" %}
