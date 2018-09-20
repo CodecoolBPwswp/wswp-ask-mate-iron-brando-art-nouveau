@@ -127,11 +127,13 @@ def post_comment_to_answer(answer_id):
     return redirect(url_to_question_details)
 
 
-
-@app.route('/comment/<comment_id>/delete-comment', methods=["GET"])
-def delete_comment(comment_id):
+@app.route('/comment/<comment_id>/delete-comment/<type_of_post>', methods=["GET"])
+def delete_comment(comment_id, type_of_post):
+    if type_of_post == 'question':
+        question_id = data_manager.get_question_id_by_comment_id(comment_id)
+    else:
+        question_id = data_manager.get_question_id_by_answer_comment_id(comment_id)
     delete_comment = data_manager.delete_comment(comment_id)
-    question_id = data_manager.get_question_id_by_comment_id(comment_id)
     url_to_question_details = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question_details)
 
@@ -141,21 +143,20 @@ def edit_comment(comment_id):
     comment_to_edit = data_manager.get_comment_by_id(comment_id)
     form_action = url_for("save_edited_comment")
     user_action = "Edit"
-    return render_template("new_comment.html", dict_of_comment=comment_to_edit, form_action=form_action, user_action=user_action)
+    return render_template("new_comment.html", dict_of_comment=comment_to_edit,
+                           form_action=form_action, user_action=user_action)
+
 
 @app.route('/save-edited-comment', methods=["POST"])
 def save_edited_comment():
     edited_message = request.form.to_dict()
     data_manager.update_comment(edited_message)
-
-
-    edited_comment = data_manager.get_comment_by_id(edited_message["id"])   #id of the comment --> comment
-
+    edited_comment = data_manager.get_comment_by_id(edited_message["id"])
     if edited_comment["question_id"] == None:
-        qu_id = data_manager.get_question_id_by_answer_id(edited_comment["answer_id"])
+        question_id = data_manager.get_question_id_by_answer_id(edited_comment["answer_id"])
     else:
-        qu_id = edited_comment["question_id"]
-    url_to_question = url_for("get_question_details", question_id=qu_id)
+        question_id = edited_comment["question_id"]
+    url_to_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question)
 
 

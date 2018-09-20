@@ -150,11 +150,24 @@ def update_comment(cursor, dict_of_updated_comment):
 def get_question_id_by_comment_id(cursor, comment_id):
     cursor.execute("""
                     SELECT question_id FROM comment
-                    WHERE id = %(comment_id)s
+                    WHERE id = %(comment_id)s;
                     """,
                    {"comment_id": comment_id})
-    to_return = cursor.fetchone()
-    return to_return
+    result = cursor.fetchone()
+    return result["question_id"]
+
+@connection.connection_handler
+def get_question_id_by_answer_comment_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT answer.question_id 
+                    FROM answer
+                    JOIN comment
+                    ON comment.answer_id = answer.id
+                    WHERE comment.id = %(comment_id)s;
+                    """,
+                   {"comment_id": comment_id})
+    search_result = cursor.fetchone()
+    return search_result["question_id"]
 
 
 @connection.connection_handler

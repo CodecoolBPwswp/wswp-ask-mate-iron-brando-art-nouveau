@@ -53,7 +53,7 @@
                             <p>{{ comment["message"] }}</p>
                         </td>
                         <td>
-                            <p><a href="{{ url_for('delete_comment', comment_id=comment['id'])}}"> <i class="fas fa-trash-alt"></i>Delete</a></p>
+                            <p><a href="{{ url_for('delete_comment', comment_id=comment['id'], type_of_post='answer')}}"> <i class="fas fa-trash-alt"></i>Delete</a></p>
                         </td>
                         <td>
                             <p><a href="{{ url_for('edit_comment',   comment_id=comment['id']) }}"> <i class="fas fa-edit"></i>Edit</a></p>
