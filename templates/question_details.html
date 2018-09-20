@@ -1,6 +1,8 @@
     <div class="question-page-frame question-frame">
     <h2>{{ dict_of_question["title"] }}</h2>
-    <p class="question-author">by {{ question_author }}</p>
+    <p class="question-author">
+        by <a href="{{ url_for("user_page", user_id=author_id) }}">{{ question_author }}</a>
+    </p>
 
         <div class="question-voting question-page-content">
             <p>

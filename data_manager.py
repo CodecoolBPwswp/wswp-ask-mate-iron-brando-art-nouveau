@@ -129,7 +129,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection.connection_handler
 def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
-                    SELECT answer.id, submission_time, vote_number, question_id, message, users.email AS author_email
+                    SELECT answer.id, submission_time, vote_number, question_id, message, user_id, users.email AS author_email
                     FROM answer JOIN users ON answer.user_id = users.id
                     WHERE question_id = %(question_id)s
                     ORDER BY id DESC
