@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Content by {{ user_email }}</h2>
+
+    <div class="user_page_box">
+        <h3>Questions</h3>
+        <table>
+            <tr>
+                <th>
+                    Submission Time
+                    <a href="{{ url_for('order_questions', column='submission_time', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='submission_time', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    Question Title
+                    <a href="{{ url_for('order_questions', column='title', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='title', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    View Number
+                    <a href="{{ url_for('order_questions', column='view_number', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='view_number', order='ASC') }}">↓</a>
+                </th>
+                <th>
+                    Vote Number
+                    <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
+                </th>
+            </tr>
+
+        {% for question in questions %}
+            <tr>
+
+                <td>{{ question["submission_time"] }}</td>
+                <td class="question-title"><a href="{{ url_for('get_question_details', question_id = question["id"]) }}">{{ question["title"] }}</a></td>
+                <td>{{ question["view_number"] }}</td>
+                <td>{{ question["vote_number"] }}</td>
+            </tr>
+        {% endfor %}
+
+        </table>
+    </div>
+
+    <div class="user_page_box">
+
+    </div>
+
+    {% include "footer.html" %}
+
+{% endblock %}

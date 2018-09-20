@@ -299,6 +299,7 @@ def get_user_email_by_id(cursor, user_id):
     user_id = cursor.fetchone()["email"]
     return user_id
 
+
 @connection.connection_handler
 def get_all_user_emails(cursor):
     cursor.execute("""
@@ -307,3 +308,14 @@ def get_all_user_emails(cursor):
     query_result = cursor.fetchall()
     list_of_emails = [row["email"] for row in query_result]
     return list_of_emails
+
+
+@connection.connection_handler
+def get_questions_by_user(cursor, user_id):
+    cursor.execute("""
+                    SELECT id, submission_time, title, vote_number, view_number FROM question
+                    WHERE user_id = %s
+                    """,
+                   (user_id, ))
+    list_of_questions = cursor.fetchall()
+    return list_of_questions

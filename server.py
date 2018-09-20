@@ -206,7 +206,7 @@ def sign_in_page():
 @app.route('/sign-in', methods=["POST"])
 def user_verification():
     attempt_email = request.form["email"]
-    user_hash = data_manager.get_password_hash_by_email(attempt_email)  # invaild email?
+    user_hash = data_manager.get_password_hash_by_email(attempt_email)
     attempt_password = request.form["plain_text_password"]
     verified = utils.verify_password(attempt_password, user_hash)
     if verified:
@@ -231,6 +231,13 @@ def list_users():
         return redirect(url_for("index"))
     user_list = data_manager.get_users()
     return render_template('user_list.html', user_list=user_list)
+
+
+@app.route('/user/<user_id>')
+def user_page(user_id):
+    questions_to_list = data_manager.get_questions_by_user(user_id)
+    user = data_manager.get_user_email_by_id(user_id)
+    return render_template("user_page.html", questions=questions_to_list, user_email=user)
 
 
 if __name__ == "__main__":
