@@ -3,6 +3,7 @@ import data_manager
 import utils
 
 app = Flask(__name__)
+app.secret_key = "HERE I COME!"
 
 
 @app.route('/')

@@ -8,7 +8,7 @@
     {% include "question_details.html" %}
 
         {% if "user" in session %}
-        <p><a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}">Add new answer</a></p>
+        <p><a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}"><i class="fas fa-plus"></i> Add new answer</a></p>
         {% endif %}
 
 	{% if answers_to_list %}
@@ -24,20 +24,20 @@
                         <td>
                             <p>Written by {{ dict_of_answer["author_email"] }} {{ dict_of_answer["submission_time"] }}</p>
                             <p class="main-message">{{ dict_of_answer["message"] }}</p>
-                            <p><a href="{{ url_for('comment_to_answer', answer_id=dict_of_answer['id']) }}">Add new comment</a></p>
-                            <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">Edit answer</a></p>
+                            <p><a href="{{ url_for('comment_to_answer', answer_id=dict_of_answer['id']) }}"><i class="fas fa-plus"></i> Add new comment</a></p>
+                            <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}"><i class="fas fa-edit"></i> Edit answer</a></p>
                         </td>
                         <td>
                             <p>
                                 <form action="{{ url_for("upvote_answer") }}" method="post" id="answer-upvote">
                                     <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
-                                    <button type="submit" form="answer-upvote">Upvote</button>
+                                    <button type="submit" form="answer-upvote"><i class="fas fa-thumbs-up"></i> Upvote</button>
                                 </form>
                             </p>
                             <p>
                                 <form action="{{ url_for("downvote_answer") }}" method="post" id="answer-downvote">
                                     <input name="answer_id" value="{{ dict_of_answer["id"] }}" hidden>
-                                    <button type="submit" form="answer-downvote">Downvote</button>
+                                    <button type="submit" form="answer-downvote"><i class="fas fa-thumbs-down"></i> Downvote</button>
                                 </form>
                             </p>
                             <p>{{ dict_of_answer["vote_number"] }}</p>
@@ -57,10 +57,10 @@
                             <p>{{ comment["message"] }}</p>
                         </td>
                         <td>
-                            <p><a href="{{ url_for('delete_comment', comment_id=comment['id'], type_of_post='answer')}}"> <i class="fas fa-trash-alt"></i>Delete</a></p>
+                            <p><a href="{{ url_for('delete_comment', comment_id=comment['id'], type_of_post='answer')}}"> <i class="fas fa-trash-alt"></i> Delete</a></p>
                         </td>
                         <td>
-                            <p><a href="{{ url_for('edit_comment',   comment_id=comment['id']) }}"> <i class="fas fa-edit"></i>Edit</a></p>
+                            <p><a href="{{ url_for('edit_comment',   comment_id=comment['id']) }}"> <i class="fas fa-edit"></i> Edit</a></p>
                         </td>
                     </tr>
                 {% endfor %}

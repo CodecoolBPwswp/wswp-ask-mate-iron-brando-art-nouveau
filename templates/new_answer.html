@@ -18,10 +18,10 @@
                 {% if dict_of_answer is not none %}
                     <input name="id" type="text" value="{{ dict_of_answer["id"]}}" hidden>
                 {% endif %}
-                <p><button type="submit" form="new-answer">Send answer</button></p>
+                <p><button type="submit" form="new-answer"><i class="fas fa-share-square"></i> Send answer</button></p>
             </form>
     </div>
-            <p><a href="{{ url_for("get_question_details", question_id = dict_of_question["id"]) }}">Back to question</a></p>
+            <p><a href="{{ url_for("get_question_details", question_id = dict_of_question["id"]) }}"><i class="fas fa-chevron-left"></i> Back to question</a></p>
 
 
     {% include "footer.html" %}

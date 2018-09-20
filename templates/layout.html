@@ -14,7 +14,7 @@
         <div class="search page-header-content">
             <p><form action="{{ url_for("search_question") }}" method="post" id="searching-bar">
                 <input type="text" name="search" placeholder="Search database..." required minlength="1">
-                <button type="submit" form="searching-bar">Search</button>
+                <button type="submit" form="searching-bar"><i class="fas fa-search"></i> Search</button>
     
             </form></p>
         </div>
@@ -22,24 +22,24 @@
         {% if "user" in session %}
         <div class="user-activities page-header-content">
             <p><form action="{{ url_for("add_new_question") }}">
-                <button type="submit">New question</button>
+                <button type="submit"><i class="fas fa-plus"></i> New question</button>
             </form></p>
-        <a class="link-box" href="{{ url_for('list_users') }}">List of all users</a>
+        <a class="link-box" href="{{ url_for('list_users') }}"><i class="fas fa-list-ul"></i> List of all users</a>
         </div>
         {% endif %}
 
         <div class="user-frame page-header-content">
             {% if "user" in session %}
-                <p>{{ session["user"] }}</p>
+                <p><i class="fas fa-user"></i> {{ session["user"] }}</p>
                 <form action="{{ url_for("sign_out") }}" method="post">
-                    <button type="submit">Sign out</button>
+                    <button type="submit"><i class="fas fa-sign-out-alt"></i> Sign out</button>
                 </form>
             {% else %}
                 <form action="{{ url_for("register_user") }}">
-                    <button type="submit"><i class="fas fa-angle-up"></i>Sign up</button>
+                    <button type="submit"><i class="fas fa-angle-up"></i> Sign up</button>
                 </form>
                 <form action="{{ url_for("user_verification") }}">
-                    <button type="submit">Sign in</button>
+                    <button type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
                 </form>
             {% endif %}
         </div>
