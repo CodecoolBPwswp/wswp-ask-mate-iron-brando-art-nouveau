@@ -114,6 +114,11 @@ a {
     font-weight: normal;
 }
 
+a.h1-link {
+    color: #b6641c;
+    font-weight: bolder;
+}
+
 div.user_list {
     width: 30%
 }
@@ -169,9 +174,15 @@ p.question-author {
     color: #8c9798;
 }
 
+p.error-message {
+    color: darkred;
+    font-weight: bold;
+}
+
 footer {
     width: 300px;
     margin: 20px auto;
     background-color: white;
     padding: 7px;
+    border-radius: 5px;
 }

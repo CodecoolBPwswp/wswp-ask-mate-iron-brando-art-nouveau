@@ -3,7 +3,7 @@ import utils
 from psycopg2 import sql
 
 HEADER_QUESTIONS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image", "user_id"]
-HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
+HEADER_ANSWERS = ["id", "submission_time", "vote_number", "question_id", "message", "image", "user_id"]
 HEADER_COMMENTS = ["id", "question_id", "answer_id", "message", "submission_time", "edited_count"]
 HEADER_USER = ["id", "registration_time", "email", "password_hash", "name", "last_login", "reputation"]
 
@@ -198,7 +198,8 @@ def get_answer_by_id(cursor, answer_id):
 @connection.connection_handler
 def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
-                    SELECT * FROM answer
+                    SELECT answer.id, submission_time, vote_number, question_id, message, users.email AS author_email
+                    FROM answer JOIN users ON answer.user_id = users.id
                     WHERE question_id = %(question_id)s
                     ORDER BY id DESC
                     """,
@@ -218,7 +219,6 @@ def get_search_results(cursor, keyword):
     return search_result
 
 
-
 @connection.connection_handler
 def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer = utils.add_submission_time(dict_of_new_answer)
@@ -227,8 +227,8 @@ def add_new_answer(cursor, dict_of_new_answer):  # to be refactored
     dict_of_new_answer["image"] = None
     dict_of_new_answer = utils.add_missing_fields(dict_of_new_answer, HEADER_ANSWERS)
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                    VALUES (%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s, %(user_id)s)
                     """,
                    dict_of_new_answer)
 
@@ -308,6 +308,9 @@ def get_question_id_for_answer(cursor, answer_id):
 
 @connection.connection_handler
 def add_new_user(cursor, dict_of_new_user):
+    saved_emails = get_all_user_emails()
+    if dict_of_new_user["email"] in saved_emails:
+        raise ValueError("Email already registered")
     dict_of_new_user = utils.store_password_hash(dict_of_new_user)
     counter_fields = ["reputation"]
     dict_of_new_user = utils.initialize_counter_fields(dict_of_new_user, counter_fields)
@@ -327,8 +330,21 @@ def get_password_hash_by_email(cursor, email):
                     WHERE email = %s
                     """,
                    (email, ))
-    saved_hash = cursor.fetchone()["password_hash"]
+    try:
+        saved_hash = cursor.fetchone()["password_hash"]
+    except (KeyError, TypeError):
+        saved_hash = ""
     return saved_hash
+
+
+@connection.connection_handler
+def get_users(cursor):
+    cursor.execute("""
+                    SELECT id,name,last_login,reputation
+                    FROM users
+                        """)
+    user_list = cursor.fetchall()
+    return user_list
 
 
 @connection.connection_handler
@@ -351,3 +367,53 @@ def get_user_email_by_id(cursor, user_id):
                    (user_id, ))
     user_id = cursor.fetchone()["email"]
     return user_id
+
+@connection.connection_handler
+def get_all_user_emails(cursor):
+    cursor.execute("""
+                    SELECT email FROM users
+                    """)
+    query_result = cursor.fetchall()
+    list_of_emails = [row["email"] for row in query_result]
+    return list_of_emails
+
+
+@connection.connection_handler
+def add_reputation_5(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 5
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+
+@connection.connection_handler
+def add_reputation_10(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 10
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+@connection.connection_handler
+def add_reputation_15(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation + 15
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+@connection.connection_handler
+def minus_reputation_2(cursor,email):
+    cursor.execute("""
+                    UPDATE users
+                      SET reputation = reputation - 2
+                      WHERE email LIKE %s;
+                    """,(email, ))
+
+
+
+

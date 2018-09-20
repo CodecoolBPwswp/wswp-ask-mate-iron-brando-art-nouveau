@@ -7,10 +7,14 @@
 
     {% include "question_details.html" %}
 
+        {% if "user" in session %}
+        <p><a href="{{ url_for('new_answer',  question_id=dict_of_question['id']) }}">Add new answer</a></p>
+        {% endif %}
 
 	{% if answers_to_list %}
 
         <h3>Answers</h3>
+
 
         {% for dict_of_answer in answers_to_list %}
         <div class="question-page-frame answer-frame">
@@ -18,7 +22,7 @@
                 <table>
                     <tr>
                         <td>
-                            <p>Answer submission: {{ dict_of_answer["submission_time"] }}</p>
+                            <p>Written by {{ dict_of_answer["author_email"] }} {{ dict_of_answer["submission_time"] }}</p>
                             <p class="main-message">{{ dict_of_answer["message"] }}</p>
                             <p><a href="{{ url_for('comment_to_answer', answer_id=dict_of_answer['id']) }}">Add new comment</a></p>
                             <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">Edit answer</a></p>

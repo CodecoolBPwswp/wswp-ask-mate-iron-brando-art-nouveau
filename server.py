@@ -62,6 +62,9 @@ def get_question_details(question_id):
 def upvote_question():
     question_id = request.form["question_id"]
     data_manager.add_question_upvote(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question['user_id'])
+    data_manager.add_reputation_5(question_author)
     url_to_voted_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_voted_question)
 
@@ -70,6 +73,9 @@ def upvote_question():
 def downvote_question():
     question_id = request.form["question_id"]
     data_manager.add_question_downvote(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question['user_id'])
+    data_manager.minus_reputation_2(question_author)
     url_to_voted_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_voted_question)
 
@@ -78,6 +84,9 @@ def downvote_question():
 def upvote_answer():
     answer_id = request.form["answer_id"]
     data_manager.add_answer_upvote(answer_id)
+    answer = data_manager.get_answer_by_id(answer_id)
+    answer_author = data_manager.get_user_email_by_id(answer['user_id'])
+    data_manager.add_reputation_10(answer_author)
     question_id = data_manager.get_question_id_for_answer(answer_id)
     url_to_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question)
@@ -87,6 +96,9 @@ def upvote_answer():
 def downvote_answer():
     answer_id = request.form["answer_id"]
     data_manager.add_answer_downvote(answer_id)
+    answer = data_manager.get_answer_by_id(answer_id)
+    answer_author = data_manager.get_user_email_by_id(answer['user_id'])
+    data_manager.minus_reputation_2(answer_author)
     question_id = data_manager.get_question_id_for_answer(answer_id)
     url_to_question = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question)
@@ -162,20 +174,24 @@ def save_edited_comment():
 
 @app.route('/details/<question_id>/new-answer')
 def new_answer(question_id):
+    if "user" not in session:
+        return redirect(url_for("index"))
     question_to_answer = data_manager.get_question_by_id(question_id)
+    question_author = data_manager.get_user_email_by_id(question_to_answer["user_id"])
     user_action = "Add new"
-    form_action = url_for("post_answer", postid=question_to_answer["id"])
+    form_action = url_for("post_answer", question_id=question_to_answer["id"])
     return render_template("new_answer.html", dict_of_question=question_to_answer,
                            dict_of_answer=None, user_action=user_action,
-                           form_action=form_action)
+                           form_action=form_action, question_author=question_author)
 
 
-@app.route('/details/<postid>/new-answer', methods=["POST"])
-def post_answer(postid):
+@app.route('/details/<question_id>/new-answer', methods=["POST"])
+def post_answer(question_id):
     dict_of_new_answer = request.form.to_dict()
-    dict_of_new_answer["question_id"] = postid
+    dict_of_new_answer["question_id"] = question_id
+    dict_of_new_answer["user_id"] = data_manager.get_user_id_by_email(session["user"])
     data_manager.add_new_answer(dict_of_new_answer)
-    url_to_question_details = url_for("get_question_details", question_id=postid)
+    url_to_question_details = url_for("get_question_details", question_id=question_id)
     return redirect(url_to_question_details)
 
 
@@ -215,8 +231,13 @@ def register_user():
 
 @app.route('/registration', methods=["POST"])
 def save_new_user():
+    form_action = url_for("save_new_user")
+    user_action = "Sign up"
     dict_of_new_user = request.form.to_dict()
-    data_manager.add_new_user(dict_of_new_user)
+    try:
+        data_manager.add_new_user(dict_of_new_user)
+    except ValueError:
+        return render_template("new_user.html", form_action=form_action, user_action=user_action, registration_failed=True)
     return redirect(url_for("index"))
 
 
@@ -236,13 +257,25 @@ def user_verification():
     if verified:
         session["user"] = attempt_email
         return redirect(url_for("index"))
-    return
+    else:
+        form_action = url_for("user_verification")
+        user_action = "Sign in"
+        return render_template("new_user.html", form_action=form_action, user_action=user_action,
+                               verification_failed=True)
 
 
 @app.route('/', methods=["POST"])
 def sign_out():
     session.pop("user")
     return redirect(url_for("index"))
+
+
+@app.route('/list_users')
+def list_users():
+    if "user" not in session:
+        return redirect(url_for("index"))
+    user_list = data_manager.get_users()
+    return render_template('user_list.html', user_list=user_list)
 
 
 if __name__ == "__main__":
