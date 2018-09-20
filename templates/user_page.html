@@ -50,7 +50,7 @@
         {% for dict_of_questions in questions %}
             <tr>
 
-                <td>{{ dict_of_questions["submission_time"] }}</td>
+                <td>{{ dict_of_questions["submission_time"]|string|truncate(19, True, "") }}</td>
                 <td class="question-title">
                     <a href="{{ url_for('get_question_details', question_id = dict_of_questions["id"]) }}">
                         {{ dict_of_questions["title"] }}
@@ -83,7 +83,7 @@
         {% for dict_of_answer in answers %}
             <tr>
 
-                <td>{{ dict_of_answer["submission_time"] }}</td>
+                <td>{{ dict_of_answer["submission_time"]|string|truncate(19, True, "") }}</td>
                 <td>{{ dict_of_answer["message"] }}</td>
                 <td class="question-title">
                     <a href="{{ url_for('get_question_details', question_id = dict_of_answer["id"]) }}">

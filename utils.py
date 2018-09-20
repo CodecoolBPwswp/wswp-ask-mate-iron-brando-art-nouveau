@@ -3,7 +3,7 @@ import bcrypt
 
 
 def get_current_time():  # timestamp should be sliced when displayed not when stored!
-    current_time_str = str(datetime.datetime.now())[:19]
+    current_time_str = str(datetime.datetime.now())
     return current_time_str
 
 

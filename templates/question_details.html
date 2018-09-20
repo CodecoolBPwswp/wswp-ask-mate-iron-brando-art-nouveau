@@ -3,6 +3,7 @@
     <p class="question-author">
         by <a href="{{ url_for("user_page", user_id=author_id) }}">{{ question_author }}</a>
     </p>
+    <p>{{ dict_of_question["submission_time"]|string|truncate(19, True, "") }}</p>
 
         <div class="question-voting question-page-content">
             <p>

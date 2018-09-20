@@ -25,7 +25,8 @@
                         <td>
                             <p>Written by <a href="{{ url_for("user_page", user_id=dict_of_answer["user_id"]) }}">
                                 {{ question_author_data["name"] }}
-                            </a> {{ dict_of_answer["submission_time"] }}</p>
+                            </a></p>
+                            <p>{{ dict_of_answer["submission_time"]|string|truncate(19, True, "") }}</p>
                             <p class="main-message">{{ dict_of_answer["message"] }}</p>
                             <p><a href="{{ url_for('comment_to_answer', answer_id=dict_of_answer['id']) }}">Add new comment</a></p>
                             <p><a href="{{ url_for("edit_answer", answer_id=dict_of_answer["id"]) }}">Edit answer</a></p>
