@@ -249,6 +249,9 @@ def list_users():
 @app.route('/user/<user_id>')
 def user_page(user_id):
     user = data_manager.get_user_email_by_id(user_id)
+    if user is None:
+        error_msg = "Invalid user ID"
+        return render_template("error_page.html", error_message=error_msg)
     questions_of_user = data_manager.get_questions_by_user(user_id)
     answers_of_user = data_manager.get_answers_by_user(user_id)
     return render_template("user_page.html", user_email=user,

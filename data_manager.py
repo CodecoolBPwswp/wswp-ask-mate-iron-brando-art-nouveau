@@ -296,8 +296,11 @@ def get_user_email_by_id(cursor, user_id):
                     WHERE id = %s;
                     """,
                    (user_id, ))
-    user_id = cursor.fetchone()["email"]
-    return user_id
+    query_result = cursor.fetchone()
+    if query_result is None:
+        return None
+    else:
+        return query_result["email"]
 
 
 @connection.connection_handler
