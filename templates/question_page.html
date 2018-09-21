@@ -24,7 +24,7 @@
                     <tr>
                         <td>
                             <p>Written by <a href="{{ url_for("user_page", user_id=dict_of_answer["user_id"]) }}">
-                                {{ question_author_data["name"] }}
+                                {{ dict_of_answer["author"] }}
                             </a></p>
                             <p>{{ dict_of_answer["submission_time"]|string|truncate(19, True, "") }}</p>
                             <p class="main-message">{{ dict_of_answer["message"] }}</p>
@@ -55,7 +55,7 @@
                 {% for comment in comments_for_answer if comment["answer_id"] == dict_of_answer["id"] %}
                     <tr>
                         <td>
-                            <p>{{ comment["submission_time"] }}</p>
+                            <p>{{ comment["submission_time"]|string|truncate(19, True, "") }}</p>
                         </td>
                         <td>
                             <p>{{ comment["message"] }}</p>

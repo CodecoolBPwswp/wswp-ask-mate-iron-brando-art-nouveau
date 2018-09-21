@@ -132,6 +132,10 @@ a.h1-link {
 div.user_list {
     width: 30%
 }
+div.user-data {
+    text-align: left;
+    width: 400px;
+}
 
 
 a:hover {

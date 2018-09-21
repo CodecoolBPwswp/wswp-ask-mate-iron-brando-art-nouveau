@@ -13,15 +13,21 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
     if order_direction == "DESC":
         cursor.execute(
                 sql.SQL("""
-                        SELECT question.id, submission_time, view_number, vote_number, title, users.name AS author
-                        FROM question JOIN users ON question.user_id = users.id
+                        SELECT question.id, question.submission_time, view_number, question.vote_number, title, 
+                            MAX(users.name) AS author, COUNT(a.id) AS number_of_answers FROM question 
+                        JOIN users ON question.user_id = users.id
+                        LEFT JOIN answer a on question.id = a.question_id
+                        GROUP BY question.id
                         ORDER BY {} DESC;
                         """).format(sql.Identifier(order_by)))
     else:
         cursor.execute(
             sql.SQL("""
-                    SELECT question.id, submission_time, view_number, vote_number, title, users.name AS author
-                    FROM question JOIN users ON question.user_id = users.id
+                    SELECT question.id, question.submission_time, view_number, question.vote_number, title, 
+                        MAX(users.name) AS author, COUNT(a.id) AS number_of_answers FROM question 
+                    JOIN users ON question.user_id = users.id
+                    LEFT JOIN answer a on question.id = a.question_id
+                    GROUP BY question.id
                     ORDER BY {} ASC
                     """).format(sql.Identifier(order_by))
         )
@@ -32,8 +38,11 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
 @connection.connection_handler
 def get_latest_questions(cursor, how_many):
     cursor.execute("""
-                    SELECT question.id, submission_time, view_number, vote_number, title, users.name AS author
-                    FROM question JOIN users ON question.user_id = users.id
+                    SELECT question.id, question.submission_time, view_number, question.vote_number, title, 
+                        MAX(users.name) AS author, COUNT(a.id) AS number_of_answers FROM question 
+                    JOIN users ON question.user_id = users.id
+                    LEFT JOIN answer a on question.id = a.question_id
+                    GROUP BY question.id
                     ORDER BY submission_time DESC
                     LIMIT %(number_of_rows)s;
                     """,
@@ -198,7 +207,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection.connection_handler
 def get_answers_by_question_id(cursor, _id):
     cursor.execute("""
-                    SELECT answer.id, submission_time, vote_number, question_id, message, user_id, users.email AS author_email
+                    SELECT answer.id, submission_time, vote_number, question_id, message, user_id, users.name AS author
                     FROM answer JOIN users ON answer.user_id = users.id
                     WHERE question_id = %(question_id)s
                     ORDER BY id DESC
@@ -213,10 +222,10 @@ def get_search_results(cursor, keyword):
     cursor.execute("""
                         SELECT question.id, question.submission_time, question.view_number, question.vote_number,
                                 question.user_id, title, question.message
-                        FROM question FULL JOIN answer ON question.id = answer.question_id
-                          WHERE answer.message LIKE %(keyword)s 
-                                OR question.message LIKE %(keyword)s
-                                OR question.title LIKE %(keyword)s
+                        FROM question LEFT JOIN answer ON question.id = answer.question_id
+                          WHERE answer.message ILIKE %(keyword)s 
+                                OR question.message ILIKE %(keyword)s
+                                OR question.title ILIKE %(keyword)s
                          """, {'keyword': '%' + keyword + '%'})
 
     search_result = cursor.fetchall()
@@ -424,7 +433,7 @@ def get_questions_by_user(cursor, user_id):
     cursor.execute("""
                     SELECT question.id, question.submission_time, title, question.vote_number, view_number, 
                         COUNT(a.id) AS number_of_answers 
-                    FROM question JOIN answer a on question.id = a.question_id
+                    FROM question LEFT JOIN answer a on question.id = a.question_id
                     WHERE question.user_id = %s
                     GROUP BY question.id
                     ORDER BY question.submission_time DESC

@@ -39,6 +39,10 @@
                     Vote Number
                     <a href="{{ url_for('order_questions', column='vote_number', order='DESC') }}">↑</a>
                     <a href="{{ url_for('order_questions', column='vote_number', order='ASC') }}">↓</a>
+                <th>
+                    Number of Answers
+                    <a href="{{ url_for('order_questions', column='number_of_answers', order='DESC') }}">↑</a>
+                    <a href="{{ url_for('order_questions', column='number_of_answers', order='ASC') }}">↓</a>
                 </th>
             </tr>
 
@@ -50,6 +54,7 @@
                 <td>{{ question["author"] }}</td>
                 <td>{{ question["view_number"] }}</td>
                 <td>{{ question["vote_number"] }}</td>
+                <td>{{ question["number_of_answers"] }}</td>
             </tr>
         {% endfor %}
 
