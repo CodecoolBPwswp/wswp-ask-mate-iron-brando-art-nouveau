@@ -20,7 +20,7 @@ def get_all_questions(cursor, order_by="submission_time", order_direction="DESC"
                         GROUP BY question.id
                         ORDER BY {} DESC;
                         """).format(sql.Identifier(order_by)))
-    else:
+    else:  # desc-asc in parameter
         cursor.execute(
             sql.SQL("""
                     SELECT question.id, question.submission_time, view_number, question.vote_number, title, 
@@ -45,7 +45,7 @@ def get_latest_questions(cursor, how_many):
                     GROUP BY question.id
                     ORDER BY submission_time DESC
                     LIMIT %(number_of_rows)s;
-                    """,
+                    """,  # limit into parameter of the previous query
                    {"number_of_rows": how_many})
     list_of_questions = cursor.fetchall()
     return list_of_questions
@@ -455,7 +455,7 @@ def get_answers_by_user(cursor, user_id):
     list_of_answers = cursor.fetchall()
     return list_of_answers
 
-
+# MAGIC NUMBERS!!
 @connection.connection_handler
 def add_reputation_5(cursor,email):
     cursor.execute("""

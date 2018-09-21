@@ -257,7 +257,7 @@ def user_verification():
     attempt_password = request.form["plain_text_password"]
     verified = utils.verify_password(attempt_password, user_hash)
     if verified:
-        session["user"] = attempt_email
+        session["user"] = attempt_email  # could be a dictionary instead
         session[attempt_email] = data_manager.get_user_data_by_email(attempt_email)
         data_manager.save_login_time(session[session["user"]]["id"])
         return redirect(url_for("index"))
